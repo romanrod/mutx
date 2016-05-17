@@ -1,0 +1,14 @@
+% form_template = Mote.parse(File.read("#{Mutx::View.path}/tasks/admin/create_edit_form.mote"), self, [:args])
+% args["action"]="edit"
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h2>Edit Task</h2></div>
+
+  <div class="panel-warning">
+    <div class="panel-body">
+
+      {{form_template.call(args:args)}}
+
+    </div>
+  </div>
+</div>

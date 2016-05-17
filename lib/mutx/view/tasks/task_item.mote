@@ -1,0 +1,41 @@
+<?
+running_results = Mutx::Results.running_results_for_task_id(task["_id"])
+status = if running_results.size > 0
+    "running"
+else
+  "READY"
+end
+
+
+
+color = Mutx::View.color(status)
+
+?>
+<div class='starter-template'>
+    <div class='panel panel-{{color}}'>
+      <div class='panel-heading'">
+        <h3 class='panel-title' onclick="goClean('/tasks/{{task["name"].gsub(' ','%20')}}');">
+          {{task["name"]}}
+        </h3>
+    % if status=="running"
+        <i class="fa fa-cog fa-spin fa-1x fa-fw margin-bottom"></i>
+
+    % end
+    </div>
+      <div class="panel-body">
+        <a href='/{{task["type"]}}s/{{task["name"].gsub(' ','%20')}}' class='label label-success'>
+          Open</a>
+        <a href='/results/task/{{task["name"].gsub(' ','%20')}}' class='label label-info'>
+          {{Mutx::Results.results_ids_for(task["_id"]).size}} results</a>
+      % if task["information"]
+        <a href='#' title='{{task["information"]}}' class='label label-default' aria-hidden='true' data-toggle='modal' data-target='#myModal' onclick="javascript:info('Information about {{task["name"]}}','{{task["information"].gsub('\n','<br>')}}', null);">
+          Information</a>
+      % end
+      % if status=="running"
+        <a href='#' title='See the last execution progress' class='label label-warning' onclick="refreshAndOpen('/results/log/{{running_results.last["_id"]}}');">
+          Last execution progress</a>
+      % end
+      </div>
+  </div>
+</div>
+

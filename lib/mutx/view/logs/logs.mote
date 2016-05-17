@@ -1,0 +1,6 @@
+<div class="btn-group" role="group" aria-label="...">
+% Mutx::Support::Logs.all.keys.each do |log|
+  <button type="button" class="btn btn-default">Left</button><a href='/logs/{{log}}'>{{log.split('_').first.capitalize}}</a></li>
+% end
+
+</div>

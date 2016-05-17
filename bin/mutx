@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'mutx'
+
+Mutx::Base.start(ARGV)

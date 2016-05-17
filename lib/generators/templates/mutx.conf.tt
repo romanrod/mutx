@@ -1,0 +1,53 @@
+{
+
+  "use_git" : true,
+
+  "app_name" : "your-host-name",
+
+  "app_port" : 8080,
+
+  "database" : {
+
+    "type" : "mongodb",
+    "host" :"localhost",
+    "port" : 27017,
+    "username" : null,
+    "password" : null},
+
+  "max_execs_per_task" : 3,
+
+  "execution_check_time" : 5,
+
+  "project_name" : "Awesome Project",
+
+  "project_url" : "http://your.project.url",
+
+  "inactivity_timeout" : 60,
+
+  "kill_inactive_executions_after" : 300,
+
+  "datetime_format" : "%d/%m/%Y %H:%M:%S",
+
+  "refresh_time" : 10,
+
+  "notification" : {
+    "use_gmail" : false,
+    "username" : null,
+    "password" : null,
+    "recipients" : "your@email.com",
+    "attach_report" : false
+  },
+
+  "footer_text" : "The text to display on footer",
+
+  "execution_tag_placeholder" : {
+    "datetime" : true,
+    "format" : "%d%^b%y-%H%M",
+    "default" : null
+  },
+
+  "headless" : {
+    "active" : false,
+    "resolution" : "1024x768",
+    "size":"24"}
+}

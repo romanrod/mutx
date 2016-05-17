@@ -1,0 +1,31 @@
+<div id='myModal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h3 class='modal-title' id='myModalLabel'></h3>
+      </div>
+      <div class='modal-body'>
+        <h4 id='my-modal' style='overflow: hidden'></h4>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id='startedModal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='startedModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h3 class='modal-title' id='startedModalLabel'></h3>
+      </div>
+      <div class='modal-body'>
+        <h4 id='started-modal' style='overflow: hidden'></h4>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-default' data-dismiss='modal' onclick='goClean(window.location.pathname);'>Close</button>
+      </div>
+    </div>
+  </div>
+</div>

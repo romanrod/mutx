@@ -1,0 +1,20 @@
+<?
+  # no_label: used in section custom params > list (representation)
+  value = param["value"].to_json.gsub('\"','"')
+?>
+
+<div class='form-group'>
+  % unless no_label
+    <label class='col-sm-2 control-label' for='formGroupInputSmall'>{{param['name']}}</label>
+  % end
+
+  % if no_label
+    <a class="btn btn-default" onclick="javascript:openBlank('/api/custom/params/{{param["name"]}}/value');">Click to open JSON</a>
+  % else
+    %if task_form
+      <textarea class='customParam' {{"required title='#{param['name']} is Required!'" if param["required"]}} type='text' placeholder='{{"Enter value here" if param["required"]}}'  />{{value}}</textarea>
+    % else
+      <textarea class='customParam' {{"required title='#{param['name']} is Required!'" if param["required"]}} type='text' name='{{param['name']}}' placeholder='{{"Enter value here" if param["required"]}}'  />{{value}}</textarea>
+    %end
+  % end
+</div>

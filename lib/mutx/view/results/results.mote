@@ -1,0 +1,67 @@
+
+% type = "tasks"
+
+% tasks_list = Mutx::API::Tasks.list({})
+% Mutx::Support::Log.debug "Results for task name #{args[:task_name]}" if Mutx::Support::Log and args[:task_name]
+% type = args[:type] || "all"
+% unless tasks_list["tasks"].empty?
+
+  <div class='form-group'>
+
+    <label class='control-label' for='formGroupInputSmall'>Type</label>
+    <select id='type' name='type' class='customParam' >
+      <option value='all'>All</option>
+      <option value='tests' {{selected if type=="tests"}}>Tests</option>
+      <option value='tasks' {{selected if type=="tasks"}}>Tasks</option>
+  </select>
+</div>
+
+  % tasks_list["tasks"].select!{|task| task["name"]==args[:task_name]} if args[:task_name]
+  % tasks_list["tasks"].each do |task|
+    % results_list = Mutx::API::Result.results_list_for(task["_id"])
+    % if results_list.size > 0
+      <div class="panel panel-primary">
+        <div class="panel-heading" data-toggle="collapse" data-target="#at_world">
+                <h3 class="panel-title">
+                  {{task["name"]}}
+                <div class="pull-right">{{results_list.size}} Results</div>
+                </h3>
+                <div></div>
+              </div>
+            <div class="panel-body collapse in" id="at_world">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="font-weight: bold;">When</th>
+                    <th style="font-weight: bold;">Label</th>
+                    <th style="font-weight: bold;">Duration (sec)</th>
+                    <th style="font-weight: bold; text-align: center;">Unviewed</th>
+                    <th style="font-weight: bold;">Console</th>
+                    <th style="font-weight: bold;">Status</th>
+                  </tr>
+                </thead>
+                % result_template = Mote.parse(File.read("#{Mutx::View.path}/results/result.mote"), self, [:result])
+                % results_list_size = results_list.size
+                % results_list = results_list[0..2] unless args[:task_name]
+                % results_list.each do |result_data|
+                  {{result_template.call(result:result_data)}}
+                % end
+              </table>
+              <div class="text-center">
+                <a href="/tasks/{{task["name"]}}" class="btn btn-info">
+                  Go to task
+                </a>
+              % unless args[:task_name]
+                <a href="/results/task/{{task["name"]}}" class="btn btn-default">
+                  &nbsp;&nbsp;All results for this {{args[:type]}}&nbsp;
+                  <span class="label label-info label-as-badge">
+                    {{results_list_size}}
+                  </span>
+                </a>
+              % end
+              </div>
+            </div>
+          </div>
+      % end
+    % end
+% end

@@ -1,0 +1,16 @@
+<div class='well'>
+% if Mutx::Support::Configuration.use_git?
+    <h4>
+      Working on branch <strong>{{Mutx::Support::Git.branch}}</strong>
+    </h4>
+
+      <small>
+        <span title='{{Mutx::Support::Git.log_last_commit}}'>Commit ID:{{Mutx::Support::Git.get_last_commit_id}}</span>
+      </small>
+% else
+  <h4>
+      Working on server with local files
+    </h4>
+
+% end
+</div>

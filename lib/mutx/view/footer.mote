@@ -1,0 +1,12 @@
+<footer>
+  <div class="well">
+    <div style='width: 100%; display: table;'>
+      <div style='display: table-row'>
+        <div style='width: 600px; display: table-cell;'>{{Mutx::Support::Configuration.company}}</div>
+        <div align='right' style='display: table-cell;'>
+          <p>Mutx {{Mutx::VERSION}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </footer>

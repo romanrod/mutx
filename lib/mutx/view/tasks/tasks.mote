@@ -1,0 +1,32 @@
+<?
+
+  type = args[:section].downcase.scan(/task|test/).first
+
+  if args[:task_name]
+    raise Mutx::Error::TaskNotFound.new("Could not find task with name #{args[:task_name]}") unless Mutx::Tasks.is_there_task_with? args[:task_name]
+    template = Mote.parse(File.read("#{Mutx::View.path}/tasks/task.mote"), self, [:task_data])
+    task_data = Mutx::API::Task.info_for_name(args[:task_name])
+    content = template.call(task_data:task_data)
+  else
+    template = Mote.parse(File.read("#{Mutx::View.path}/tasks/task_item.mote"), self, [:task])
+
+    tasks_list = Mutx::API::Tasks.list(type:type)
+  end
+
+?>
+
+% unless args[:task_name]
+  % number_of_tasks = tasks_list["tasks"].size
+  <div class="bs-callout bs-callout-danger">
+    <h4>&nbsp;&nbsp;&nbsp;Showing {{number_of_tasks}} {{type}}{{number_of_tasks>1 ? 's':''}}<small>&nbsp;&nbsp;Click on any task to open it</small></h4>
+  </div>
+% end
+% if args[:task_name]
+  {{content}}
+% else
+
+  % tasks_list = tasks_list["tasks"]
+  % tasks_list.each do |task_data|
+    {{template.call(task:task_data)}}
+  % end
+% end

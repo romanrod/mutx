@@ -1,0 +1,19 @@
+<?
+  # no_label: used in section custom params > list (representation)
+
+?>
+<div class='form-group'>
+  % unless no_label
+    <label class='col-sm-2 control-label' for='formGroupInputSmall'>{{param["name"]}}</label>
+  % end
+  % if task_form
+    <select class='customParam' >
+  % else
+    <select id='{{param["name"]}}' name='{{param["name"]}}' class='customParam' >
+  % end
+  % param["options"].each do |value|
+    % value = nil if value.downcase == "none"
+    <option value='{{value}}'>{{value}}</option>
+  % end
+  </select>
+</div>
