@@ -16,17 +16,17 @@ require_rel 'generators'
 module Mutx
 
 
-  if Dir.exist? "#{Dir.pwd}/mutx/logs"
+  # if Dir.exist? "#{Dir.pwd}/mutx/logs"
 
-    # Creates mutx_log if it does not exist
-    File.open("#{Dir.pwd}/mutx/logs/mutx.log","a+"){} unless File.exist? "#{Dir.pwd}/mutx/logs/mutx.log"
+  #   # Creates mutx_log if it does not exist
+  #   File.open("#{Dir.pwd}/mutx/logs/mutx.log","a+"){} unless File.exist? "#{Dir.pwd}/mutx/logs/mutx.log"
 
-    # Set global conf
-    #Mutx::Support::Log.start
-    Mutx::Support::Configuration.get
-    $NOTIF ||= Support::Notification.new("#{Dir.pwd.split("/").last}", "#{Mutx::Support::IfConfig.ip}:#{Mutx::Support::Configuration.port}")
+  #   # Set global conf
+  #   #Mutx::Support::Log.start
+  #   Mutx::Support::Configuration.get
+  #   $NOTIF ||= Support::Notification.new("#{Dir.pwd.split("/").last}", "#{Mutx::Support::IfConfig.ip}:#{Mutx::Support::Configuration.port}")
 
-  end
+  # end
 
 
   class Base < Thor

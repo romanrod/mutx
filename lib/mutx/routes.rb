@@ -2,7 +2,7 @@ require "cuba"
 
 include Mote::Helpers
 
-Mutx::Support::Log.start
+# Mutx::Support::Log.start
 Mutx::Support::Configuration.get
 
 Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
