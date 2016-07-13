@@ -48,7 +48,7 @@
             <li><a href='/logs/mutx'>Mutx Log</a>
             <li><a href='/logs/sidekiq'>Sidekiq Log</a>
             <li role="presentation" class="divider"></li>
-            <li><a href='/admin/config'>Configuration</a></li>
+            <!-- <li><a href='/admin/config'>Configuration</a></li> -->
           </ul>
         </li>
       </ul>

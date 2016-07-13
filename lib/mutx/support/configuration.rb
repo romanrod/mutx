@@ -5,6 +5,8 @@ module Mutx
       attr_reader :input
 
       def self.get
+        Mutx::Support::Log.start
+        
         Mutx::Support::Log.debug "Creating configuration object" if Mutx::Support::Log
 
         if self.config_file_exists?
@@ -190,7 +192,7 @@ module Mutx
 
       # After this period of time (in seconds) Mutx will kill process execution automatically
       def self.execution_time_to_live
-        self.is_a_number?(@@input["kill_inactive_executions_after"]) ? @@input["kill_inactive_executions_after"] : 3600
+        self.is_a_number?(@@input["kill_inactive_executions_after"]) ? @@input["kill_inactive_executions_after"] : 900
       end
 
       def self.kill_after_time?

@@ -1,5 +1,5 @@
 require 'mongo'
-require 'byebug'
+
 module Mutx
   module Database
     class MongoConnector
@@ -132,7 +132,8 @@ module Mutx
       end
 
       def self.generate_id
-        Time.now.to_f.to_s.gsub( ".","")[0..12].to_i
+        value = Time.now.to_f.to_s.gsub( ".","")[0..12].to_i
+        Digest::MD5.hexdigest(value.to_s) #Added MD5 to generate a mongo id
       end
 
       # Returns a list of collections
@@ -199,7 +200,8 @@ module Mutx
       # Update record for a given task
       # @param [Hash] task_data
       def self.update_task task_data
-        task_data["_id"] = task_data["_id"].to_i
+        #Fix because MD5 as _id
+        #task_data["_id"] = task_data["_id"].to_i
         task_data.delete("action")
         Mutx::Support::Log.debug "Updating task [#{task_data}]" if Mutx::Support::Log
         res = @@tasks.update_one( {"_id" => task_data["_id"]}, task_data)
@@ -210,7 +212,7 @@ module Mutx
       # @param [String] task_name
       # @return [Hash] all task data
       def self.task_data_for task_id
-        task_id = task_id.to_i if task_id.respond_to? :to_i
+        #task_id = task_id.to_i if task_id.respond_to? :to_i
         res = @@tasks.find({"_id" => task_id}).to_a.first
         Mutx::Support::Log.debug "Getting db task data for task id #{task_id} => res = [#{res}]" if Mutx::Support::Log
         res
@@ -272,7 +274,8 @@ module Mutx
 
       def self.delete_task task_id
         Mutx::Support::Log.debug "Deletting db task with id #{task_id}" if Mutx::Support::Log
-        task_id = task_id.to_i if task_id.respond_to? :to_i
+        #Fix because MD5
+        #task_id = task_id.to_i if task_id.respond_to? :to_i
         res = @@tasks.delete_one({"_id" => task_id})
         res.n==1
       end
@@ -390,7 +393,10 @@ module Mutx
 
       # Returns all results for a given task_id
       def self.results_for task_id
-        @@results.find({"task.id" => ensure_int(task_id)}).sort("started_at" => -1).to_a
+        #FIXED
+        #@@results.find({"task.id" => ensure_int(task_id)}).sort("started_at" => -1).to_a #Cant convert MD5 to integer
+        @@results.find({"task.id" => (task_id)}).sort("started_at" => -1).to_a
+
       end
 
       # Updates result register with the given data
@@ -405,7 +411,8 @@ module Mutx
       end
 
       def self.result_data_for_id(result_id)
-        result_id = self.ensure_int(result_id)
+        #FIXED
+        #result_id = self.ensure_int(result_id) #Cant convert MD5 to integer
         res = @@results.find({"_id" => result_id})
         res = res.to_a.first if res.respond_to? :to_a
         res

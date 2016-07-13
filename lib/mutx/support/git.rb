@@ -21,7 +21,8 @@ module Mutx
           end
 
           def self.branch
-            self.branches.select{|branch| branch.include? "*"}.first.gsub("*","").gsub(" ","")
+            branch_name = self.branches.select{|branch| branch.include? "*"}.first
+            branch_name.gsub("*","").gsub(" ","") unless branch_name.nil?
           end
 
           def self.actual_branch; self.branch; end
@@ -162,9 +163,9 @@ module Mutx
           end
 
           def self.remote_url
-
-            res = Mutx::Support::Console.execute("git config --get remote.origin.url").split("\n").first.gsub(":","/").gsub("git@", 'http://').chop
-            res[0..-5] if res.end_with? ".git"
+            # res = Mutx::Support::Console.execute("git config --get remote.origin.url").split("\n").first.gsub(":","/").gsub("git@", 'http://').chop
+            # res[0..-5] if res.end_with? ".git"
+            "Local"
           end
 
           # Returns an Array with the existing files on .gitignore

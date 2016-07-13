@@ -4,7 +4,7 @@ module Mutx
     class Task
 
       def self.info(task_id)
-        task_id = task_id.to_i if task_id.respond_to? :to_i
+        #task_id = task_id.to_i if task_id.respond_to? :to_i "NO PASAR EL ID A TO_I"
         response = {
           "project_name" => Dir.pwd.split("/").last,
           "task" => nil,

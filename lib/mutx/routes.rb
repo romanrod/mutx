@@ -197,8 +197,8 @@ Cuba.define do
         if result.finished? and !result.stopped? and result.html_report.size > 0
           template = Mote.parse(File.read("#{Mutx::View.path}/results/report.mote"),self, [:result])
           res.write template.call(result:result)
-        else
-          res.redirect "results/#{result_id}/log"
+        #else
+        #  res.redirect "results/#{result_id}/log"
         end
       end
 
@@ -622,7 +622,7 @@ Cuba.define do
       end
      
       on root do
-        res.redirect "/tasks"
+        res.redirect "/admin/tasks/list"
       end
 
     end

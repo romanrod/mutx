@@ -35,7 +35,8 @@ information = query_string.information if query_string.information
 command = query_string.required if query_string.command
 types = Mutx::Tasks::Custom::Param.types
 types.unshift("Select...") unless types.include? "Select..."
-
+execution_type = type.capitalize if type
+platform = task["platform"].capitalize if task
 
 ?>
 
@@ -66,23 +67,29 @@ types.unshift("Select...") unless types.include? "Select..."
         <!-- type -->
             <div class='form-group'>
               <label class='col-sm-3 control-label' for='formGroupInputSmall'>Execution type</label>
-              <select name="type" id="type" class='customParam' {{disabled}}>
-                <option value="test">Test</option>
-                <option value="task">Task</option>
-              </select>
+                <select name="type" id="type" class='customParam' {{disabled}}>
+                  % if !execution_type.nil?
+                    <option value="{{execution_type.downcase}}" selected>{{execution_type}}</option>
+                  % end
+                  <option value="test">Test</option>
+                  <option value="task">Task</option>
+                </select>
             </div>
 
 
         <!-- platform -->
             <div class='form-group'>
               <label class='col-sm-3 control-label' for='formGroupInputSmall'>Platform</label>
-              <select name="platform" id="platform" class='customParam' {{disabled}}>
-                <option value="ruby">Ruby</option>
-                <option value="java">Java</option>
-                <option value="scala">Scala</option>
-                <option value="groovy">Groovy</option>
-                <option value="other">Other</option>
-              </select>
+                <select name="platform" id="platform" class='customParam' {{disabled}}>
+                  % if !platform.nil?
+                    <option value="{{platform.downcase}}" selected>{{platform}}</option>
+                  % end
+                  <option value="ruby">Ruby</option>
+                  <option value="java">Java</option>
+                  <option value="scala">Scala</option>
+                  <option value="groovy">Groovy</option>
+                  <option value="other">Other</option>
+                </select>
             </div>
 
         <!-- Max exec per suite -->

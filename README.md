@@ -103,7 +103,7 @@ mutx/conf/mutx.conf file reference:
     "port" : 27017,
     "username" : null,
     "password" : null},
-    "project_name" : "Awesome Project",
+    "project_name" : "Mutx",
     "project_url" : "http://your.project.url",
     "inactivity_timeout" : 60,
     "kill_inactive_executions_after" : 300,

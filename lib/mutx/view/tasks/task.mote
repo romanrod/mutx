@@ -1,5 +1,9 @@
 <?
 
+puts "========================================"
+puts task_data 
+puts "========================================"
+
 task = task_data["task"]
 
 #task = Mutx::Tasks::Task.get(task_name)
@@ -17,7 +21,6 @@ else
 end
 
 color =  Mutx::View.color(status)
-
 
 ?>
 <div class='starter-template'>

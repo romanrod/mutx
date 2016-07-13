@@ -8,6 +8,8 @@ require 'sidekiq'
 require 'mote'
 require 'base64'
 require 'require_all'
+require 'byebug'
+require 'digest'
 
 require_rel 'mutx'
 require_rel 'generators'
@@ -48,11 +50,7 @@ module Mutx
         Mutx::Support::Log.start
         Mutx::Commands.start(options["nodemon"])
       else
-        puts "
-
-Could not find mutx folder on root project folder. You can use `mutx install`
-
-".red
+        puts "Could not find mutx folder on root project folder. You can use `mutx install`".red
       end
     end
 
