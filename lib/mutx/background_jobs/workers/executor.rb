@@ -1,5 +1,6 @@
 require 'mutx'
 require 'socket'
+require 'sidekiq/testing/inline' #***this line allow us to use 'byebug'***
 
 module Mutx
   module Workers
@@ -26,10 +27,15 @@ module Mutx
               bundle_output = Mutx::Support::Console.execute "bundle install"
             end
             if bundle_output
-              result.append_output bundle_output
+              result.append_output bundle_output if bundle_output.include? "Installing"
               if bundle_output.include? "Could not find"
                 result.finish!
                 raise "An error ocurred installing gem while executing bundler"
+              else
+                result.append_output "All GEMS are installed and running!\n"
+                result.append_output "=========================\n"
+                result.append_output "EXECUTION OUTPUT:\n"
+                result.append_output "=========================\n"
               end
             end
           end
@@ -50,19 +56,18 @@ module Mutx
 
           #################
           # POPEN3 ref
-          #
           # http://blog.honeybadger.io/capturing-stdout-stderr-from-shell-commands-via-ruby/?utm_source=rubyweekly&utm_medium=email
-          #
-          #
           ##################
           @count = 0
+
           IO.popen("#{result.mutx_command}") do |data|
             result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
             result.save!
+
             while line = data.gets
               @count += 1
               @output += line
-              if @count == 10
+              if @count == 30
                 result.append_output @output
                 @output = ""
                 @count = 0
@@ -71,7 +76,9 @@ module Mutx
                 result.finished_by_timeout! and break
               end
             end
+
             result.append_output @output unless @output.empty?
+            result.append_output "=========================\n"
           end
 
           result.ensure_finished!

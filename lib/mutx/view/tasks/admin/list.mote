@@ -31,7 +31,7 @@
                 <td><b>Name</b></td>
                 <td><b>Command</b></td>
                 <td><b>Task Type</b></td>
-                <td><b>Custom Parameters</b></td>
+                <td><b>Custom Params</b></td>
                 <td><b>Information</b></td>
                 <td><b>Actions</b></td>
               </tr>
@@ -69,10 +69,34 @@
             % end
             </tbody>
           % else
-            <h4>There is no Tasks defined</h4>
+            <div id='well'>
+              <h3>No tasks defined, create a new task to run!</h3>
+            </div>
           % end
         </table>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+#well {
+  aling: right;
+  height: 50px;
+  background: #edf7ed;
+  width: 600px;
+  font-size: 20px;
+  #font-style: oblique;
+  color: #009900;
+  text-align: center;
+  padding: 0 20px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  /* align horizontal */
+  align-items: center;
+  /* align vertical */
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>

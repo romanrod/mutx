@@ -6,7 +6,7 @@ module Mutx
 			end
 
 			def self.debug output
-				# @@logger.debug output if self.exist?
+				@@logger.debug output if self.exist?
 			end
 
 			def self.info output

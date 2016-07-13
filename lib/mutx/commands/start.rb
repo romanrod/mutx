@@ -2,6 +2,7 @@ module Mutx
   module Commands
     def self.start nodemon=false
 
+      Mutx::Support::Log.start
 
       Mutx::Support::Log.debug "Starting Mutx" if Mutx::Support::Log
       begin
@@ -32,8 +33,7 @@ module Mutx
           Mutx::Support::Log.debug "Headless mode: ON - Checking xvfb existance" if Mutx::Support::Log
           res = Mutx::Support::Console.execute "xvfb-run"
           if res.include? "sudo apt-get install xvfb"
-            puts "
-You have configured headless mode but xvfb package is not installed on your system.
+            puts "You have configured headless mode but xvfb package is not installed on your system.
 Please, install xvfb package if you want to run browsers in headless mode
 or set headless active value as false if you do not use browser in your tests."
             return
@@ -80,6 +80,7 @@ or set headless active value as false if you do not use browser in your tests."
         # Start mutx app
         Mutx::Support::Log.debug "Starting Mutx" if Mutx::Support::Log
         Mutx::Support::Console.execute "unicorn -c #{Dir.pwd}/mutx/unicorn.rb -p #{Mutx::Support::Configuration.port} #{mutx_arg} mutx/config.ru"
+        # Mutx::Support::Console.execute "rackup mutx/config.ru"
         Mutx::Support::Log.debug "Mutx started" if Mutx::Support::Log
 
         # Save all mutx pids
