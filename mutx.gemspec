@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mote'
   spec.add_dependency 'require_all'
   spec.add_dependency 'byebug'
-  # spec.add_dependency 'shotgun'
+  spec.add_dependency 'shotgun'
   spec.add_dependency 'digest'
 
 

@@ -34,9 +34,11 @@ color =  Mutx::View.color(status)
 
     <div class='panel-body collapse in' id='{{task["name"].gsub(' ','')}}'>
       <ul class='list-group'>
+        <!--
         <li class='list-group-item'>
           Command: {{task["command"]}}
         </li>
+        -->
 
       <!--  Si la task está en running se muestran las ejecuciones -->
       % if running_results.size > 0

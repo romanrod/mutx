@@ -32,7 +32,7 @@ types.unshift("Select...") unless types.include? "Select..."
 
 
 ?>
-custom param id {{args[:custom_param_id]}}
+{{args[:custom_param_id]}}
 {{custom_param}}
 {{type}}
 {{required}}

@@ -1,6 +1,8 @@
 <?
+
   key = args[:query_string].keyword if (args[:query_string].keyword and !args[:query_string].keyword.empty?)
   status = args[:query_string].status if (args[:query_string].status and !args[:query_string].status.empty?)
+  application = args[:query_string].application if (args[:query_string].application and !args[:query_string].application.empty?)
 
 
   results = Mutx::API::Results.show()
@@ -35,6 +37,21 @@
     end
   end
 
+  if application
+    results_list.select! do |res|
+      by_application = res["application"].downcase==application.downcase
+      by_first_part_summary = res["summary"].split("step").first.downcase.include? application.downcase
+      first_part = res["summary"].split("step").first
+      if first_part
+        scenarios = first_part.scan(/\(\d.+\)/).first
+        if scenarios
+          by_partial_summary = scenarios.scan(/[a-z]+/).first == application
+        end
+      end
+      by_application or (by_first_part_summary and by_partial_summary)
+    end
+  end
+
   results_size_text = if (key or status)
     "#{results_list.size} result#{'s' if results_list.size>1} found"
   else
@@ -55,8 +72,14 @@
       <option value='failed' {{'selected' if status=='failed'}}>Failed</option>
       <option value='stopped' {{'selected' if status=='stopped'}}>Stopped</option>
     </select>
+    <select id='application' name='application' style='height: 34px; padding: 6px 12px; font-size: 14px; line-height: 1.42857143; color: #555; background-color: #fff; background-image: none; border: 1px solid #ccc; border-radius: 4px;'>
+      <option value='' {{'selected' if application.nil?}}>Any Application</option>
+      <option value='api' {{'selected' if application=='api'}}>Api</option>
+      <option value='gui' {{'selected' if application=='gui'}}>Gui</option>
+      <option value='none_app' {{'selected' if application=='none_app'}}>None_APP</option>
+    </select>
     <input type='submit' class='btn btn-success' value='Search'>&nbsp;&nbsp;
-  % if key or status
+  % if key or status or application
     <a class='btn btn-danger' href='/results/all' role='button'>Clear</a>
   % end
 
@@ -80,4 +103,34 @@
   % results_list.each do |result_data|
     {{result_info.call(result:result_data)}}
   % end
+% else
+  <br>
+  <br>
+  <div id='well'>
+    <h3>No results found, go ahead and run a task!</h3>
+  </div>
+  <br>
+  <br>
 % end
+
+<style>
+#well {
+  aling: right;
+  height: 50px;
+  background: #F5F5F5;
+  width: 600px;
+  font-size: 20px;
+  #font-style: oblique;
+  color: #696969;
+  text-align: center;
+  padding: 0 20px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  /* align horizontal */
+  align-items: center;
+  /* align vertical */
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>

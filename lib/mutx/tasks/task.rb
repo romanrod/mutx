@@ -22,7 +22,11 @@ module Mutx
       :information,
       :cucumber,
       :max_execs,
-      :running_execs
+      :running_execs,
+      :cronneable,
+      :cron_time,
+      :last_exec_time,
+      :application
 
 
       def self.valid_types
@@ -48,7 +52,10 @@ module Mutx
           @cucumber         = task_data["cucumber_report"]
           @cucumber_report  = task_data["cucumber"]
           @max_execs        = task_data["max_execs"] || Mutx::Support::Configuration.maximum_execs_per_task
-
+          @cronneable       = task_data["cronneable"]
+          @cron_time        = task_data["cron_time"]
+          @last_exec_time   = task_data["last_exec_time"]
+          @application      = task_data["application"] || "command line"
         else
           Mutx::Support::Log.error "Creting task object. Argument is not a hash" if Mutx::Support::Log
           raise "Task data not defined correctly. Expecting info about task"
@@ -91,7 +98,11 @@ module Mutx
           "branch" => Mutx::Support::Git.actual_branch,
           "status" => "READY",
           "max_execs" => data["max_execs"],
-          "custom_params" => data["custom_params"]
+          "custom_params" => data["custom_params"],
+          "cronneable" => data["cronneable"],
+          "cron_time" => data["cron_time"],
+          "last_exec_time" => Time.now.utc,
+          "application" => data["application"]
         }
         self.new(task_data)
       end
@@ -197,7 +208,11 @@ module Mutx
           "running_execs" => running_execs,
           "max_execs" => max_execs,
           "cucumber" => cucumber,
-          "platform" => platform
+          "platform" => platform,
+          "cronneable" => cronneable,
+          "cron_time" => cron_time,
+          "last_exec_time" => last_exec_time,
+          "application" => application
         }
       end
 

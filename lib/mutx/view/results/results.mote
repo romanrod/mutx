@@ -7,14 +7,13 @@
 % unless tasks_list["tasks"].empty?
 
   <div class='form-group'>
-
     <label class='control-label' for='formGroupInputSmall'>Type</label>
     <select id='type' name='type' class='customParam' >
       <option value='all'>All</option>
       <option value='tests' {{selected if type=="tests"}}>Tests</option>
       <option value='tasks' {{selected if type=="tasks"}}>Tasks</option>
-  </select>
-</div>
+    </select>
+  </div>
 
   % tasks_list["tasks"].select!{|task| task["name"]==args[:task_name]} if args[:task_name]
   % tasks_list["tasks"].each do |task|
@@ -62,6 +61,45 @@
               </div>
             </div>
           </div>
+      % else
+        <br>
+        <br>
+        <div id='well'>
+          <h4>No results found for execution: '{{task[:name]}}', go ahead and run it</h4>
+        </div>
+        <br>
+        <br>
       % end
     % end
 % end
+% if tasks_list["tasks"].empty?
+    <br>
+    <br>
+    <div id='well'>
+      <h3>No results found, go ahead create and run a task</h3>
+    </div>
+    <br>
+    <br>
+% end
+
+<style>
+#well {
+  aling: right;
+  height: 50px;
+  background: #F5F5F5;
+  width: 600px;
+  font-size: 20px;
+  #font-style: oblique;
+  color: #696969;
+  text-align: center;
+  padding: 0 20px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  /* align horizontal */
+  align-items: center;
+  /* align vertical */
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>

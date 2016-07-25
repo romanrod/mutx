@@ -24,9 +24,39 @@
 % if args[:task_name]
   {{content}}
 % else
-
   % tasks_list = tasks_list["tasks"]
   % tasks_list.each do |task_data|
     {{template.call(task:task_data)}}
   % end
+  % if tasks_list.empty?
+    <br>
+    <br>
+    <div id='well'>
+      <h3>No tasks defined, create a new task to run!</h3>
+    </div>
+    <br>
+    <br>
+  % end
 % end
+
+<style>
+#well {
+  aling: right;
+  height: 50px;
+  background: #F5F5F5;
+  width: 600px;
+  font-size: 20px;
+  #font-style: oblique;
+  color: #696969;
+  text-align: center;
+  padding: 0 20px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  /* align horizontal */
+  align-items: center;
+  /* align vertical */
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>

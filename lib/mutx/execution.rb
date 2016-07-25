@@ -7,6 +7,7 @@ module Mutx
         Mutx::Support::Git.reset_hard and Mutx::Support::Git.pull
         Mutx::Support::Log.debug "Git pulled" if Mutx::Support::Log
       end
+      
         result = Mutx::Results::Result.new(execution_request_data)
         Mutx::Support::Log.debug "Result created with id => #{result.id}" if Mutx::Support::Log
 

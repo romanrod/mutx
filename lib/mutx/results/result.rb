@@ -29,7 +29,8 @@ module Mutx
         :configuration_values,
         :timeout,
         :started_message,
-        :console_output
+        :console_output,
+        :application
 
 
       def initialize data_for_result
@@ -59,6 +60,7 @@ module Mutx
           @command                  = data_for_result['command']
           @task_name                = task_data["name"]
           @command                  = task_data["command"]
+          @application              = task_data["application"]
           @console_output           = ""
           @last_check_time          = now_in_seconds
           @execution_data           = {}
@@ -87,6 +89,7 @@ module Mutx
           "task"                      => @task,
           "execution_name"            => execution_name,
           "command"                   => command,
+          "application"               => application,
           "custom_params"             => custom_params,
           "mutx_command"              => mutx_command,
           "started_message"           => started_message,

@@ -80,7 +80,7 @@ or set headless active value as false if you do not use browser in your tests."
         # Start mutx app
         Mutx::Support::Log.debug "Starting Mutx" if Mutx::Support::Log
         Mutx::Support::Console.execute "unicorn -c #{Dir.pwd}/mutx/unicorn.rb -p #{Mutx::Support::Configuration.port} #{mutx_arg} mutx/config.ru"
-        # Mutx::Support::Console.execute "rackup mutx/config.ru"
+        #Mutx::Support::Console.execute "rackup mutx/config.ru"
         Mutx::Support::Log.debug "Mutx started" if Mutx::Support::Log
 
         # Save all mutx pids

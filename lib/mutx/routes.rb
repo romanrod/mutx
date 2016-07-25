@@ -622,7 +622,7 @@ Cuba.define do
       end
      
       on root do
-        res.redirect "/admin/tasks/list"
+        res.redirect "/tasks"
       end
 
     end

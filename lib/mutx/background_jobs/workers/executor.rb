@@ -1,6 +1,5 @@
 require 'mutx'
 require 'socket'
-require 'sidekiq/testing/inline' #***this line allow us to use 'byebug'***
 
 module Mutx
   module Workers

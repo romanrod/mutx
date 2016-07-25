@@ -24,7 +24,7 @@
   template_file_path = File.read("#{Mutx::View.path}/#{Mutx::View::Sections.path_for(section)}.mote")
 
   content = Mote.parse(template_file_path, self, [:args]).call(args:args)
-  
+
   puts "Section: #{section}".colorize(:green).on_red
   puts "Viewing #{Mutx::View.path}/#{Mutx::View::Sections.path_for(section)}.mote".colorize(:green).on_red
   section = section.gsub(" ","_").downcase

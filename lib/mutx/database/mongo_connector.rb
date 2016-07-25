@@ -241,6 +241,14 @@ module Mutx
         @@tasks.find(criteria).sort("last_result" => -1).to_a
       end
 
+      #Get cronneable tasks
+      def self.cron_tasks
+        Mutx::Support::Log.debug "Getting cronneable tasks" if Mutx::Support::Log
+        criteria = {}
+        criteria["cronneable"]="on"
+        @@tasks.find(criteria).sort("last_result" => -1).to_a
+      end
+
       # Returns all active tasks
       def self.all_tasks
         self.tasks
@@ -300,7 +308,7 @@ module Mutx
     end
 
     def self.insert_custom_param custom_param_data
-      Mutx::Support::Log.debug "Inserting custom param [#{custom_param_data}]" if Mutx::Support::Loga
+      Mutx::Support::Log.debug "Inserting custom param [#{custom_param_data}]" if Mutx::Support::Log
       @@custom_params.insert_one(custom_param_data)
     end
 
