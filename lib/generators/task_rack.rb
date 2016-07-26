@@ -49,10 +49,11 @@ module Mutx
           branch_list.each_with_index do |branch_name, index|
             puts "\t(#{index + 1}) - #{branch_name}"
           end
-          print "\n\t     Your option:"; option = STDIN.gets
+          print "\n\t     Your option:"; option = "7"#STDIN.gets
 
           #Converted to Fixnum
           option = option.gsub!("\n","").to_i
+
 
         end until (1..branch_list.size).include? option
 
