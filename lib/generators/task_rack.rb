@@ -39,7 +39,7 @@ module Mutx
         # Gets the list of branches
         branch_list=Mutx::Support::Git.branch_list
         branch_list << "local files"
-
+=begin
         begin
           system "clear"
           Mutx::Support::Logo.show
@@ -54,10 +54,10 @@ module Mutx
           #Converted to Fixnum
           option = option.gsub!("\n","").to_i
 
-        end until (1..branch_list.size).include? 7#hardcoded to use master option by default
+        end until (1..branch_list.size).include? option
+=end
 
-
-        selected_branch_name = branch_list[option-1]
+        selected_branch_name = branch_list[6]#branch_list[option-1]
         puts "
         Lets work on '#{selected_branch_name}'
 
