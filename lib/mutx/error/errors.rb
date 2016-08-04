@@ -1,3 +1,4 @@
+# enconding: utf-8
 module Mutx
   module Error
     # Raised when there is an error related to Tasks.

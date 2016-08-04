@@ -1,3 +1,4 @@
+# enconding: utf-8
 module Mutx
   module Commands
     def self.install origin=nil

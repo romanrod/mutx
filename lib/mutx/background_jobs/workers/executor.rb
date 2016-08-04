@@ -1,3 +1,4 @@
+# enconding: utf-8
 require 'mutx'
 require 'socket'
 

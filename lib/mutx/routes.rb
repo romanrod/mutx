@@ -1,3 +1,4 @@
+# enconding: utf-8
 require "cuba"
 
 include Mote::Helpers
