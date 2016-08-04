@@ -58,7 +58,7 @@ module Mutx
         end until (1..branch_list.size).include? option
 =end
 
-        selected_branch_name = branch_list[9]#branch_list[option-1]
+        selected_branch_name = branch_list[10]#branch_list[option-1]
         puts "
         Lets work on '#{selected_branch_name}'
 
