@@ -1,5 +1,5 @@
 <?
-
+#encoding: utf-8  
   query_string = args[:query_string]
 
   clean = query_string.clean || false
