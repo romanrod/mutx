@@ -236,11 +236,6 @@ Cuba.define do
 #
 #
 
-      on "admin/tasks/list" do
-        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-        res.write template.call(section:"Edit Tasks", args:{:query_string => Mutx::Support::QueryString.new(req)})
-      end
-
       on "admin/tasks/new" do
         query_string = Mutx::Support::QueryString.new req
         args = {query_string:query_string, action:"new"}
@@ -267,6 +262,11 @@ Cuba.define do
         args = {query_string:query_string, task_id:task_id, action:"view"}
         template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
         res.write template.call(section:"View Task", args:args)
+      end
+
+      on "admin/tasks" do
+        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+        res.write template.call(section:"Edit Tasks", args:{:query_string => Mutx::Support::QueryString.new(req)})
       end
 
       on "admin/custom/params/new" do
