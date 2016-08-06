@@ -1,5 +1,6 @@
 # encoding: UTF-8
 # require "git"
+
 module Mutx
   module Support
     class Git
@@ -127,6 +128,8 @@ module Mutx
             log = self.log
             log.split('\n').select do |line|
                 self.is_commit_id? line
+            end.map do |line|
+              line.split(" ").first
             end
           end
 
