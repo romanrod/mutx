@@ -33,7 +33,7 @@ module Mutx
           def self.actual_branch; self.branch; end
 
           def self.branches
-            Mutx::Support::Console.execute("git branch")
+            Mutx::Support::Console.execute("git branch").split("\n")
           end
 
           def self.git_add_commit msg=nil
