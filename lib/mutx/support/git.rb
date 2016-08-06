@@ -126,13 +126,9 @@ module Mutx
 
           def self.commits_ids
             log = self.log
-            if log.respond_to? :split
-              log.split('\n').select do |line|
-                  self.is_commit_id? line
-              end
-            else
-              []
-            end
+            # log.split('\n').select do |line|
+            #     self.is_commit_id? line
+            # end
           end
 
           def self.commits
