@@ -1,8 +1,10 @@
 <?
-	# branch = Mutx::Support::Git.branch
-	branch = "blabla"
-	log_last_commit = Mutx::Support::Git.log_last_commit
-	last_commit_id = Mutx::Support::Git.get_last_commit_id
+	branch = "branch"
+	log_last_commit = "log"
+	last_commit_id = "commit id"
+	#branch = Mutx::Support::Git.branch
+	#log_last_commit = Mutx::Support::Git.log_last_commit
+	#last_commit_id = Mutx::Support::Git.get_last_commit_id
 ?>
 <div class='well'>
 % if Mutx::Support::Configuration.use_git?
