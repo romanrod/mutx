@@ -14,7 +14,8 @@ module Mutx
           end
 
           def self.remote_branches
-            Mutx::Support::Console.execute("git branch -r").split("\n") || []
+            res = Mutx::Support::Console.execute("git branch -r")
+            res.encode('iso-8859-1').encode('utf-8').split("\n") || []
           end
 
           def self.fetch
@@ -33,7 +34,8 @@ module Mutx
           def self.actual_branch; self.branch; end
 
           def self.branches
-            Mutx::Support::Console.execute("git branch").split("\n")
+            res = Mutx::Support::Console.execute("git branch")
+            res.encode('iso-8859-1').encode('utf-8').split("\n")
           end
 
           def self.git_add_commit msg=nil
@@ -163,11 +165,13 @@ module Mutx
 
           def self.remote_log
             self.fetch
-            Mutx::Support::Console.execute "git log origin/#{self.actual_branch}"
+            res = Mutx::Support::Console.execute "git log origin/#{self.actual_branch}"
+            res.encode('iso-8859-1').encode('utf-8')
           end
 
           def self.log
-            Mutx::Support::Console.execute "git log"
+            res = Mutx::Support::Console.execute "git log"
+            res.encode('iso-8859-1').encode('utf-8')
           end
 
           def self.log_last_commit
