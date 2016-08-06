@@ -1,5 +1,6 @@
 <?
   all_custom_params = Mutx::Tasks::Custom::Params.list
+  puts all_custom_params
   custom_params_objects = all_custom_params.select{|custom| custom_params.include? custom["_id"]}
   puts custom_params_objects
 ?>

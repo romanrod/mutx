@@ -108,7 +108,7 @@ Cuba.define do
           custom_params = data.keys.select do |field|
             field.start_with? "custom_param_" and data.delete(field)
           end.inject([]) do |res, value|
-            res<<value.gsub("custom_param_","").to_i; res
+            res<<value.gsub("custom_param_",""); res
           end
 
           data["custom_params"] = custom_params
