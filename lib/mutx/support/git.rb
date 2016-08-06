@@ -1,6 +1,5 @@
 # encoding: UTF-8
 # require "git"
-
 module Mutx
   module Support
     class Git
@@ -126,16 +125,14 @@ module Mutx
 
           def self.commits_ids
             log = self.log
-            [log]
-            # log.split('\n').select do |line|
-            #     self.is_commit_id? line
-            # end
+            log.split('\n').select do |line|
+                self.is_commit_id? line
+            end
           end
 
           def self.commits
             log = self.log
-            # log.split("commit")[1..-1] 
-            [log]
+            log.split("commit")[1..-1] 
           end
 
           def self.is_commit_id? line
