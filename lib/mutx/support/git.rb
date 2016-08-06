@@ -121,8 +121,13 @@ module Mutx
           end
 
           def self.commits_ids
-            self.log.split("\n").select do |line|
-                self.is_commit_id? line
+            log = self.log
+            if log.respond_to? :split
+              log.split("\n").select do |line|
+                  self.is_commit_id? line
+              end
+            else
+              []
             end
           end
 
@@ -135,7 +140,12 @@ module Mutx
           end
 
           def self.last_remote_commit
-            self.remote_commits.first
+            remotes = self.remote_commits
+            remotes.first if remotes.respond_to? :first
+          end
+
+          def self.up_to_date?
+            self.get_last_commit_id == self.last_remote_commit
           end
 
           def self.remote_commits
