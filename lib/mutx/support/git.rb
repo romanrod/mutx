@@ -23,7 +23,11 @@ module Mutx
 
           def self.branch
             branch_name = self.branches.select{|branch| branch.include? "*"}.first
-            branch_name.gsub("*","").gsub(" ","") unless branch_name.nil?
+            if branch_name.respond_to? :gsub
+              branch_name.gsub("*","").gsub(" ","") unless branch_name.nil?
+            else
+              branch_name
+            end
           end
 
           def self.actual_branch; self.branch; end

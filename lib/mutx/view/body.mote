@@ -17,9 +17,7 @@
 
   args[:section] = section
 
-  #git_information = Mote.parse(File.read("#{Mutx::View.path}/git_information.mote"), self, [:section]).call(section:section)
-
-  git_information = "blabla"
+  git_information = Mote.parse(File.read("#{Mutx::View.path}/git_information.mote"), self, [:section]).call(section:section)
 
   footer = Mote.parse(File.read("#{Mutx::View.path}/footer.mote"), self, []).call()
 
