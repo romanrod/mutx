@@ -1,7 +1,5 @@
 <?
-	#branch = "branch"
-	#log_last_commit = "log"
-	#last_commit_id = "commit id"
+# encoding: utf-8
 	branch = Mutx::Support::Git.branch
 	log_last_commit = Mutx::Support::Git.log_last_commit
 	last_commit_id = Mutx::Support::Git.get_last_commit_id

@@ -14,8 +14,7 @@ module Mutx
           end
 
           def self.remote_branches
-            res = Mutx::Support::Console.execute("git branch -r")
-            res.encode('utf-8').split("\n") || []
+            Mutx::Support::Console.execute("git branch -r")
           end
 
           def self.fetch
@@ -34,8 +33,7 @@ module Mutx
           def self.actual_branch; self.branch; end
 
           def self.branches
-            res = Mutx::Support::Console.execute("git branch")
-            res.encode('utf-8').split("\n")
+            Mutx::Support::Console.execute("git branch")
           end
 
           def self.git_add_commit msg=nil
@@ -165,13 +163,12 @@ module Mutx
 
           def self.remote_log
             self.fetch
-            res = Mutx::Support::Console.execute "git log origin/#{self.actual_branch}"
-            res.encode('utf-8')
+            Mutx::Support::Console.execute "git log origin/#{self.actual_branch}"
           end
 
           def self.log
             res = Mutx::Support::Console.execute "git log"
-            res.encode('utf-8')
+
           end
 
           def self.log_last_commit
@@ -187,9 +184,8 @@ module Mutx
           end
 
           def self.remote_url
-            # res = Mutx::Support::Console.execute("git config --get remote.origin.url").split("\n").first.gsub(":","/").gsub("git@", 'http://').chop
-            # res[0..-5] if res.end_with? ".git"
-            "Local"
+            res = Mutx::Support::Console.execute("git config --get remote.origin.url").split("\n").first.gsub(":","/").gsub("git@", 'http://').chop
+            res[0..-5] if res.end_with? ".git"
           end
 
           # Returns an Array with the existing files on .gitignore
