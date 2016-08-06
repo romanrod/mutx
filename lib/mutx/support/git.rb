@@ -126,6 +126,7 @@ module Mutx
 
           def self.commits_ids
             log = self.log
+            [log]
             # log.split('\n').select do |line|
             #     self.is_commit_id? line
             # end
@@ -134,6 +135,7 @@ module Mutx
           def self.commits
             log = self.log
             # log.split("commit")[1..-1] 
+            [log]
           end
 
           def self.is_commit_id? line
