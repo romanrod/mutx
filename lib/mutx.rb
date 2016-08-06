@@ -1,4 +1,4 @@
-# enconding: utf-8
+# encoding: utf-8
 require "mutx/version"
 require "thor"
 require 'json'
