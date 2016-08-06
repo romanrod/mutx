@@ -60,6 +60,11 @@ module Mutx
           ##################
           @count = 0
 
+          # Update repo if changes are found
+          if Mutx::Support::Configuration.use_git?
+            Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
+          end
+
           IO.popen("#{result.mutx_command}") do |data|
             result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
             result.save!
