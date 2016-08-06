@@ -129,7 +129,7 @@ module Mutx
             log.split('\n').select do |line|
                 self.is_commit_id? line
             end.map do |line|
-              line.split(" ").first
+              line.split(" ")[1]
             end
           end
 
