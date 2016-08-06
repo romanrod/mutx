@@ -133,11 +133,7 @@ module Mutx
 
           def self.commits
             log = self.log
-            if log.respond_to? :split
-              log.split("commit")[1..-1] 
-            else
-              []
-            end
+            # log.split("commit")[1..-1] 
           end
 
           def self.is_commit_id? line
