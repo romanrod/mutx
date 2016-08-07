@@ -14,7 +14,7 @@ module Mutx
           end
 
           def self.remote_branches
-            Mutx::Support::Console.execute("git branch -r")
+            Mutx::Support::Console.execute("git branch -r").split("\n")
           end
 
           def self.fetch
