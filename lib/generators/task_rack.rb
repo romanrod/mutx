@@ -64,7 +64,7 @@ module Mutx
         "
         
         Mutx::Support::Git.checkout_to(selected_branch_name) unless (@local = selected_branch_name == "local files")
-
+        Mutx::Support::Git.pull
       end
 
   # ==============================
@@ -176,8 +176,8 @@ module Mutx
 
       def push_changes
         unless @local
-          Mutx::Support::Git.git_add_commit "Mutx: Commit after install command execution"
-          Mutx::Support::Git.git_push_origin_to_actual_branch
+          Mutx::Support::Git.add_commit "Mutx: Commit after install command execution"
+          Mutx::Support::Git.push_origin_to_actual_branch
         end
       end
 

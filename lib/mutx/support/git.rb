@@ -36,7 +36,7 @@ module Mutx
             Mutx::Support::Console.execute("git branch").split("\n")
           end
 
-          def self.git_add_commit msg=nil
+          def self.add_commit msg=nil
             self.add_all
             self.commit msg
           end
@@ -64,11 +64,6 @@ module Mutx
 
           def self.reset_hard_and_pull
             self.reset_hard and self.pull
-          end
-
-          def self.git_push_origin_to_actual_branch
-            branch_name = self.branch
-            self.git_push_origin_to branch_name
           end
 
           def self.git_push_origin_to_actual_branch
