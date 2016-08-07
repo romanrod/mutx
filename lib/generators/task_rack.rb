@@ -26,12 +26,11 @@ module Mutx
 
 
       def check_redis_existance
-        redis = Mutx::Support::Console.execute "redis-server -v"
-        raise "
+          raise "
   REDIS SERVER IS NOT INSTALLED ON YOUR SYSTEM.
   INSTALL REDIS SERVER BEFORE USING KAYA
   to install Redis go to:
-        " unless redis =~ /Redis server v=\d+\.\d+\.\d+/
+        " unless Mutx::Support::RedisHelper.redis_installed?
       end
 
 
