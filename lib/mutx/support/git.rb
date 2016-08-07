@@ -66,7 +66,7 @@ module Mutx
             self.reset_hard and self.pull
           end
 
-          def self.git_push_origin_to_actual_branch
+          def self.push_origin_to_actual_branch
             git_push_origin_to(self.actual_branch)
           end
 
