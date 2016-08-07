@@ -72,7 +72,7 @@ module Mutx
 
           def self.commit msg = nil
             # self.ensure_being_at_mutx_branch
-            msg = "KAYA COMMIT #{Time.new.strftime('%d %m %Y %H:%M:%S')}" if msg.nil?
+            msg = "MuTX COMMIT #{Time.new.strftime('%d %m %Y %H:%M:%S')}" if msg.nil?
             Mutx::Support::Console.execute"git commit -m '#{msg}'"
           end
 

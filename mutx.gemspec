@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'thor'
   spec.add_dependency 'cuba'
   spec.add_dependency 'unicorn'
-  spec.add_dependency 'mongo', '2.2.4'
+  spec.add_dependency 'mongo'
   spec.add_dependency 'redis'
   spec.add_dependency 'sidekiq'
   spec.add_dependency 'bson_ext'

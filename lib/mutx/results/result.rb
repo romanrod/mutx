@@ -319,7 +319,7 @@ module Mutx
         !(["Not available yet", "running"].include? @summary)
       end
 
-      # Returns the html report file created by KAYA
+      # Returns the html report file created by MuTX
       # @param [String] html report file name
       # @return [String] html code read from report
       def read_report
