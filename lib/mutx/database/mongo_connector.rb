@@ -183,8 +183,10 @@ module Mutx
       # @return [Hash] if exist
       def self.last_commit
         Mutx::Support::Log.debug "Getting last commit" if Mutx::Support::Log
-        data = @@commits.find({})
-        data["log"] if data
+        data = @@commits.find({}).to_a || []
+        unless data.empty?
+          data.last["log"]
+        end
       end
 
       ##################################
