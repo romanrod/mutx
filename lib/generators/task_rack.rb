@@ -6,33 +6,6 @@ module Mutx
 
       desc "Generates files needed by Mutx"
 
-  # ===============================
-  # Evaluates prerequisites
-  #
-  #
-
-  #     def check_for_mongo_existance
-  #       begin
-  #         mongo = Mutx::Support::Console.execute "mongo --version"
-  #         mongo_version = mongo.scan(/(\d+\.\d+\.\d+)/).flatten.first
-  #       rescue
-  #         raise "
-  # MONGODB NOT INSTALLED. INSTALL MONGODB BEFORE USING KAYA
-  # to install MongoDB go to: http://docs.mongodb.org/manual/installation/
-  # " if mongo_version.nil?
-  #         end
-  #         puts "MongoDB version installed => #{mongo_version} => OK"
-  #     end
-
-
-      def check_redis_existance
-          raise "
-  REDIS SERVER IS NOT INSTALLED ON YOUR SYSTEM.
-  INSTALL REDIS SERVER BEFORE USING KAYA
-  to install Redis go to:
-        " unless Mutx::Support::RedisHelper.redis_installed?
-      end
-
 
       def choose_working_branch
 
