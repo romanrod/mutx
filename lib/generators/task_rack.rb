@@ -73,6 +73,9 @@ module Mutx
         empty_directory "mutx/conf"
       end
 
+      def creates_mutx_cron_dir
+        empty_directory "mutx/cron"
+      end
 
 
       def copy_server_file
@@ -105,6 +108,18 @@ module Mutx
 
       def copy_mutx_log_file
         template "mutx.log.tt", "#{Dir.pwd}/mutx/logs/mutx.log" unless File.exist? "#{Dir.pwd}/mutx/logs/mutx.log"
+      end
+
+      def copy_mutx_cron_alive
+        template "cron_alive.sh.tt", "#{Dir.pwd}/mutx/cron/cron_alive.sh" unless File.exist? "#{Dir.pwd}/mutx/cron/cron_alive.sh"
+      end
+      
+      def copy_mutx_cron
+        template "cron.rb.tt", "#{Dir.pwd}/mutx/cron/cron.rb" unless File.exist? "#{Dir.pwd}/mutx/cron/cron.rb"
+      end
+      
+      def copy_mutx_cronned_task
+        template "cronned_task.rb.tt", "#{Dir.pwd}/mutx/cron/cronned_task.rb" unless File.exist? "#{Dir.pwd}/mutx/cron/cronned_task.rb"
       end
 
       def copy_sidekiq_log_file

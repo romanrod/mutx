@@ -4,6 +4,6 @@ scheduler = Rufus::Scheduler.new
 
 scheduler.every '1m' do
   current_directory = Dir.pwd
-  system("cd #{current_directory}" && "bundle exec ruby cron.rb")
+  system("cd #{Dir.pwd}/mutx/cron/" && "bundle exec ruby cron.rb")
 end
 scheduler.join
