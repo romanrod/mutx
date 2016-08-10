@@ -95,7 +95,9 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
           % end
           <h3>
             <small>
-              <b style='color:Green'>{{text}}</b>
+              <pre style="height:400px; overflow:scroll; white-space:pre; word-wrap:normal;">
+                <b style='color:Green'>{{text}}</b>
+              </pre>
             </small>
           </h3>
         % if size_of_lines > 15
@@ -122,16 +124,3 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
     % end
   </body>
 </html>
-
-<style>
-#result {
-    background-color:black;
-    text-align:left;
-    padding:3px;
-}
-#well {
-    background-color:red;
-    text-align:center;
-    padding:5px;
-}
-</style>
