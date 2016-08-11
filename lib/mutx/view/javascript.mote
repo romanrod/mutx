@@ -50,6 +50,7 @@
         link += elements[i].getAttribute('name') + '=' + elements[i].value + '&';
       }
     }
+    link = link.replace(/\s/g,'%20');
     infoForLink('Use to the following link to start execution, share it!', link.slice(0,link.length-1));
   }
   function info(title, text){
