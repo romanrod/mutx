@@ -34,9 +34,11 @@
         <li class='{{'active' if section == "repo"}}'>
           <a title='Open repository url' href='{{Mutx::Support::Configuration.project_url}}' target='_blank'>Repo</a>
         </li>
+        <!--
         <li class='{{section == "help" ? 'active' : ''}}'>
           <a href='/help'>Help</a>
         </li>
+         -->
         <!--
         <li class='{{'active' if section =~ /custom|admin|log/}}'>
           <a href='#' class='dropdown-toggle' data-toggle='dropdown' role= 'button' aria-expanded='false'>
@@ -49,7 +51,8 @@
             <li><a href='/logs/mutx'>Mutx Log</a>
             <li><a href='/logs/sidekiq'>Sidekiq Log</a>
             <li role="presentation" class="divider"></li>
-            <!-- <li><a href='/admin/config'>Configuration</a></li> -->
+            <!-- <li><a href='/admin/config'>Configuration</a></li>
+             -->
           </ul>
         </li>
         -->

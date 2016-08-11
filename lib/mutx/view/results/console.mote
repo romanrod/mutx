@@ -39,7 +39,7 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <meta http-equiv='refresh' content='{{Mutx::Support::Configuration.refresh_time}}'>
+    <!-- <meta http-equiv='refresh' content='{{Mutx::Support::Configuration.refresh_time}}'> -->
     <link rel='icon' href='../../favicon.ico'>
     <title>Result for {{result.task_name}}</title>
     <!-- Bootstrap core CSS -->
@@ -96,7 +96,7 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
           <h3>
             <small>
               <pre style="height:400px; overflow:scroll; white-space:pre; word-wrap:normal;">
-                <b style='color:Green'>{{text}}</b>
+                <b style='color:Black'>{{text}}</b>
               </pre>
             </small>
           </h3>

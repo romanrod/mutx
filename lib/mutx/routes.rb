@@ -623,6 +623,8 @@ Cuba.define do
       end
      
       on root do
+        #When go to root path, check for updates on the branch and make a pull if its outdated
+        Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
         res.redirect "/tasks"
       end
 
