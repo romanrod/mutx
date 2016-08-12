@@ -92,6 +92,7 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
         <div id='result'>
           % if size_of_lines > 15
             <button type='button' class='btn btn-default' title='Go down' onclick='goToBottom()' style='float: right'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span> Go down</button>
+            <br>
           % end
           <h3>
             <small>

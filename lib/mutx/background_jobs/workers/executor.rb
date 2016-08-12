@@ -32,10 +32,7 @@ module Mutx
                 result.finish!
                 raise "An error ocurred installing gem while executing bundler"
               else
-                result.append_output "All GEMS are installed and running!\n"
-                result.append_output "=========================\n"
-                result.append_output "EXECUTION OUTPUT:\n"
-                result.append_output "=========================\n"
+                result.append_output "All GEMS are installed and running!\nEXECUTION OUTPUT:\n\n--"                
               end
             end
           end
