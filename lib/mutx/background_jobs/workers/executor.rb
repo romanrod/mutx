@@ -92,6 +92,19 @@ module Mutx
 
           result.ensure_finished!
 
+          task = Mutx::Database::MongoConnector.task_data_for result.task[:id]
+          subject = if task[:subject].empty?
+            task[:name]
+          else
+            task[:subject]
+          end
+
+          email = task[:mail]
+          name = task[:name]
+          id = task[:_id]
+          
+          Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id) if ((task[:notifications].eql? "on") && (!email.empty?))
+
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
 
         end

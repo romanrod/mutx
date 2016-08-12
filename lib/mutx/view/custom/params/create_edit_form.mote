@@ -32,10 +32,6 @@ types.unshift("Select...") unless types.include? "Select..."
 
 
 ?>
-{{args[:custom_param_id]}}
-{{custom_param}}
-{{type}}
-{{required}}
 
 <nav class="navbar navbar-default">
   <form name="custom-param" id="custom-param" action="/admin/custom-param" method="POST">

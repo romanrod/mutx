@@ -77,6 +77,10 @@ module Mutx
         empty_directory "mutx/cron"
       end
 
+      def creates_mutx_templates_dir
+        empty_directory "mutx/templates"
+      end
+
 
       def copy_server_file
         unless File.exist? "#{Dir.pwd}/mutx/config.ru"
@@ -116,6 +120,10 @@ module Mutx
       
       def copy_mutx_cron
         template "cron.rb.tt", "#{Dir.pwd}/mutx/cron/cron.rb" unless File.exist? "#{Dir.pwd}/mutx/cron/cron.rb"
+      end
+
+      def copy_mutx_templates
+        template "mutx_template.html.erb.tt", "#{Dir.pwd}/mutx/templates/mutx_template.html.erb" unless File.exist? "#{Dir.pwd}/mutx/templates/mutx_template.html.erb"
       end
       
       def copy_mutx_cronned_task

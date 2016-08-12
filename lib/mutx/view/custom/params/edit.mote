@@ -1,6 +1,5 @@
 % form_template = Mote.parse(File.read("#{Mutx::View.path}/custom/params/create_edit_form.mote"), self, [:args])
 % args["action"]="edit"
-args:{{args}}
 <div class="panel panel-info">
   <!-- Default panel contents -->
   <div class="panel-heading"><h2>Edit Custom Parameter</h2></div>

@@ -292,7 +292,6 @@ module Mutx
       end
 
       def self.update_tasks_with_custom_param_id custom_param_id
-        custom_param_id = custom_param_id.to_i if custom_param_id.respond_to? :to_i
         self.tasks_with_custom_param_id(custom_param_id).each do |task_data|
           task_data["custom_params"].delete(custom_param_id)
           self.update_task task_data
@@ -319,7 +318,7 @@ module Mutx
     # @param [Hash] custom_param_data
     def self.update_custom_param custom_param_data
       Mutx::Support::Log.debug "Updating db custom param [#{custom_param_data}]" if Mutx::Support::Log
-      id = custom_param_data["_id"].to_i if custom_param_data["_id"].respond_to? :to_i
+      id = custom_param_data["_id"]
       @@custom_params.update_one( {"_id" => custom_param_data["_id"]}, custom_param_data)
     end
 
@@ -328,7 +327,6 @@ module Mutx
     # @return [Hash] all custom param data
     def self.get_custom_param custom_param_id
       Mutx::Support::Log.debug "Getting db custom param data for custom param id #{custom_param_id}" if Mutx::Support::Log
-      custom_param_id = custom_param_id.to_i if custom_param_id.respond_to? :to_i
 
       res = @@custom_params.find({"_id" => custom_param_id}).to_a.first
     end
@@ -349,15 +347,14 @@ module Mutx
     end
 
     def self.exist_custom_param_id? param_id
-      param_id = param_id.to_i if param_id.respond_to? :to_i
       # !@@custom_params.find({"_id" => param_id}).nil?
       @@custom_params.find({"_id" => param_id})
     end
 
     def self.delete_custom_param custom_param_id
       Mutx::Support::Log.debug "Deleting db custom param for custom param id [#{custom_param_id}]" if Mutx::Support::Log
-      custom_param_id = custom_param_id.to_i if custom_param_id.respond_to? :to_i
       @@custom_params.delete_one({"_id" => custom_param_id})
+
       self.update_tasks_with_custom_param_id(custom_param_id)
     end
 

@@ -7,7 +7,6 @@ module Mutx
       def self.set data
 
         # Sanity
-
         data = self.sanitize data
 
 
@@ -51,8 +50,7 @@ module Mutx
           data["required"] = data["required"]=="on"
 
         end
-        data["_id"] = data["_id"].to_i if data.keys.include? "_id"
-
+        #data["_id"] = data["_id"].to_i if data.keys.include? "_id" # MD5 dont need to be coverted to int
         data
       end
 

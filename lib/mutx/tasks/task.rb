@@ -27,7 +27,10 @@ module Mutx
       :cronneable,
       :cron_time,
       :last_exec_time,
-      :application
+      :application,
+      :mail,
+      :subject,
+      :notifications
 
 
       def self.valid_types
@@ -50,11 +53,14 @@ module Mutx
           @custom_params    = task_data["custom_params"] || []
           @information      = task_data["information"]
           @running_execs    = []
-          @cucumber         = task_data["cucumber_report"]
-          @cucumber_report  = task_data["cucumber"]
+          @cucumber         = task_data["cucumber"]
+          @cucumber_report  = task_data["cucumber_report"]
           @max_execs        = task_data["max_execs"] || Mutx::Support::Configuration.maximum_execs_per_task
           @cronneable       = task_data["cronneable"]
           @cron_time        = task_data["cron_time"]
+          @mail             = task_data["mail"]
+          @subject          = task_data["subject"]
+          @notifications    = task_data["notifications"]
           @last_exec_time   = task_data["last_exec_time"]
           @application      = task_data["application"] || "command line"
         else
@@ -102,6 +108,9 @@ module Mutx
           "custom_params" => data["custom_params"],
           "cronneable" => data["cronneable"],
           "cron_time" => data["cron_time"],
+          "mail" => data["mail"],
+          "subject" => data["subject"],
+          "notifications" => data["notifications"],
           "last_exec_time" => Time.now.utc,
           "application" => data["application"]
         }
@@ -211,6 +220,9 @@ module Mutx
           "cucumber" => cucumber,
           "platform" => platform,
           "cronneable" => cronneable,
+          "mail" => mail,
+          "subject" => subject,
+          "notifications" => notifications,
           "cron_time" => cron_time,
           "last_exec_time" => last_exec_time,
           "application" => application
