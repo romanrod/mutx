@@ -105,12 +105,13 @@ module Mutx
         result = Mutx::Results::Result.get(result_id)
 
         task = Mutx::Tasks::Task.get(result.task_id)
-
+        # if is the owner
           if result.process_running? or !result.finished? or !result.stopped?
             begin
               if result.pid
                 Mutx::Support::Processes.kill_p(result.pid)
                 killed = true
+                task.set_ready!
                 Mutx::Support::Log.debug "Execution (id=#{result.id}) killed"
               end
             rescue => e
@@ -129,16 +130,20 @@ module Mutx
             result.show_as = "pending"
             result.save!
 
-            task.set_ready! if Mutx::Results.is_there_running_executions_for? task.name
-            if killed and cleanned
-              {"message" => "Execution:Stopped - Process:Killed - Files:Cleanned"}
+            # task.set_ready! if Mutx::Results.is_there_running_executions_for? task.name
+            if killed 
+              message = "Execution: Stopped (forced) "
+              message += " Files: Cleanned" if cleanned
             else
-              {"message" => "Could not stop execution. Process killing: #{killed}. Files cleanned: #{celanned}"}
+              message = "Could not stop execution. Process killing: #{killed}. Files cleanned: #{cleanned}"
+              
             end
+              
           end
         # else
         #   {"message" => "You are not the owner of this execution"}
         # end
+        {"message" => message}
       end
 
     end
