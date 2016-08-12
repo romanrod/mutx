@@ -31,7 +31,8 @@ module Mutx
         :timeout,
         :started_message,
         :console_output,
-        :application
+        :application,
+        :gui_task
 
 
       def initialize data_for_result
@@ -137,7 +138,7 @@ module Mutx
       # Returns the string of custom params values
       # @return [String] foo=bar john=doe
       def custom_params_values
-        "mutx_custom_params='#{validate_params(@custom_params).to_json}'".gsub(',', ', ')
+        "mutx_custom_params='#{validate_params(@custom_params).to_json}'".gsub(',', ', ') unless @custom_params.empty?
       end
 
 
@@ -201,6 +202,10 @@ module Mutx
 
       def generate_cucumber_report?
         @task["cucumber_report"]
+      end
+
+      def gui_task?
+        @task["aplication"] == "GUI"
       end
 
       def finish!

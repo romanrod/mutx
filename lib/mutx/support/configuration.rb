@@ -215,15 +215,11 @@ module Mutx
       end
 
       def self.headless?
-        if self.is_boolean? @@input["headless"]["active"]
-          "xvfb-run --auto-servernum --server-args='-screen 0, #{self.resolution}x#{self.size}' " if @@input["headless"]["active"]
-        end
+        self.is_boolean? @@input["headless"]["active"]
+      end
 
-        # begin
-        #   @@input["headless"]["active"] if self.is_boolean? @@input["headless"]["active"]
-        # rescue
-        #   false
-        # end
+      def self.headless_configuration
+        "xvfb-run --auto-servernum --server-args='-screen 0, #{self.resolution}x#{self.size}' "
       end
 
       # Returns value for screen resolution

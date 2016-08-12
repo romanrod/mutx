@@ -41,12 +41,15 @@ module Mutx
           end
 
           Dir.mkdir "#{Dir.pwd}/mutx/temp" unless Dir.exist? "#{Dir.pwd}/mutx/temp"
-          cucumber_report_command = result.is_cucumber? ? "-f pretty -f html -o mutx/temp/#{result.mutx_report_file_name}" : ""
 
-          # Adding _id=result.id to use inside execution the posiibility to add information to the result
-          result.mutx_command= "#{Mutx::Support::Configuration.headless?} #{result.command} #{cucumber_report_command} #{result.custom_params_values} _id=#{result.id} "
-
-          Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
+          efective_command = []
+          efective_command << Mutx::Support::Configuration.headless? if result.gui_task?
+          efective_command << result.command
+          efective_command << "-f pretty -f html -o mutx/temp/#{result.mutx_report_file_name}" if result.is_cucumber?
+          efective_command << result.custom_params_values
+          efective_command << "_id=#{result.id}" # to use inside execution the posiibility to add information to the result
+          
+          result.mutx_command= efective_command.join(" ")
 
           result.running!
 
@@ -65,6 +68,7 @@ module Mutx
             Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
           end
 
+          Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
           IO.popen("#{result.mutx_command}") do |data|
             result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
             result.save!
