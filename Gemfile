@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
-
-gem 'mutx'
+gemspec
+#gem 'mutx'

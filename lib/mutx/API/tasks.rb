@@ -26,7 +26,7 @@ module Mutx
       def self.sanitize data
         data["max_execs"] = data["max_execs"].to_i if data["max_execs"].respond_to? :to_i
         data["cucumber_report"] = data["cucumber"]
-        data["information"] = nil if data["information"].size.zero?
+        data["information"] = "-" if data["information"].size.zero?
         data["last_exec_time"] = Time.now.utc
         data
       end

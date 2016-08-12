@@ -52,8 +52,6 @@ Cuba.define do
 
           data = req.params.dup
 
-          data["_id"] = data["_id"].to_i
-
           response = Mutx::API::CustomParams.set data # Creates or update
 
           path = "/admin/custom/params"
@@ -500,12 +498,12 @@ Cuba.define do
       end
 
       on "api/tasks/:id/status" do |task_id|
-        output = Mutx::API::Task.status(task_id.to_i)
+        output = Mutx::API::Task.status(task_id)
         res.write output.to_json
       end
 
       on "api/tests/:id/status" do |task_id|
-        output = Mutx::API::Task.status(task_id.to_i)
+        output = Mutx::API::Task.status(task_id)
         res.write output.to_json
       end
 
