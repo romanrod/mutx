@@ -162,7 +162,11 @@ module Mutx
       end
 
       def self.is_boolean? object
-        [TrueClass, FalseClass].include? object.class
+        if [TrueClass, FalseClass].include? object.class
+          object.class 
+        else
+          false
+        end
       end
 
       def self.use_git?
