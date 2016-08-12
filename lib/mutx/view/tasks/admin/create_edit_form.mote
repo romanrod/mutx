@@ -44,6 +44,7 @@ execution_type = type.capitalize if type
 platform = task["platform"].capitalize if task
 application = task["application"].capitalize if task
 
+?>
 <script>
   src="http://code.jquery.com/jquery-1.9.1.js"
   $(document).ready(function(){
@@ -68,7 +69,6 @@ application = task["application"].capitalize if task
 </script>
 
 
-?>
 
 <form name="custom-param" id="custom-param" action="/admin/tasks/add-edit" method="POST">
   <nav class="navbar navbar-default">
