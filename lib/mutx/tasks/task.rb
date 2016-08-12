@@ -50,8 +50,8 @@ module Mutx
           @custom_params    = task_data["custom_params"] || []
           @information      = task_data["information"]
           @running_execs    = []
-          @cucumber         = task_data["cucumber_report"]
-          @cucumber_report  = task_data["cucumber"]
+          @cucumber         = task_data["cucumber"] == "on"
+          # @cucumber_report  = task_data["cucumber_report"]
           @max_execs        = task_data["max_execs"] || Mutx::Support::Configuration.maximum_execs_per_task
           @cronneable       = task_data["cronneable"]
           @cron_time        = task_data["cron_time"]
@@ -260,9 +260,11 @@ module Mutx
       end
 
       def set_ready!
-        @status = "READY"
-        Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as ready" if Mutx::Support::Log
-        self.save!
+        if Mutx::Tasks.number_of_running_executions_for_task(@name).zero?
+          @status = "READY"
+          Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as ready" if Mutx::Support::Log
+          self.save!
+        end
       end
 
       def set_running!

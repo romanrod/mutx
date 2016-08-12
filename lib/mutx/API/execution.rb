@@ -126,7 +126,8 @@ module Mutx
             end
 
             result.save_report
-            result.reset!("forced"); Mutx::Support::Log.debug "Execution stopped! Mutx restarted"
+            result.reset!("forced"); 
+            Mutx::Support::Log.debug "Execution stopped!"
             result.show_as = "pending"
             result.save!
 

@@ -87,6 +87,8 @@ module Mutx
           end
 
           result.ensure_finished!
+          task = Mutx::Tasks::Task.get(result.task_id)
+          task.set_ready!
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
 
