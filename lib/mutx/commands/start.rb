@@ -32,11 +32,17 @@ module Mutx
 
         if Mutx::Support::Configuration.headless?
           Mutx::Support::Log.debug "Headless mode: ON - Checking xvfb existance" if Mutx::Support::Log
-          res = Mutx::Support::Console.execute "xvfb-run"
-          if res.include? "sudo apt-get install xvfb"
-            puts "You have configured headless mode but xvfb package is not installed on your system.
-Please, install xvfb package if you want to run browsers in headless mode
-or set headless active value as false if you do not use browser in your tests."
+          begin
+            res = Mutx::Support::Console.execute "xvfb-run"
+            if res.include? "sudo apt-get install xvfb"
+              puts "You have configured headless mode but xvfb package is not installed on your system.
+    Please, install xvfb package if you want to run browsers in headless mode
+    or set headless active value as false if you do not use browser in your tests."  
+              return 
+            end
+          rescue
+            # if mac, show option
+            puts "Not Ubuntu OS :("
             return
           end
         end
