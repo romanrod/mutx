@@ -146,6 +146,7 @@ module Mutx
       {success:success, message:message}
     end
 
+    # Resets all Tasks
     def self.reset!
       Mutx::Support::Log.debug "Resetting tasks status" if Mutx::Support::Log
       self.running_tasks.each do |task|

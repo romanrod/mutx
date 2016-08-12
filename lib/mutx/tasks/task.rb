@@ -54,7 +54,7 @@ module Mutx
           @information      = task_data["information"]
           @running_execs    = []
           @cucumber         = task_data["cucumber"]
-          @cucumber_report  = task_data["cucumber_report"]
+          @cucumber_report  = task_data["cucumber_report"]          
           @max_execs        = task_data["max_execs"] || Mutx::Support::Configuration.maximum_execs_per_task
           @cronneable       = task_data["cronneable"]
           @cron_time        = task_data["cron_time"]
@@ -233,14 +233,7 @@ module Mutx
         !@custom_params.empty?
       end
 
-      # Returns an array of those required custom params
-      # This is for start execution validations
-      # @return [Array]
-#     # def required_custom_params
-#     #   all_required = Mutx::Task::Custom::Params.all_required_ids
-#     #   custom_params.select{|param| all_required.include? param["_id"]}.map{|param| param["name"]}
-#     # end
-
+      
       def has_info?
         not @information.empty?
       end
@@ -248,20 +241,6 @@ module Mutx
       def test?
         self.type == "test"
       end
-
-      # def activate!
-      #   raise "activate! => DEPRECATED #{__FILE__}:#{__LINE__}"
-      #   # @cucumber= true
-      #   # Mutx::Support::Log.debug "[#{@id}:#{@name}] Activated" if Mutx::Support::Log
-      #   # self.save!
-      # end
-
-      # def deactivate!
-      #   raise "deactivate! => DEPRECATED #{__FILE__}:#{__LINE__}"
-      #   # @cucumber = false
-      #   # Mutx::Support::Log.debug "[#{@id}:#{@name}] Deactivated" if Mutx::Support::Log
-      #   # self.save!
-      # end
 
       def is_ready?
         status == "READY"
@@ -272,9 +251,11 @@ module Mutx
       end
 
       def set_ready!
-        @status = "READY"
-        Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as ready" if Mutx::Support::Log
-        self.save!
+        if Mutx::Tasks.number_of_running_executions_for_task(@name).zero?
+          @status = "READY"
+          Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as ready" if Mutx::Support::Log
+          self.save!
+        end
       end
 
       def set_running!
@@ -311,7 +292,6 @@ module Mutx
 
       def save!
         if Mutx::Database::MongoConnector.task_data_for(id)
-        # unless Mutx::Database::MongoConnector.task_data_for(id).empty?
           Mutx::Database::MongoConnector.update_task(task_data_structure)
         else
           Mutx::Database::MongoConnector.insert_task(task_data_structure)
