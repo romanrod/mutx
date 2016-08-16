@@ -451,7 +451,7 @@ module Mutx
       end
 
       def is_running?
-        @status =~ /running|stated/i
+        @status =~ /running|started/i
       end
 
 

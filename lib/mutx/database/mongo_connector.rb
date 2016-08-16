@@ -142,18 +142,6 @@ module Mutx
         ["tasks","results","custom_params","commit","configuration"]
       end
 
-      # Drops all mutx collections
-      # def self.drop_collections hard=false
-      #   db = self.mutx_db
-      #   collections_to_drop = collections
-      #   unless hard
-      #     ["custom_params","tasks"].each{|col| collections_to_drop.delete(col)}
-      #   end
-      #   collections_to_drop.each do |collection|
-      #     db.drop_collection(collection) if collection != "documentation"
-      #   end
-      # end
-
       def self.drop_collections hard=false
         collections_to_drop = self.collections
         ["custom_params","tasks"].each{|col| collections_to_drop.delete(col)} unless hard
@@ -162,10 +150,7 @@ module Mutx
         end
       end
 
-      # def self.mutx_db
-      #   MongoClient.new().db(@@db_name)
-      # end
-
+    
 
       ##################################
       # COMMITS
@@ -271,12 +256,14 @@ module Mutx
 
       def self.running type
         Mutx::Support::Log.debug "Getting db running tasks" if Mutx::Support::Log
-        @@tasks.find({"status" => "RUNNING", "type" => type}).to_a
+        @@results.find({"status" => /started|running/, "task.type" => type}).to_a.map do |result|
+          self.task_data_for result["task"]["id"]
+        end.uniq
       end
 
       def self.running_for_task task_name
         Mutx::Support::Log.debug "Getting db running for task name #{task_name}" if Mutx::Support::Log
-        @@tasks.find({"name" => task_name, "status" => "RUNNING"}).to_a
+        @@results.find({"status" => /started|running/, "task.name" => task_name}).to_a
       end
 
       def self.active_tasks

@@ -49,8 +49,6 @@ module Mutx
 
             task.push_exec execution_id
 
-            task.set_running!
-
             task.save!
 
             Mutx::Support::Log.debug "Task #{task_name} setted as running" if Mutx::Support::Log
@@ -111,7 +109,6 @@ module Mutx
               if result.pid
                 Mutx::Support::Processes.kill_p(result.pid)
                 killed = true
-                task.set_ready!
                 Mutx::Support::Log.debug "Execution (id=#{result.id}) killed"
               end
             rescue => e
@@ -131,7 +128,6 @@ module Mutx
             result.show_as = "pending"
             result.save!
 
-            # task.set_ready! if Mutx::Results.is_there_running_executions_for? task.name
             if killed 
               message = "Execution: Stopped (forced) "
               message += " Files: Cleanned" if cleanned

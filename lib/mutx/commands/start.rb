@@ -65,11 +65,6 @@ module Mutx
         Mutx::Support::FilesCleanner.clear_sidekiq_log
         Mutx::Support::Log.debug "Sidekiq log file cleanned" if Mutx::Support::Log
 
-        # To prevent showing tasks as runnnig when service started recently reset all tasks
-        Mutx::Support::Log.debug "Reseting tasks statuses" if Mutx::Support::Log
-        Mutx::Tasks.reset!
-        Mutx::Support::Log.debug "Tasks statuses reseted" if Mutx::Support::Log
-        puts "\n* Tasks Status: Reseted"
 
         # Force results to reset or finished status
         Mutx::Support::Log.debug "Reseting defunct executions" if Mutx::Support::Log

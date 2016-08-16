@@ -111,13 +111,11 @@ module Mutx
     # Returns the ids for running tasks
     # @return [Array] of task ids
     def self.running_tasks
-      # Obtener el listado completo de tasks y luego filtrar las que tienen results running
-      # Mutx::Database::MongoConnector.running_tasks
+      Mutx::Database::MongoConnector.running_tasks
     end
 
     def self.running_tests
-      # Obtener el listado completo de tasks y luego filtrar las que tienen results running
-      # Mutx::Database::MongoConnector.running_tests
+      Mutx::Database::MongoConnector.running_tests
     end
 
     def self.exist_task? task_id
@@ -146,14 +144,6 @@ module Mutx
         message = "Could not find task with id '#{task_id}'"
       end
       {success:success, message:message}
-    end
-
-    # Resets all Tasks
-    def self.reset!
-      Mutx::Support::Log.debug "Resetting tasks status" if Mutx::Support::Log
-      self.running_tasks.each do |task|
-        Mutx::Tasks::Task.get(task["_id"]).set_ready!
-      end
     end
 
   end
