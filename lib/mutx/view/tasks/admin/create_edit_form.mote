@@ -45,10 +45,6 @@ platform = task["platform"].capitalize if task
 application = task["application"].capitalize if task
 
 ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 7946439652abce4c9ee3be74593bb6899725d31b
 <script>
   src="http://code.jquery.com/jquery-1.9.1.js"
   $(document).ready(function(){
@@ -59,7 +55,6 @@ application = task["application"].capitalize if task
         $('#autoUpdate').fadeOut('slow');
       });
   });
-
   $(document).ready(function(){
     $('#checkbox2').change(function(){
       if(this.checked)
@@ -68,15 +63,7 @@ application = task["application"].capitalize if task
         $('#autoUpdate1').fadeOut('slow');
       });
   });
-
-
 </script>
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 7946439652abce4c9ee3be74593bb6899725d31b
 <form name="custom-param" id="custom-param" action="/admin/tasks/add-edit" method="POST">
   <nav class="navbar navbar-default">
   <table width="100%">
