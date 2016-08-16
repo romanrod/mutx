@@ -247,7 +247,7 @@ module Mutx
       end
 
       def is_running?
-        status == "RUNNING"
+        status == "running"
       end
 
       def set_ready!
@@ -259,7 +259,7 @@ module Mutx
       end
 
       def set_running!
-        @status= "RUNNING"
+        @status= "running"
         Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as running" if Mutx::Support::Log
         self.save!
       end
