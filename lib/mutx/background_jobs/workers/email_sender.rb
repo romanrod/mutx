@@ -3,6 +3,7 @@ require 'mutx'
 require 'mail'
 require 'erb'
 require 'ostruct'
+#require 'sidekiq/testing/inline'
 
 module Mutx
   module Workers
@@ -44,6 +45,14 @@ module Mutx
         mail.to "#{email}"
 
         mail.subject = "[MuTX] ==> #{subject}"
+
+        File.open("result.html", "w") { |file| file.write("#{html_part.body}") }
+
+        mail.add_file "result.html"
+
+        html_part.body "\nA continuacion se adjunta el resutado de la ejecucion solicitada"
+        html_part.body ""
+        html_part.body "\n-.Equipo [MuTX].-"
 
         puts "ENVIANDO RESULTADO VIA MAIL"
 
