@@ -17,7 +17,6 @@ module Mutx
       :type,
       :platform,
       :framework,
-      :status,
       :command,
       :custom_params,
       :information,
@@ -48,7 +47,6 @@ module Mutx
           @type             = task_data["type"] || "task"
           @platform         = task_data["platform"] || "command line"
           @framework        = task_data["framework"]
-          @status           = task_data["status"]
           @command          = task_data["command"]
           @custom_params    = task_data["custom_params"] || []
           @information      = task_data["information"]
@@ -75,7 +73,8 @@ module Mutx
         response = task_data_structure
         response["results"]={
           "size" => number_of_results,
-          "ids" => all_results_ids
+          "ids" => all_results_ids,
+          "status" => status
         }
         response
       end
@@ -103,7 +102,6 @@ module Mutx
           "information" => data["information"],
           "cucumber" => data["cucumber"],
           "branch" => Mutx::Support::Git.actual_branch,
-          "status" => "READY",
           "max_execs" => data["max_execs"],
           "custom_params" => data["custom_params"],
           "cronneable" => data["cronneable"],
@@ -129,7 +127,6 @@ module Mutx
       end
 
       def self.validate(data)
-
         # cucumber value must be boolean
         errors = []
           if data["action"] == "edit"
@@ -137,11 +134,8 @@ module Mutx
           else
             errors << self.validate_name(data["name"])
           end
-
           errors << self.validate_max_execs(data["max_execs"])
-
           errors << self.validate_type(data["type"])
-
           errors << self.validate_risk_command(data["command"])
           errors.compact
       end
@@ -211,7 +205,6 @@ module Mutx
           "name" => name,
           "branch" => branch,
           "type" => type,
-          "status" => status,
           "command" => command,
           "custom_params" => custom_params,
           "information"  => information,
@@ -242,28 +235,6 @@ module Mutx
         self.type == "test"
       end
 
-      def is_ready?
-        status == "READY"
-      end
-
-      def is_running?
-        status == "RUNNING"
-      end
-
-      def set_ready!
-        if Mutx::Tasks.number_of_running_executions_for_task(@name).zero?
-          @status = "READY"
-          Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as ready" if Mutx::Support::Log
-          self.save!
-        end
-      end
-
-      def set_running!
-        @status= "RUNNING"
-        Mutx::Support::Log.debug "[#{@id}:#{@name}] Marked as running" if Mutx::Support::Log
-        self.save!
-      end
-
       def push_exec result_id
         @running_execs << result_id
         self.save!
@@ -278,6 +249,10 @@ module Mutx
         all_results.size
       end
 
+      def number_of_running_results
+        all_results.select{|res| res["status"] == "RUNNING"}.size
+      end
+
       def all_results_ids
         all_results.inject([]){|res, result| res << result["_id"]}
       end
@@ -290,6 +265,14 @@ module Mutx
         number_of_results > 0
       end
 
+      def status
+        if number_of_running_results > 0
+          "RUNNING"
+        else
+          "IDLE"
+        end
+      end
+
       def save!
         if Mutx::Database::MongoConnector.task_data_for(id)
           Mutx::Database::MongoConnector.update_task(task_data_structure)
@@ -297,11 +280,6 @@ module Mutx
           Mutx::Database::MongoConnector.insert_task(task_data_structure)
         end
         Mutx::Support::Log.debug "[#{@id}:#{@name}] Task saved" if Mutx::Support::Log
-      end
-
-      # If test tasks ir running
-      def check_last_result!
-        raise "NO SE PUEDE USAR MAS ESTO, AHORA HAY QUE CHEQUEAR POR SEPARADO"
       end
 
     end

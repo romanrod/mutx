@@ -111,11 +111,13 @@ module Mutx
     # Returns the ids for running tasks
     # @return [Array] of task ids
     def self.running_tasks
-      Mutx::Database::MongoConnector.running_tasks
+      # Obtener el listado completo de tasks y luego filtrar las que tienen results running
+      # Mutx::Database::MongoConnector.running_tasks
     end
 
     def self.running_tests
-      Mutx::Database::MongoConnector.running_tests
+      # Obtener el listado completo de tasks y luego filtrar las que tienen results running
+      # Mutx::Database::MongoConnector.running_tests
     end
 
     def self.exist_task? task_id

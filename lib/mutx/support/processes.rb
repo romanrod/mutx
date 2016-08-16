@@ -32,7 +32,13 @@ module Mutx
 
       def self.kill_p(pid)
         pid = pid.to_i if pid.respond_to? :to_i
-        Process.kill('INT', pid)
+        begin
+          Process.kill('INT', pid)
+          true
+        rescue => e
+          puts "#{e} [#{pid}]"
+          false
+        end
       end
 
       def self.kill_dash_nine(pid)

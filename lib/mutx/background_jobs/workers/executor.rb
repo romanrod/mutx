@@ -89,7 +89,6 @@ module Mutx
 
           result.ensure_finished!
           task = Mutx::Tasks::Task.get(result.task_id)
-          task.set_ready!
 
           task = Mutx::Database::MongoConnector.task_data_for result.task[:id]
           subject = if task[:subject].empty?
