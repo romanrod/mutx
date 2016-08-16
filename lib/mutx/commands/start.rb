@@ -43,8 +43,6 @@ module Mutx
           rescue
             # if mac, show option
             puts "Not Ubuntu OS :(\n xvfb will not work"
-
-            
           end
         end
 

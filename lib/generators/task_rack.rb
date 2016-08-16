@@ -1,4 +1,8 @@
 # encoding: utf-8
+require 'erb'
+require 'zip'
+require 'fileutils'
+
 module Mutx
   class TaskRack < Thor::Group
 
@@ -123,7 +127,12 @@ module Mutx
       end
 
       def copy_mutx_templates
-        template "mutx_template.html.erb.tt", "#{Dir.pwd}/mutx/templates/mutx_template.html.erb" unless File.exist? "#{Dir.pwd}/mutx/templates/mutx_template.html.erb"
+        dir = "#{Dir.pwd}"
+        template "mutx_template.html.erb.zip", "#{Dir.pwd}/mutx/templates/mutx_template.html.erb.zip" unless File.exist? "#{Dir.pwd}/mutx/templates/mutx_template.html.erb.zip"
+        FileUtils.cd("#{Dir.pwd}/mutx/templates/")
+        `unzip mutx_template.html.erb.zip`
+        `rm mutx_template.html.erb.zip`
+        FileUtils.cd(dir)
       end
       
       def copy_mutx_cronned_task
