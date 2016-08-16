@@ -9,7 +9,7 @@
     % content.each_line do |line|
       <div class="small">{{line.gsub("<","&lt").gsub(">","&gt").gsub('"',"&quot;").gsub("&lt","&lt<strong>").gsub("&gt","</strong>&gt").gsub(" ","&nbsp;").gsub("======#=====","<br><br>")}}</div>
     % end
-  </pre>
+  </div>
 % end
 
 <!-- % content = IO.read("#{Dir.pwd}/#{feature_path}").each_line{|line| line.gsub("<","%LT&").gsub(">","%GT&").gsub("'","").gsub('"',"").gsub("\n","<br>")} -->

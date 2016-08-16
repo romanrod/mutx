@@ -107,9 +107,9 @@ module Mutx
           if result.process_running? or !result.finished? or !result.stopped?
             begin
               if result.pid
-                Mutx::Support::Processes.kill_p(result.pid)
                 killed = true
-                Mutx::Support::Log.debug "Execution (id=#{result.id}) killed"
+                Mutx::Support::Processes.kill_p(result.pid)
+                Mutx::Support::Log.debug "Execution (id=#{result.id}) killed: #{killed}"
               end
             rescue => e
               Mutx::Support::Log.error "#{e}#{e.backtrace}"
@@ -137,9 +137,6 @@ module Mutx
             end
               
           end
-        # else
-        #   {"message" => "You are not the owner of this execution"}
-        # end
         {"message" => message}
       end
 

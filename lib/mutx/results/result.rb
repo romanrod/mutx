@@ -222,8 +222,8 @@ module Mutx
 
         @timeout = "#{Mutx::Support::Configuration.execution_time_to_live}"
         reset!("Timeout reached '#{@timeout}'")
-        # save_report
-        # save_report_summary_and_status!
+        save_report
+        save_report_summary_and_status!
         Mutx::Support::Log.debug "[#{@id}] Finished by timeout (#{Mutx::Support::Configuration.execution_time_to_live} sec)" if Mutx::Support::Log
         Mutx::Workers::EmailSender.perform_async(self.id)
         true

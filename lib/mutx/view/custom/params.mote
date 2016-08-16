@@ -1,8 +1,8 @@
 <?
   all_custom_params = Mutx::Tasks::Custom::Params.list
-  puts all_custom_params
+  # puts all_custom_params
   custom_params_objects = all_custom_params.select{|custom| custom_params.include? custom["_id"]}
-  puts custom_params_objects
+  # puts custom_params_objects
 ?>
 <h4 title='This parameters will be passed to the test task execution'>&nbsp;&nbsp;&nbsp;Custom Parameters</h4>
 <div class='container' style='width: inherit'>
