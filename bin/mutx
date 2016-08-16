@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
 require 'mutx'
+require 'digest'
+require 'erb'
 
 Mutx::Base.start(ARGV)
