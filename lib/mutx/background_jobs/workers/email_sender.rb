@@ -50,9 +50,7 @@ module Mutx
 
         mail.add_file "result.html"
 
-        html_part.body "\nA continuacion se adjunta el resutado de la ejecucion solicitada"
-        html_part.body ""
-        html_part.body "\n-.Equipo [MuTX].-"
+        html_part.body "\nA continuacion se adjunta el resutado de la ejecucion solicitada. -.Equipo [MuTX].-"
 
         puts "ENVIANDO RESULTADO VIA MAIL"
 
