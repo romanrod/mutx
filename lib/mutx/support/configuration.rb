@@ -98,16 +98,32 @@ module Mutx
         }
       end
 
-      def self.execution_check_time
-        self.is_a_number?(@@input["execution_check_time"]) ? @@input["execution_check_time"] : 5
+      def self.smtp_address
+        @@input['notification']['smtp_address']          
       end
 
-      def self.maximum_execs_per_task
-        self.is_a_number?(@@input["max_execs_per_task"]) ? @@input["max_execs_per_task"] : 3
+      def self.smtp_port
+        @@input['notification']['smtp_port']  
       end
 
-      def self.max_execs
-        self.maximum_execs_per_task
+      def self.smtp_domain
+        @@input['notification']['smtp_domain']  
+      end
+
+      def self.smtp_user
+        @@input['notification']['smtp_user']  
+      end
+
+      def self.smtp_password
+        @@input['notification']['smtp_password']  
+      end
+
+      def self.smtp_autentication
+        @@input['notification']['smtp_autentication']  
+      end
+
+      def self.smtp_enanle_start_tls_auto
+        @@input['notification']['smtp_enanle_start_tls_auto']  
       end
 
       def self.notification?
@@ -129,6 +145,19 @@ module Mutx
       def self.notification_password
         @@input['notification']['password']
       end
+
+      def self.execution_check_time
+        self.is_a_number?(@@input["execution_check_time"]) ? @@input["execution_check_time"] : 5
+      end
+
+      def self.maximum_execs_per_task
+        self.is_a_number?(@@input["max_execs_per_task"]) ? @@input["max_execs_per_task"] : 3
+      end
+
+      def self.max_execs
+        self.maximum_execs_per_task
+      end
+
 
       def self.refresh_time
         self.is_a_number?(@@input['refresh_time']) ? @@input['refresh_time'] : 0
@@ -154,8 +183,6 @@ module Mutx
         value = @@input['notification']['attach_report']
         self.is_boolean? value ? value : false
       end
-
-
 
       def self.is_a_number? value
         !"#{value}".scan(/\d+/).empty?

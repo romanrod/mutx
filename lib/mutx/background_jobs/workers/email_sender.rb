@@ -13,13 +13,13 @@ module Mutx
 
         Mail.defaults do
           delivery_method :smtp, {
-          address:              'smtp.gmail.com',
-          port:                 587,
-          domain:               'gmail.com',
-          user_name:            'mutx.notifications@gmail.com',
-          password:             "garbaqa2016",
-          authentication:       'plain',
-          enable_starttls_auto: true
+          address:              Mutx::Support::Configuration.smtp_address,
+          port:                 Mutx::Support::Configuration.smtp_port,
+          domain:               Mutx::Support::Configuration.smtp_domain,
+          user_name:            Mutx::Support::Configuration.smtp_user,
+          password:             Mutx::Support::Configuration.smtp_password,
+          authentication:       Mutx::Support::Configuration.smtp_autentication,
+          enable_starttls_auto: Mutx::Support::Configuration.smtp_enanle_start_tls_auto
           }
         end
 
@@ -41,7 +41,7 @@ module Mutx
         html_part.body = ERB.new(template).result(data.instance_eval { binding })
         mail.html_part = html_part
         #fin seteo template
-        mail.from 'Mutx <mutx@garbarino.com>'
+        mail.from 'Mutx <your@email.sender.org>'
         mail.to "#{email}"
 
         mail.subject = "[MuTX] ==> #{subject}"
