@@ -122,8 +122,8 @@ module Mutx
         @@input['notification']['smtp_autentication']  
       end
 
-      def self.smtp_enanle_start_tls_auto
-        @@input['notification']['smtp_enanle_start_tls_auto']  
+      def self.smtp_enable_start_tls_auto
+        @@input['notification']['smtp_enable_start_tls_auto']  
       end
 
       def self.notification?

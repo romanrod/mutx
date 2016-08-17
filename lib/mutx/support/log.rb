@@ -19,7 +19,7 @@ module Mutx
 			end
 
 			def self.exist?
-				Dir.exist? "#{Dir.pwd}/mutx/logs"
+				Dir.exist? "#{Dir.pwd}/mutx/logs/"
 			end
 
 		end

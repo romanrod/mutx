@@ -132,6 +132,14 @@ module Mutx
         FileUtils.cd("#{Dir.pwd}/mutx/templates/")
         `unzip mutx_template.html.erb.zip`
         `rm mutx_template.html.erb.zip`
+
+        FileUtils.cd(dir)
+
+        template "mutx_body_template.html.erb.zip", "#{Dir.pwd}/mutx/templates/mutx_body_template.html.erb.zip" unless File.exist? "#{Dir.pwd}/mutx/templates/mutx_body_template.html.erb.zip"
+        FileUtils.cd("#{Dir.pwd}/mutx/templates/")
+        `unzip mutx_body_template.html.erb.zip`
+        `rm mutx_body_template.html.erb.zip`
+
         FileUtils.cd(dir)
       end
       
@@ -173,7 +181,7 @@ module Mutx
           f.each_line{|line| content += line}
           f.write "\n" unless content[-1] == "\n"
           line_to_write = "gem 'mutx'"
-          f.write "#{file_name}\n" unless content.include? line_to_write
+          f.write "#{line_to_write}\n" unless content.include? line_to_write
           f.close
         end
 
