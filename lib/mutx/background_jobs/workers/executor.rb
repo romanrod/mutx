@@ -45,8 +45,11 @@ module Mutx
           efective_command << "-f pretty -f html -o mutx/temp/#{result.mutx_report_file_name}" if result.is_cucumber?
           efective_command << result.custom_params_values
           efective_command << "_id=#{result.id}" # to use inside execution the posiibility to add information to the result
-          
+                    
           result.mutx_command= efective_command.join(" ")
+
+          # To Be Deleted on prod
+          Mutx::Support::Log.debug "[result:#{result.id}] #{efective_command.join(' ')}" if Mutx::Support::Log
 
           result.running!
 

@@ -172,11 +172,8 @@ module Mutx
           content = ""
           f.each_line{|line| content += line}
           f.write "\n" unless content[-1] == "\n"
-          unless content.include? "#{file_name}"
-            ["gem 'mutx'"].each do |file_name|
-              f.write "#{file_name}\n"
-            end
-          end
+          line_to_write = "gem 'mutx'"
+          f.write "#{file_name}\n" unless content.include? line_to_write
           f.close
         end
 

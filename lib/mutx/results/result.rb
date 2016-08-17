@@ -138,7 +138,15 @@ module Mutx
       # Returns the string of custom params values
       # @return [String] foo=bar john=doe
       def custom_params_values
-        "mutx_custom_params='#{validate_params(@custom_params).to_json}'".gsub(',', ', ') unless @custom_params.empty?
+        unless @custom_params.empty?
+          line = ""
+          validated = validate_params(@custom_params)
+          validated.each_pair do |param_name,value|
+            line += "#{param_name}=#{value} "
+          end
+          line
+        end 
+        # "mutx_custom_params='#{validate_params(@custom_params).to_json}'".gsub(',', ', ') unless @custom_params.empty?
       end
 
 
