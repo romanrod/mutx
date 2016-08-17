@@ -74,6 +74,8 @@ module Mutx
         res.split("\n").select{|lines| !lines.include? "grep"}.map{|line| line.split[1]}
       end
 
+      # Returns a list of sidekiq pids
+      # @return [Array]
       def self.sidekiq_pids
         res = Mutx::Support::Console.execute "ps -fea | grep 'sidekiq'"
 
