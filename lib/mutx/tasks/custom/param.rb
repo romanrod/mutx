@@ -148,9 +148,7 @@ module Mutx
 
         def self.validate_name_with_id definition
           db_id = Mutx::Database::MongoConnector.param_id_for_name(definition["name"])
-          unless db_id.empty?
-            return "There is another custom param with the name (#{definition['name']})" if db_id != definition["_id"]
-          end
+          return "There is another custom param with the name (#{definition['name']})" unless db_id.nil?
           self.validate_special_chars_for_name definition
         end
 
