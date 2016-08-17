@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.test_files             = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths          = ["lib"]
 
+  # spec.add_dependency 'digest'
   spec.add_dependency 'thor'
   spec.add_dependency 'cuba'
   spec.add_dependency 'unicorn'
@@ -34,7 +35,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'require_all'
   spec.add_dependency 'byebug'
   spec.add_dependency 'shotgun'
-  spec.add_dependency 'digest'
   spec.add_dependency 'rufus-scheduler'
   spec.add_dependency 'mail'
 
