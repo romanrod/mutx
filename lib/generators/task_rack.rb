@@ -172,17 +172,24 @@ module Mutx
           content = ""
           f.each_line{|line| content += line}
           f.write "\n" unless content[-1] == "\n"
-          ["gem 'mutx'"].each do |file_name|
-            f.write "#{file_name}\n" unless content.include? "#{file_name}"
+          unless content.include? "#{file_name}"
+            ["gem 'mutx'"].each do |file_name|
+              f.write "#{file_name}\n"
+            end
           end
+          f.close
         end
 
       end
 
       def push_changes
         unless @local
-          Mutx::Support::Git.add_commit "Mutx: Commit after install command execution"
-          Mutx::Support::Git.push_origin_to_actual_branch
+          if yes?("\n  Your Gemfile has been updated with mutx gem. You should push this change. Do you want mutx do it for you? (yes/no)", color = :red)
+            Mutx::Support::Git.add_commit "Mutx: Gemfile updated"
+            Mutx::Support::Git.push_origin_to_actual_branch
+          else
+            puts "Do not forget to use mutx gem on your Gemfile. Otherwise, it will not work properly"
+          end
         end
       end
 
