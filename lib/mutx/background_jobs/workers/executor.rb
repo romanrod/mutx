@@ -94,17 +94,18 @@ module Mutx
           task = Mutx::Tasks::Task.get(result.task_id)
 
           task = Mutx::Database::MongoConnector.task_data_for result.task[:id]
-          subject = if task[:subject].empty?
+          subject = if ((task[:subject].empty?) || (task[:subject].nil?))
             task[:name]
           else
             task[:subject]
           end
 
           email = task[:mail]
+          type = task[:type]
           name = task[:name]
           id = task[:_id]
           
-          Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id) if ((task[:notifications].eql? "on") && (!email.empty?))
+          Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type) if ((task[:notifications].eql? "on") && (!email.empty?))
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
 

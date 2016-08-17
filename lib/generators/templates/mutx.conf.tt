@@ -41,6 +41,7 @@
     "username" : null,
     "password" : null,
     "recipients" : "your@email.com",
+    "smtp_enable_start_tls_auto" : true,
     "attach_report" : false
   },
 

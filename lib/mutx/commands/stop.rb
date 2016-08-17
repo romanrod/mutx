@@ -3,8 +3,6 @@ module Mutx
   module Commands
     def self.stop
 
-      `bundle`
-
       Mutx::Support::Log.debug "#{self}:#{__method__}" if Mutx::Support::Log
 
       Mutx::Support::Configuration.get

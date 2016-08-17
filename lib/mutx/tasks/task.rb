@@ -57,7 +57,7 @@ module Mutx
           @cronneable       = task_data["cronneable"]
           @cron_time        = task_data["cron_time"]
           @mail             = task_data["mail"]
-          @subject          = task_data["subject"]
+          @subject          = task_data["subject"] || ""
           @notifications    = task_data["notifications"]
           @last_exec_time   = task_data["last_exec_time"]
           @application      = task_data["application"] || "command line"
