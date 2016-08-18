@@ -1,4 +1,4 @@
-![alt tag](https://github.com/romanrod/mutx/tree/master/img/mutx_logo.png)
+![alt tag](https://raw.githubusercontent.com/romanrod/mutx/master/img/mutx_logo.png)
 Mutx (WIP)
 ==============
 
