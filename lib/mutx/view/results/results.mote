@@ -20,14 +20,14 @@
     % results_list = Mutx::API::Result.results_list_for(task["_id"])
     % if results_list.size > 0
       <div class="panel panel-primary">
-        <div class="panel-heading" data-toggle="collapse" data-target="#at_world">
+        <div class="panel-heading" data-toggle="collapse" data-target='#{{task["_id"]}}'>
                 <h3 class="panel-title">
                   {{task["name"]}}
                 <div class="pull-right">{{results_list.size}} Results</div>
                 </h3>
                 <div></div>
               </div>
-            <div class="panel-body collapse in" id="at_world">
+            <div class="panel-body collapse in" id='{{task["_id"]}}'>
               <table class="table">
                 <thead>
                   <tr>

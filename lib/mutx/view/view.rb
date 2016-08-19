@@ -47,7 +47,7 @@ module Mutx
 
     def self.access_report? result
       if result["status"] =~ /stopped|running/
-        "onclick=\"javascript:refreshAndOpen('/results/log/#{result["_id"]}');\""
+        #"onclick=\"javascript:refreshAndOpen('/results/log/#{result["_id"]}');\""
       else
         "onclick=\"javascript:refreshAndOpen('/results/report/#{result['_id']}');\"" if result["status"]=='finished' and result["has_report"]
       end

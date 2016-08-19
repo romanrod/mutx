@@ -103,8 +103,9 @@ module Mutx
           type = task[:type]
           name = task[:name]
           id = task[:_id]
+          cucumber = task[:cucumber]
           
-          Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type) if ((task[:notifications].eql? "on") && (!email.empty?))
+          Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber) if ((task[:notifications].eql? "on") && (!email.empty?))
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
 

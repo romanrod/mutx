@@ -350,7 +350,7 @@ module Mutx
           FileUtils.cp("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}", "#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}~")
           file_content = File.open "#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}~", "r"
 
-          File.delete("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}~")
+          #File.delete("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}~")
 
         rescue
           false
@@ -530,7 +530,7 @@ module Mutx
 
       def delete_mutx_report_file!
         begin
-          File.delete("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}")
+          #File.delete("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}")
           Mutx::Support::Log.debug "[#{@id}] Report files deleted" if Mutx::Support::Log
           true
         rescue => e
@@ -540,7 +540,7 @@ module Mutx
 
       def delete_copy_mutx_report_file!
         begin
-          File.delete("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}~")
+          #File.delete("#{Dir.pwd}/mutx/temp/#{mutx_report_file_name}~") #No delete to attach via email
           true
         rescue => e
           false

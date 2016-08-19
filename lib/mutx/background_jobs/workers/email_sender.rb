@@ -3,14 +3,13 @@ require 'mutx'
 require 'mail'
 require 'erb'
 require 'ostruct'
-require 'byebug'
 #require 'sidekiq/testing/inline'
 
 module Mutx
   module Workers
     class EmailSender
       include Sidekiq::Worker
-      def perform(result_id, subject, email, name, id, type)
+      def perform(result_id, subject, email, name, id, type, cucumber)
 
         Mail.defaults do
           delivery_method :smtp, {
@@ -30,10 +29,10 @@ module Mutx
         template_body_path = (`pwd`+"/mutx/templates/mutx_body_template.html.erb").delete"\n"
 
         output = result.console_output
-        status = result.status      
+        status = result.status    
 
         info = "Only for TEST executions"
-        (info = output.match(/\d+\sscenarios\s+([^\/]+)/)
+        (info = output.match(/\d+\sscenarios?\s+([^\/]+)\d\D/)
         info_1 = info.to_s.delete"=========================" 
         info = info_1
         ) if type.to_s.downcase.eql? "test"
@@ -41,24 +40,30 @@ module Mutx
         #sets template
         mail = Mail.new
         mail.content_type "multipart/mixed;"
-
-        data = OpenStruct.new(output: output, task_name: name, id: id, time: result.elapsed_time, status: status, info: info)
-        html_part = Mail::Part.new
-        html_part.content_type = "text/html; charset=UTF-8"
-        template = File.read(template_path)
-        html_part.body = ERB.new(template).result(data.instance_eval { binding })
-        
-
-        #end setting template
-
         mail.from 'Mutx <your@email.sender.org>'
-
         mail.to "#{email}"
         mail.subject = "[MuTX] ==> #{subject}"
 
-        File.open("result.html", "w") { |file| file.write("#{html_part.body}") }
-
-        mail.add_file "result.html"
+        data = OpenStruct.new(output: output, task_name: name, id: id, time: result.elapsed_time, status: status, info: info)
+        
+        if !cucumber.eql? "on"
+          html_part = Mail::Part.new
+          html_part.content_type = "text/html; charset=UTF-8"
+          template = File.read(template_path)
+          html_part.body = ERB.new(template).result(data.instance_eval { binding })
+          #mail.html_part = html_part #Adjunta al mail
+          File.open("result.html", "w") { |file| file.write("#{html_part.body}") }
+          mail.add_file "result.html"
+          #fin seteo template
+        else
+          report = "mutx_report_#{result_id}.html"
+          template_report_path = (`pwd`+"/mutx/temp/#{report}").delete"\n"
+          html_part = Mail::Part.new
+          html_part.content_type = "text/html; charset=UTF-8"
+          #mail.html_part = html_part #Adjunta al mail
+          mail.add_file template_report_path
+          #fin seteo template
+        end
 
         html_part = Mail::Part.new
         html_part.content_type = "text/html; charset=UTF-8"
