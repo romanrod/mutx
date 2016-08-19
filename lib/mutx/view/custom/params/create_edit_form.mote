@@ -33,6 +33,32 @@ types.unshift("Select...") unless types.include? "Select..."
 
 ?>
 
+<script>
+  $( document ).ready(function() {
+    $("#type").change(function(){
+
+     if ($(this).val()=="text" ){
+          $('#text').show();
+      }
+     else{
+          $('#text').hide();
+      }
+     if ($(this).val()=="select_list" ){
+          $('#select_list').show();
+      }
+     else{
+          $('#select_list').hide();
+      }
+     if ($(this).val()=="json" ){
+          $('#json').show();
+      }
+     else{
+          $('#json').hide();
+      }
+})
+});
+</script>
+
 <nav class="navbar navbar-default">
   <form name="custom-param" id="custom-param" action="/admin/custom-param" method="POST">
     <div class='form-group'>
@@ -48,23 +74,27 @@ types.unshift("Select...") unless types.include? "Select..."
     </div>
     <div class='form-group'>
       <label class='col-sm-2 control-label' for='formGroupInputSmall'>Type</label>
-      <select id='type' name='type' class='customParam' onchange="javascript:disableElements();">
+      <select id='type' name='type' class='customParam'>
         % types.each do |valid_type|
         % selected = 'selected="selected"' if custom_param and (valid_type == type)
         <option value='{{valid_type}}' {{selected}}>{{valid_type.gsub(/-|_/," ").capitalize}}</option>
         % end
       </select>
     </div>
-    <div class='form-group'>
-      <label class='col-sm-2 control-label' for='formGroupInputSmall'>Value for text/JSON type</label>
+    <div id='text' onchange="javascript:disableElements();">
+      <label class='col-sm-2 control-label' for='formGroupInputSmall'>Value for text type</label>
       <textarea class='customParam' type='text' name='value' id='value' placeholder='Default value Text type'  >{{value}}</textarea>
     </div>
-    <div class='form-group'>
+    <div id='json'>
+      <label class='col-sm-2 control-label' for='formGroupInputSmall'>Value for JSON type</label>
+      <textarea class='customParam' type='text' name='value' id='value' placeholder='Default value JSONs type'  >{{value}}</textarea>
+    </div>
+    <div id='select_list'>
       <label class='col-sm-2 control-label' for='formGroupInputSmall'>Options for Select list type</label>
       %  options = ((action == "edit") and (options.is_a? Array)) ? "#{options.join(",").gsub('none,','')}" : ""
       <textarea class='customParam' type='text' name='options' id='options' placeholder='Options for Select list type' >{{options}}</textarea>
     </div>
-
+    <br>
     <div class='form-group'>
       <label class='col-sm-2 control-label' for='formGroupInputSmall'>Required</label>
       <input type="checkbox" name="required" id="required" {{'checked="checked"' if required}} />
@@ -77,3 +107,20 @@ types.unshift("Select...") unless types.include? "Select..."
     <br>
   </form>
 </nav>
+
+<style>
+#text {
+    display:none
+}
+#json {
+    display:none
+}
+#select_list {
+    display:none
+}
+% if action=="edit"
+.form-group:hover + #text {
+    display: block;
+}
+% end
+</style>
