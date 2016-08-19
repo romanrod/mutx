@@ -75,6 +75,38 @@ module Mutx
         source.scan(/\d+\sscenario.*\)/).first.gsub(/\<.+\>/,' - ')
       end
 
+      def self.feature_html content=nil
+        html = "<table>
+        "
+        content.each_line do |line|
+          html += "#{self.resolve_style(line)}
+          "
+        end
+        html += "</table>"
+      end
+
+      def self.resolve_style line
+        line = line.gsub("<","&lt;").gsub(">","&gt;").gsub("'","").gsub('"',"").gsub("\n","<br>")
+        case line
+        when /#.*/
+          "<tr style='color:grey;'><td>#{line}</td></tr>"
+        when /^Característica|Feature.*/
+          "<tr style='color:black;'><td><b>#{line}</b></td></tr>"
+        when /^Given|When|Then|And|But|\*|Dado|Cuando|Entonces|Y|Pero.*/
+          "<tr style='color:blue;'><td>&nbsp;&nbsp;&nbsp;&nbsp;#{line}</td></tr>"
+        when /^Scenario|Escenario|Esquema|Antecedentes|Background.*/
+          "<tr style='color:red;'><td><b>#{line}</b></td></tr>"
+        when /^Examples|Ejemplo.*/
+          "<tr style='color:red;'><td><b>&nbsp;&nbsp;&nbsp;#{line}</b></td></tr>"
+        when /\|.*/
+          "<tr style='color:red;'><td>&nbsp;&nbsp;&nbsp;#{line}</td></tr>"
+        when /^@.*/
+          "<tr><td><br></td></tr><tr style='color:green;'><td>#{line}</td></tr>"
+        else
+          "<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;#{line}</td></tr>"
+        end
+      end
+
     end
   end
 end
