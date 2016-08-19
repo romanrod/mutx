@@ -68,18 +68,17 @@ module Mutx
             Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
           end
 
+
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
           IO.popen("#{result.mutx_command}") do |data|
             result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
             result.save!
 
             while line = data.gets
-              @count += 1
               @output += line
-              if @count == 30
+              if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 10
                 result.append_output @output
                 @output = ""
-                @count = 0
               end
               if result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
                 result.finished_by_timeout! and break
