@@ -24,7 +24,7 @@
 
   "inactivity_timeout" : 60,
 
-  "kill_inactive_executions_after" : 300,
+  "kill_inactive_executions_after" : 600,
 
   "datetime_format" : "%d/%m/%Y %H:%M:%S",
 
