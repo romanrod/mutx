@@ -27,6 +27,13 @@ module Mutx
       	end
       end
 
+      def self.wait_for seconds
+        self.start
+        begin
+        end until self.elapsed_from_last_check_greater_than? seconds
+        seconds
+      end
+
       def self.now_in_seconds
       	self.now.to_i
       end
