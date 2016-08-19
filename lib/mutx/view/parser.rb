@@ -86,8 +86,8 @@ module Mutx
       end
 
       def self.resolve_style line
-        line = line.gsub("<","&lt;").gsub(">","&gt;").gsub("'","").gsub('"',"").gsub("\n","<br>")
-        case line
+        line = line.gsub("<","&lt;").gsub(">","&gt;").gsub("'","").gsub('"',"").gsub("\n","<br>").gsub("&lt;","<b>&lt;").gsub("&gt;","&gt;</b>")
+        styled = case line
         when /#.*/
           "<tr style='color:grey;'><td>#{line}</td></tr>"
         when /^Característica|Feature.*/
