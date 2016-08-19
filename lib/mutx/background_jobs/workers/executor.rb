@@ -68,7 +68,7 @@ module Mutx
             Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
           end
 
-
+          Mutx::Support::TimeHelper.start # Sets timestamp before start process
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
           IO.popen("#{result.mutx_command}") do |data|
             result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"

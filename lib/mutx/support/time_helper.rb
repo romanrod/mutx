@@ -8,16 +8,17 @@ module Mutx
       end
 
       def self.start
-      	@@start = Time.now.to_i
+      	@@start = self.now_in_seconds
+      	@@stamp = self.now_in_seconds
       end
 
       def self.elapsed
       	self.now_in_seconds - @@start
       end
 
-      def elapsed_from_last_check_greater_than? senconds
+      # Use start class method before using this class method
+      def self.elapsed_from_last_check_greater_than? seconds
       	raise "seconds arg must be a Fixnum" unless seconds.is_a? Fixnum
-      	@@stamp = self.now_in_seconds if @@stamp.nil?
       	if (self.now_in_seconds - @@stamp) > seconds
       		@@stamp = self.now_in_seconds
       		true
