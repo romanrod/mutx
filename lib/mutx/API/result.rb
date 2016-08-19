@@ -41,22 +41,10 @@ module Mutx
         end
       end
 
-      # def self.path_data data, query_string
-      #     query_string.split(".").each do |key|
-      #       key = key.to_i if key =~ /^\d+$/
-      #       data = data[key]
-      #     end
-      #     data
-      # end
-
       def self.status result_id
         result = self.info result_id
         {"type" => "result", "status" => result["status"]}
       end
-
-      # def self.results_list
-
-      # end
 
     end
   end

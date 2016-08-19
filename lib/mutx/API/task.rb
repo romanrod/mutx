@@ -28,7 +28,7 @@ module Mutx
 
 
       def self.status task_id
-        Mutx::Support::Log.debug "Task status for '#{task_i}'"
+        Mutx::Support::Log.debug "Task status for '#{task_id}'"
         response = info(task_id)
 
         output = if response["message"]

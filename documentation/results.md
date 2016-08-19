@@ -2,7 +2,7 @@ Results and details about them.
 ==============
 
 Each Test Suite execution creates a result. You can see them in Results section.
-You will see each Test Suite box with its results. If a Test Suite has more than three results, you'll see a green button that says `All results` for this test task to see all results for that test task
+You will see each Task or Test box with its results. If a task or test has more than three results, you'll see a green button that says `All results` for this test task to see all results for that test task
 A result line looks like:
 
 <div class="panel panel-primary">

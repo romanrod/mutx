@@ -10,7 +10,6 @@ module Mutx
         response["results"] = Mutx::Results.all_results.map{|result| Mutx::API::Result.info(result["_id"])}
         response["message"] = "No results found" if (response["size"] = response["results"].size).zero?
         response
-
       end
 
       def self.find_by_key keyword

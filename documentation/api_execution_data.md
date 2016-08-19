@@ -27,30 +27,48 @@ After adding the gem to your project, you can do:
 
     Mutx::Custom::Execution.add_data("my_data_key", "some value for data key")
 
+Once the execution is finished, you can see the values through:
 
-Once the execution it is finished, you can see the values through:
-
-    http::/host:port/mutx/api/results/<result_id>/data
+    api/results/<result_id>/data
 
 And you'll see something like:
 
     {
-      type: "result",
-      _id: 1427901370053,
-      status: "stopped (Inactivity Timeout reached)",
-      execution_data: {
-        my_data_key: "some value for data key"
+      "type": "result",
+      "_id": 1427901370053,
+      "status": "finished",
+      "execution_data": {
+        "my_data_key": "some value for data key"
       }
     }
 
+And you can navigate through the path of the JSON to get a value. Supose you have a result like this:
 
-Think about this for integration tests.
+    {
+      "type": "result",
+      "_id": 1427901370053,
+      "status": "finished",
+      "execution_data": {
+        "key": [
+          {
+            "sub_key1":"value_1"
+          },
+          {
+            "sub_key2":"value_2"
+          }
+        ]
+      }
+    }
 
----------------------------------------
+    api/results/<result_id>/data?key.1.sub_key2
 
-Path to output dir
-============================
+And you'll see
 
-If you want to save files you should use Mutx output dir path by using
-
-    "#{Mutx::Custom::Execution.output_path}/<your_file_name.extension>"
+    {
+      "type": "result",
+      "_id": 1427901370053,
+      "status": "finished",
+      "execution_data": {
+        "sub_key2":"value_2"
+      }
+    }

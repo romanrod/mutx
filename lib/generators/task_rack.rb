@@ -167,8 +167,6 @@ module Mutx
           f.write "\n" unless content[-1] == "\n"
           f.write "mutx/\n" unless content.include? "mutx/"
           f.write "mutx/*\n" unless content.include? "mutx/*"
-
-
           f.close
         end
       end

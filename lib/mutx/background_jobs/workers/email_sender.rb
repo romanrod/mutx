@@ -38,7 +38,7 @@ module Mutx
         info = info_1
         ) if type.to_s.downcase.eql? "test"
 
-        #seteo el template
+        #sets template
         mail = Mail.new
         mail.content_type "multipart/mixed;"
 
@@ -47,9 +47,9 @@ module Mutx
         html_part.content_type = "text/html; charset=UTF-8"
         template = File.read(template_path)
         html_part.body = ERB.new(template).result(data.instance_eval { binding })
-        #mail.html_part = html_part #Adjunta al mail
+        
 
-        #fin seteo template
+        #end setting template
 
         mail.from 'Mutx <your@email.sender.org>'
 
@@ -66,7 +66,7 @@ module Mutx
         html_part.body = ERB.new(template1).result(data.instance_eval { binding })
         mail.html_part = html_part
 
-        puts "ENVIANDO RESULTADO VIA MAIL"
+        puts "SENDING RESULT VIA EMAIL"
 
         tries = 3
         begin
