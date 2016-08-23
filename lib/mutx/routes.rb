@@ -628,7 +628,7 @@ Cuba.define do
 
     end
 
-
+  Mutx::Database::MongoConnector.force_close
 
   rescue => e
     Mutx::Support::Log.error "Cuba: #{e} #{e.backtrace}" if Mutx::Support::Log

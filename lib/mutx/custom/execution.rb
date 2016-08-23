@@ -32,6 +32,7 @@ module Mutx
             {key => value}
           end
         end
+        Mutx::Database::MongoConnector.force_close
       end
 
       def self.get_result
@@ -41,6 +42,7 @@ module Mutx
       # Returns result execution data if exist. Else returns an empty hash
       def self.get_data
         self.is_there_result? ? self.get_result.execution_data : {}
+        Mutx::Database::MongoConnector.force_close
       end
 
       # Conntects to database if not connected

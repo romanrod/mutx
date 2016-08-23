@@ -27,12 +27,24 @@ module Mutx
 
       def set_client opts
         Mutx::Support::Log.debug "Setting db client" if Mutx::Support::Log
-        @@client = Mongo::Client.new("mongodb://#{opts[:host]}:#{opts[:port]}/#{set_db_name}")
+        @@client ||= Mongo::Client.new("mongodb://#{opts[:host]}:#{opts[:port]}/#{set_db_name}")
+      end
+
+      def self.force_close
+        @@client.close if @@client
+        puts
+        puts "CERRANDO CONEXIONES"
+        puts
       end
 
       def set_db
         Mutx::Support::Log.debug "Setting db" if Mutx::Support::Log
         @@db = @@client.database
+        @@client.close
+        @@client = nil
+        puts
+        puts "CERRANDO LUEGO DE SET_DB"
+        puts
       end
 
       def authenticate opts

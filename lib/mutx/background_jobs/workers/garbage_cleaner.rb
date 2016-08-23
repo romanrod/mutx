@@ -26,6 +26,7 @@ module Mutx
               File.delete("#{Dir.pwd}/mutx/temp/#{report_file}") if result.finished?
             end
           end
+          Mutx::Database::MongoConnector.force_close
         end
     end
   end

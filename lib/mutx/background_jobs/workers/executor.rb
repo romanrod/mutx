@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'mutx'
 require 'socket'
+require 'pty'
 
 module Mutx
   module Workers
@@ -70,24 +71,26 @@ module Mutx
 
           Mutx::Support::TimeHelper.start # Sets timestamp before start process
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
-          IO.popen("#{result.mutx_command}") do |data|
+
+          #USE 'PTY' GEM INSTEAD POPEN TO READ OUTPUT IN REAL TIME
+          PTY::spawn("#{result.mutx_command}") do |stdout, stdin, pid|
             result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
             result.save!
 
-            while line = data.gets
+            while line = stdout.gets
               @output += line
-              if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 10
+              if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 5
                 result.append_output @output
                 @output = ""
               end
               if result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
                 result.finished_by_timeout! and break
               end
-            end
+            end#while
 
             result.append_output @output unless @output.empty?
             result.append_output "=========================\n"
-          end
+          end#PTY
 
           result.ensure_finished!
           task = Mutx::Tasks::Task.get(result.task_id)
@@ -108,7 +111,8 @@ module Mutx
           Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber) if ((task[:notifications].eql? "on") && (!email.empty?))
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
-
+          
+          Mutx::Database::MongoConnector.force_close
         end
     end
   end

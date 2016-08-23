@@ -19,6 +19,8 @@ module Mutx
         Mutx::Support::FilesCleanner.start!
         print "Done!\n\n"
 
+        Mutx::Database::MongoConnector.force_close
+
       rescue => e
         puts "CANNOT CLEAN SYSTEM\n#{e}\n\n#{e.backtrace}"
       end
