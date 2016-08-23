@@ -102,7 +102,7 @@ module Mutx
           "information" => data["information"],
           "cucumber" => data["cucumber"],
           "branch" => Mutx::Support::Git.actual_branch,
-          "max_execs" => data["max_execs"],
+          "max_execs" => (data["max_execs"] = 1 if data["max_execs"].eql? 0),
           "custom_params" => data["custom_params"],
           "cronneable" => data["cronneable"],
           "cron_time" => data["cron_time"],
