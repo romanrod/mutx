@@ -32,9 +32,6 @@ module Mutx
 
       def self.force_close
         @@client.close if @@client
-        puts
-        puts "CERRANDO CONEXIONES"
-        puts
       end
 
       def set_db
