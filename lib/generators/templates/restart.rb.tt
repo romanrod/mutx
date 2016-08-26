@@ -1,0 +1,23 @@
+require 'mutx'
+require 'byebug'
+
+module Cron
+	class Server
+
+		def self.restart
+			running_task = []
+		  running_task = Mutx::Database::MongoConnector.running_now
+
+		  if running_task.eql? []
+        Mutx::Support::Console.execute "cd /home/ubuntu/garba-automation && mutx restart"
+      else
+      	puts
+      	puts "Tasks running right now, cant restart"
+      	puts
+      end
+		  Mutx::Database::MongoConnector.force_close
+		end
+	end#class
+end#module
+
+Cron::Server.restart

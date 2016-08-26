@@ -1,6 +1,6 @@
 <?
-  title = "<p>Oops!</p><p> What are you looking for?</p>"
-  alert = "danger"
+  title = "<p>Click on result or return to tasks</p>"
+  alert = "info"
   buttons = "<a href='/tasks' class='btn btn-info' >Go to Tasks</a>"
 
   result_id = args[:result_id]
@@ -26,11 +26,12 @@
 <div class="alert alert-{{alert}}" role="alert">
 
   <H3>
-    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;{{title}}
+    <!--<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>-->&nbsp;{{title}}
   </H3>
   <p>&nbsp;</p>
   <p>&nbsp;</p>
   <p>
     {{buttons}}
+    <a onclick="window.open('/results/{{result_id}}/log', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600');" class='btn btn-primary'>Go to Result</a>
   </p>
 </div>

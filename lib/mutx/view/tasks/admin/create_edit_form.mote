@@ -42,7 +42,7 @@ types = Mutx::Tasks::Custom::Param.types
 types.unshift("Select...") unless types.include? "Select..."
 execution_type = type.capitalize if type
 platform = task["platform"].capitalize if task
-application = task["application"].capitalize if task
+application = task["application"].upcase if task
 
 ?>
 
@@ -107,7 +107,7 @@ application = task["application"].capitalize if task
               <label class='col-sm-3 control-label' for='formGroupInputSmall'>Application?</label>
                 <select name="application" id="application" class='customParam' {{disabled}}>
                   % if !application.nil?
-                    <option value="{{application.downcase}}" selected>{{application}}</option>
+                    <option value="{{application.upcase}}" selected>{{application}}</option>
                   % end
                   <option value="api">API</option>
                   <option value="gui">GUI</option>

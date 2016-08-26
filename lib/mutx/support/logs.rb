@@ -21,7 +21,7 @@ module Mutx
           path = "#{Dir.pwd}/mutx/logs/#{log}.log"
           if File.exist?("#{path}")
             FileUtils.cp(path, "#{path}~")
-            all_content = IO.read("#{path}~")
+            all_content = IO.read("#{path}~")[-4000..-1]
             content = all_content.gsub("\n","<br>")
             File.delete("#{path}~")
           else

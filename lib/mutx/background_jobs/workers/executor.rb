@@ -2,6 +2,9 @@
 require 'mutx'
 require 'socket'
 require 'pty'
+require 'colorize'
+#require 'sidekiq/testing/inline'
+#require 'byebug'
 
 module Mutx
   module Workers
@@ -45,7 +48,7 @@ module Mutx
           efective_command << result.command
           efective_command << "-f pretty -f html -o mutx/temp/#{result.mutx_report_file_name}" if result.is_cucumber?
           efective_command << result.custom_params_values
-          efective_command << "_id=#{result.id}" # to use inside execution the posiibility to add information to the result
+          efective_command << "_id=#{result.id}" # to use inside execution the possibility to add information to the result
                     
           result.mutx_command= efective_command.join(" ")
 
@@ -73,24 +76,33 @@ module Mutx
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
 
           #USE 'PTY' GEM INSTEAD POPEN TO READ OUTPUT IN REAL TIME
-          PTY::spawn("#{result.mutx_command}") do |stdout, stdin, pid|
-            result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
-            result.save!
-
-            while line = stdout.gets
-              @output += line
-              if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 5
-                result.append_output @output
-                @output = ""
+          @uname = Mutx::Support::Console.execute "uname"
+          begin
+            PTY.spawn("#{result.mutx_command}") do |stdout, stdin, pid|
+              result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
+              result.save!
+              begin
+                stdout.each { |line|
+                  Mutx::Support::Console.execute "sudo sync && sudo sysctl -w vm.drop_caches=3" if @uname.include? "Linux" #Free memo only Linux
+                  @output += line
+                  #if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 5
+                    result.append_output @output.gsub(/(\[\d{1,2}\m)/, "")
+                    @output = ""
+                  #end
+                  if result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
+                    result.finished_by_timeout! and break
+                  end }
+                result.append_output @output unless @output.empty?
+                result.append_output "=========================\n"
+              rescue Errno::EIO, Errno::ENOENT => e
               end
-              if result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
-                result.finished_by_timeout! and break
-              end
-            end#while
-
+            end
+          rescue PTY::ChildExited, Errno::ENOENT => e
+            cmd = result.mutx_command.match(/(\D*)\_/)[0].delete"_"
+            @output = "EXCEPTION: #{e.message} for the command requested for you: #{cmd.upcase}"
             result.append_output @output unless @output.empty?
-            result.append_output "=========================\n"
-          end#PTY
+            result.append_output "\n\n=========================\n"
+          end
 
           result.ensure_finished!
           task = Mutx::Tasks::Task.get(result.task_id)

@@ -27,7 +27,7 @@ module Mutx
 
       def set_client opts
         Mutx::Support::Log.debug "Setting db client" if Mutx::Support::Log
-        @@client ||= Mongo::Client.new("mongodb://#{opts[:host]}:#{opts[:port]}/#{set_db_name}")
+        @@client ||= Mongo::Client.new("mongodb://#{opts[:host]}:#{opts[:port]}/#{set_db_name}?connectTimeoutMS=30000")
       end
 
       def self.force_close
@@ -258,6 +258,11 @@ module Mutx
 
       def self.running_tests
         self.running "test"
+      end
+
+      def self.running_now
+        Mutx::Support::Log.debug "Getting db running tasks" if Mutx::Support::Log
+        @@results.find({"status" => /started|running/}).to_a
       end
 
       def self.running type
