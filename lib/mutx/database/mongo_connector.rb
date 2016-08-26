@@ -42,9 +42,6 @@ module Mutx
         @@db = @@client.database
         @@client.close
         @@client = nil
-        puts
-        puts "CERRANDO LUEGO DE SET_DB"
-        puts
       end
 
       def authenticate opts
