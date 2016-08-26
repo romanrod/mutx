@@ -31,13 +31,13 @@
 
   navigation_bar = Mote.parse(File.read("#{Mutx::View.path}/navigation_bar.mote"), self, [:section]).call(section:section)
 ?>
-<!DOCtype html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns ="http://www.w3.org/1999/xhtml"><head><meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>'
+<!DOCtype html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns ="http://www.w3.org/1999/xhtml"><head><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/><meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>'
   <head>
     <title>{{Mutx::Support::Configuration.project_name}} through Mutx - {{title}}</title>
 
     <meta content='text/html;charset=utf-8' http-equiv='Content-Type'/>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='shortcut icon' href='/favicon'>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
     <link href='https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 

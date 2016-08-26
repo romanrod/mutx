@@ -16,6 +16,7 @@ module Cron
 		        Mutx::API::Execution.start task_name, query_string
 		    end
 		  end
+		  Mutx::Database::MongoConnector.force_close
 		end
 	end#class
 end#module

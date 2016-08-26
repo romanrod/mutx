@@ -126,6 +126,10 @@ module Mutx
         template "cron.rb.tt", "#{Dir.pwd}/mutx/cron/cron.rb" unless File.exist? "#{Dir.pwd}/mutx/cron/cron.rb"
       end
 
+      def copy_mutx_restart
+        template "restart.rb.tt", "#{Dir.pwd}/mutx/restart.rb" unless File.exist? "#{Dir.pwd}/mutx/restart.rb"
+      end
+
       def copy_mutx_templates
         dir = "#{Dir.pwd}"
         template "mutx_template.html.erb.zip", "#{Dir.pwd}/mutx/templates/mutx_template.html.erb.zip" unless File.exist? "#{Dir.pwd}/mutx/templates/mutx_template.html.erb.zip"
