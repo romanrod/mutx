@@ -1,21 +1,30 @@
-<div>
-<div><img class="CToWUd" style="margin-top: 0px; margin-bottom: 0px; border: 0px; max-width: 150px; min-height: auto; outline: 0px; float: left;" src="https://raw.githubusercontent.com/romanrod/mutx/master/img/mutx_logo.png" alt="MuTX" width="43" height="43" border="0" /></div>
-</div>
-<div>
-<p>&nbsp;<img class="CToWUd" style="display: block;" src="https://ci4.googleusercontent.com/proxy/mX95orir-khAa9968ZvaEUFjay-YQnjjfRzI5YJXNG30xvJECdmEqqDPUE4KChEE5CsA-0xr-URW-1rIGpQFhhTosSDZj4LQ_ktxrrYjsrJXrntn8L8oOIU=s0-d-e1-ft#http://app2.dopplerfiles.net/Users/3778/Campaigns/8930766/520x1.png" alt="" width="100%" height="1" border="0" /></p>
-</div>
-<div>
-<div class="container">
-<div class="well">
-<p style="color: black; font-size: 12px;"><strong>&lt;%= task_name %&gt;</strong> finished</p>
-<p style="color: black; font-size: 12px;"><strong>Duration:&nbsp;</strong>&lt;%= time %&gt; seconds&nbsp;</p>
-<p style="color: black; font-size: 12px;"><strong><strong>Status: </strong></strong>&lt;%= status %&gt;</p>
-<p style="color: black; font-size: 12px;"><strong>Result ID: </strong>&lt;%= id %&gt;</p>
-<p style="color: black; font-size: 12px;"><strong>Execution name:</strong> &lt;%= execution_name %&gt;</p>
-<p style="color: black; font-size: 12px;"><strong>Output</strong></p>
-<p style="color: black; font-size: 12px;">&lt;%= output %&gt;</p>
-<h4>&nbsp;<span style="color: #ff0000;">This email is sent automatically. Please, do not reply</span></h4>
-</div>
-</div>
-</div>
-<div>&nbsp;</div>
+<html>
+	<tbody>
+		<div>
+			<div>
+				<img class="CToWUd" style="margin-top: 0px; margin-bottom: 0px; border: 0px; max-width: 150px; min-height: auto; outline: 0px; float: left;" src="https://raw.githubusercontent.com/romanrod/mutx/master/img/mutx_logo.png" alt="MuTX" width="43" height="43" border="0" /></div>
+		</div>
+		<div>
+			<p>&nbsp;<img class="CToWUd" style="display: block;" src="https://ci4.googleusercontent.com/proxy/mX95orir-khAa9968ZvaEUFjay-YQnjjfRzI5YJXNG30xvJECdmEqqDPUE4KChEE5CsA-0xr-URW-1rIGpQFhhTosSDZj4LQ_ktxrrYjsrJXrntn8L8oOIU=s0-d-e1-ft#http://app2.dopplerfiles.net/Users/3778/Campaigns/8930766/520x1.png" alt="" width="100%" height="1" border="0" /></p>
+		</div>
+		<div>
+			<div class="container">
+				<div class="well">
+					<p style="color: black; font-size: 12px;"><strong>'<%= task_name %>' </strong> finished</p>
+					<p style="color: black; font-size: 12px;"><strong>Duration:&nbsp;</strong>'<%= time %>' seconds&nbsp;</p>
+					<p style="color: black; font-size: 12px;"><strong><strong>Status: </strong></strong> '<%= status %>' </p>
+					<p style="color: black; font-size: 12px;"><strong>Result ID: </strong>'<%= id %>' </p>
+					<p style="color: black; font-size: 12px;"><strong>Output</strong></p>
+					<h3>
+						<medium>
+							<pre style="height:400px; white-space:pre; word-wrap:normal;">
+								<b style='color:Black; font-size: 12px;'><%= output %></b>
+							</pre>
+						</medium>
+					</h3>
+				</div>
+			</div>
+		</div>
+		<div>&nbsp;</div>
+	</tbody>
+</html>

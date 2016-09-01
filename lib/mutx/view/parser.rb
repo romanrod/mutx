@@ -22,7 +22,7 @@ module Mutx
         info  = "<h2><strong>Task:</strong> #{result.task_name}</h2>"
         info += "<h4>Execution name: #{result.execution_name.gsub('-_-',' ')}</h4>" unless result.execution_name.empty?
         info += "<h4>Command: #{result.command}</h4>"
-        info += "<h4>Custom Params: #{result.custom_params_values.split('=').last}</h4>"
+        #info += "<h4>Custom Params: #{result.custom_params_values.split('=').last}</h4>"
         info += "<h4>Started: #{result.started_at_formatted}</h4>"
         info += "<h4>Commit ID: #{result.git_log.split('\n').first}</h4>"
         info += "<h4><input type='button' onclick='window.close();' value='Close this window' />"

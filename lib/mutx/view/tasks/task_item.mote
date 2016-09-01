@@ -16,6 +16,9 @@ color = Mutx::View.color(status)
       <div class='panel-heading'">
         <h3 class='panel-title' onclick="goClean('/tasks/{{task["name"].gsub(' ','%20')}}');">
           {{task["name"]}}
+          % if task["cronneable"].eql? "on"
+            &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i>
+          % end
         </h3>
     % if status=="running"
         <i class="fa fa-cog fa-spin fa-1x fa-fw margin-bottom"></i>

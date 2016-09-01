@@ -39,7 +39,6 @@
           <a href='/help'>Help</a>
         </li>
          -->
-        <!--
         <li class='{{'active' if section =~ /custom|admin|log/}}'>
           <a href='#' class='dropdown-toggle' data-toggle='dropdown' role= 'button' aria-expanded='false'>
             Admin
@@ -55,7 +54,11 @@
              -->
           </ul>
         </li>
-        -->
+        % if $result
+          <li class='{{'active' if section == "logout"}}'>
+            <a href='/logout'>Logout</a>
+          </li>
+        % end
       </ul>
     </div>
     <!--/.nav-collapse -->

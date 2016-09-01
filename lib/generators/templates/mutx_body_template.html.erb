@@ -1,16 +1,21 @@
-<div><img class="CToWUd" style="margin-top: 0px; margin-bottom: 0px; border: 0px; max-width: 150px; min-height: auto; outline: 0px; float: left;" src="https://raw.githubusercontent.com/romanrod/mutx/master/img/mutx_logo.png" alt="MuTX" width="43" height="43" border="0" /></div>
-<p>&nbsp;<img class="CToWUd" style="display: block;" src="https://ci4.googleusercontent.com/proxy/mX95orir-khAa9968ZvaEUFjay-YQnjjfRzI5YJXNG30xvJECdmEqqDPUE4KChEE5CsA-0xr-URW-1rIGpQFhhTosSDZj4LQ_ktxrrYjsrJXrntn8L8oOIU=s0-d-e1-ft#http://app2.dopplerfiles.net/Users/3778/Campaigns/8930766/520x1.png" alt="" width="100%" height="1" border="0" /></p>
-<div>
-<div class="container">
-<div class="well">
-<p style="color: black; font-size: 12px;">&lt;%= task_name %&gt;'&nbsp;finished</p>
-<p style="color: black; font-size: 12px;"><strong>Summary:&nbsp;</strong>&lt;%= info %&gt;</p>
-<p style="color: black; font-size: 12px;"><strong>Duration:&nbsp;</strong>&lt;%= time %&gt; seconds&nbsp;</p>
-<p style="color: black; font-size: 12px;"><strong><strong>Status: </strong></strong>&lt;%= status %&gt;</p>
-<p style="color: black; font-size: 12px;"><strong>Result ID: </strong>&lt;%= id %&gt;</p>
-<p style="color: black; font-size: 12px;"><strong>Execution name:</strong> &lt;%= execution_name %&gt;</p>
-<p style="color: black; font-size: 12px;"><span style="color: #ff0000;"><strong>The execution output is attached</strong></span></p>
-<h6>&nbsp;This email is sent automatically. Please, do not reply</h6>
-</div>
-</div>
-</div>
+<html>
+	<tbody>
+		<div>
+			<img class="CToWUd" style="margin-top: 0px; margin-bottom: 0px; border: 0px; max-width: 150px; min-height: auto; outline: 0px; float: left;" src="https://raw.githubusercontent.com/romanrod/mutx/master/img/mutx_logo.png" alt="MuTX" width="43" height="43" border="0" />
+		</div>
+		<p>&nbsp;<img class="CToWUd" style="display: block;" src="https://ci4.googleusercontent.com/proxy/mX95orir-khAa9968ZvaEUFjay-YQnjjfRzI5YJXNG30xvJECdmEqqDPUE4KChEE5CsA-0xr-URW-1rIGpQFhhTosSDZj4LQ_ktxrrYjsrJXrntn8L8oOIU=s0-d-e1-ft#http://app2.dopplerfiles.net/Users/3778/Campaigns/8930766/520x1.png" alt="" width="100%" height="1" border="0" /></p>
+		<div>
+			<div class="container">
+				<div class="well">
+					<p style="color: black; font-size: 12px;">'<%= task_name %>' &nbsp;finished</p>
+					<p style="color: black; font-size: 12px;"><strong>Summary:&nbsp;</strong> '<%= info %>' </p>
+					<p style="color: black; font-size: 12px;"><strong>Duration:&nbsp;</strong> '<%= time %>' seconds&nbsp;</p>
+					<p style="color: black; font-size: 12px;"><strong><strong>Status: </strong></strong>'<%= status %>'</p>
+					<p style="color: black; font-size: 12px;"><strong>Result ID: </strong> '<%= id %>' </p>
+					<p style="color: black; font-size: 12px;"><span style="color: #ff0000;"><strong>The execution output is attached</strong></span></p>
+					<h6>&nbsp;This email is sent automatically. Please, do not reply</h6>
+				</div>
+			</div>
+		</div>
+	</tbody>
+</html>

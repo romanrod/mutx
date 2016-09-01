@@ -1,5 +1,8 @@
 # encoding: utf-8
 require "cuba"
+#include Basica
+
+Cuba.plugin Basica
 
 include Mote::Helpers
 
@@ -17,7 +20,6 @@ Cuba.define do
   Mutx::Support::Log.debug "REQUEST '#{request.request}" if Mutx::Support::Log
 
   begin
-
 
 # ========================================================================
 # COMMON INIT
@@ -160,6 +162,12 @@ Cuba.define do
 
     on get do
 
+      on "logout" do
+        a = env["HTTP_REFERER"]
+        logout = a.match(/\D{4,5}:\/\//).to_s+"user:pass@"+env["SERVER_NAME"].to_s+":"+env["SERVER_PORT"].to_s
+        res.redirect "#{logout}/tasks"
+      end
+
 # ========================================================================
 # HELP
 #
@@ -263,8 +271,19 @@ Cuba.define do
       end
 
       on "admin/tasks" do
-        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-        res.write template.call(section:"Edit Tasks", args:{:query_string => Mutx::Support::QueryString.new(req)})
+         $result = basic_auth(env) do |user, pass|
+           user == "mutx" && pass == "mutxAdmin"
+         end
+         if $result
+          template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+          res.write template.call(section:"Edit Tasks", args:{:query_string => Mutx::Support::QueryString.new(req)})
+         else
+           on default do
+             res.status = 401
+             res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+             res.write "Access Denied, Mutx don't let you go to that place without authorization"
+           end
+         end
       end
 
       on "admin/custom/params/new" do
@@ -290,10 +309,21 @@ Cuba.define do
       end
 
       on "admin/custom/params" do
+        $result = basic_auth(env) do |user, pass|
+         user == "mutx" && pass == "mutxAdmin"
+        end
+        if $result
         query_string = Mutx::Support::QueryString.new req
         args = {query_string:query_string}
         template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
         res.write template.call(section:"Custom Params", args:args)
+        else
+         on default do
+           res.status = 401
+           res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+           res.write "Access Denied, Mutx don't let you go to that place without authorization"
+         end
+        end
       end
 
       on "admin/config" do
@@ -407,10 +437,21 @@ Cuba.define do
 
 
       on "logs/:log_name" do |log_name|
-        query_string = Mutx::Support::QueryString.new req
-        args = {query_string:query_string, log_name:log_name}
-        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-        res.write template.call(section:"Log", args:args)
+        $result = basic_auth(env) do |user, pass|
+         user == "mutx" && pass == "mutxAdmin"
+        end
+        if $result
+         query_string = Mutx::Support::QueryString.new req
+         args = {query_string:query_string, log_name:log_name}
+         template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+         res.write template.call(section:"Log", args:args)
+        else
+         on default do
+           res.status = 401
+           res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+           res.write "Access Denied, Mutx don't let you go to that place without authorization"
+         end
+        end
       end
 
       on "logs" do
