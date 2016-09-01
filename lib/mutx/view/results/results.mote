@@ -20,7 +20,11 @@
     % results_list = Mutx::API::Result.results_list_for(task["_id"])
     % if results_list.size > 0
       % size = results_list.size
-      % if ((size > 200) && (size < 300))
+      % if ((size > 300) && (size < 400))
+        % results_list_size = "300+"
+      % elsif ((size > 400) && (size < 500))
+        % results_list_size = "400+"
+      % elsif ((size > 200) && (size < 300))
         % results_list_size = "200+"
       % elsif ((size > 100) && (size < 200))
         % results_list_size = "100+"
@@ -31,7 +35,7 @@
         <div class="panel-heading" data-toggle="collapse" data-target='#{{task["_id"]}}'>
                 <h3 class="panel-title">
                   {{task["name"]}}
-                <div class="pull-right">{{results_list.size}} Results</div>
+                <div class="pull-right">{{results_list_size}} Results</div>
                 </h3>
                 <div></div>
               </div>

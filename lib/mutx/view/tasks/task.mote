@@ -78,6 +78,7 @@ color =  Mutx::View.color(status)
                 Link
               </span>
             </button>
+            <a href='/results/task/{{task["name"].gsub(' ','%20')}}' class='btn btn-primary'>Results for: {{task["name"]}}</a>
             % if task["information"]
             <div style="text-align:right">
               <a href='#'><span title='{{task["information"]}}' class='glyphicon glyphicon-info-sign' aria-hidden='true' data-toggle='modal' data-target='#myModal' onclick="javascript:info('Information about {{task["name"]}}','{{task["information"].gsub('\n','<br>')}}', null);"></span>

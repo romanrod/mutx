@@ -163,9 +163,13 @@ Cuba.define do
     on get do
 
       on "logout" do
-        a = env["HTTP_REFERER"]
-        logout = a.match(/\D{4,5}:\/\//).to_s+"user:pass@"+env["SERVER_NAME"].to_s+":"+env["SERVER_PORT"].to_s
-        res.redirect "#{logout}/tasks"
+        if env["SERVER_NAME"].eql? "localhost"
+          a = env["HTTP_REFERER"]
+          logout = a.match(/\D{4,5}:\/\//).to_s+"user:pass@"+env["SERVER_NAME"].to_s+":"+env["SERVER_PORT"].to_s
+          res.redirect "#{logout}/tasks"
+        else
+          res.redirect "http://user@mutx.garba.ninja/tasks"
+        end
       end
 
 # ========================================================================
@@ -660,10 +664,14 @@ Cuba.define do
       on "favicon" do
         res.write ""
       end
+
+      on "pull" do
+        #When go to pull, check for updates on the branch and make a pull if its outdated
+        Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
+        res.redirect "/tasks"
+      end
      
       on root do
-        #When go to root path, check for updates on the branch and make a pull if its outdated
-        Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
         res.redirect "/tasks"
       end
 
