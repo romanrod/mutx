@@ -74,5 +74,12 @@ module Mutx
       result = Mutx::API::Result.info result_id
       self.formatted_for result["started_at"] if result
     end
+
+    def self.round_plus number
+      return "10000+" if number > 10000
+      return "#{number/100}00+" if number > 1000
+      return "#{number/100}00+" if number > 100
+      "#{number}"
+    end
   end
 end
