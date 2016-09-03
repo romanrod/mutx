@@ -29,7 +29,11 @@ module Mutx
       :application,
       :mail,
       :subject,
-      :notifications
+      :notifications,
+      :value_for_regex,
+      :regex
+
+      VALID_VALUES = ["failed","passed"]
 
 
       def self.valid_types
@@ -61,6 +65,8 @@ module Mutx
           @notifications    = task_data["notifications"]
           @last_exec_time   = task_data["last_exec_time"]
           @application      = task_data["application"] || "command line"
+          @regex            = task_data["regex"]
+          @value_for_regex  = task_data["value_for_regex"]
         else
           Mutx::Support::Log.error "Creting task object. Argument is not a hash" if Mutx::Support::Log
           raise "Task data not defined correctly. Expecting info about task"
@@ -110,7 +116,9 @@ module Mutx
           "subject" => data["subject"],
           "notifications" => data["notifications"],
           "last_exec_time" => Time.now.utc,
-          "application" => data["application"]
+          "application" => data["application"],
+          "regex" => data["regex"],
+          "value_for_regex" => data["value_for_regex"]
         }
         self.new(task_data)
       end
@@ -134,6 +142,7 @@ module Mutx
           else
             errors << self.validate_name(data["name"])
           end
+          errors << self.validate_value_for_regex(data['value_for_regex'])
           errors << self.validate_max_execs(data["max_execs"])
           errors << self.validate_type(data["type"])
           errors << self.validate_risk_command(data["command"])
@@ -193,6 +202,11 @@ module Mutx
 
       end
 
+      def self.validate_value_for_regex result_for_regex=nil
+        return "Must define a result for regex" if result_for_regex.nil?
+        return "Invalid value for regex #{result_for_regex}" unless VALID_VALUES.include? result_for_regex
+      end
+
       def task_data_for task_name
         Mutx::Database::MongoConnector.task_data_for(task_name)
       end
@@ -218,7 +232,9 @@ module Mutx
           "notifications" => notifications,
           "cron_time" => cron_time,
           "last_exec_time" => last_exec_time,
-          "application" => application
+          "application" => application,
+          "regex" => regex,
+          "value_for_regex" => value_for_regex
         }
       end
 

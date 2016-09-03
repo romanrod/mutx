@@ -32,7 +32,10 @@ module Mutx
         :started_message,
         :console_output,
         :application,
-        :gui_task
+        :gui_task,
+        :regex,
+        :value_for_regex,
+        :result_value
 
 
       def initialize data_for_result
@@ -59,10 +62,13 @@ module Mutx
 
           # Save task info
           task_data                 = Mutx::Database::MongoConnector.task_data_for(@task["id"])
-          @command                  = data_for_result['command']
+          @command                  = data_for_result["command"]
           @task_name                = task_data["name"]
           @command                  = task_data["command"]
           @application              = task_data["application"]
+          @regex                    = task_data["regex"]
+          @value_for_regex          = task_data["value_for_regex"]
+          @result_value             = "NONE" # by default
           @console_output           = ""
           @last_check_time          = now_in_seconds
           @execution_data           = {}
@@ -111,7 +117,10 @@ module Mutx
           "pid"                       => pid,
           "last_check_time"           => last_check_time,
           "execution_data"            => execution_data,
-          "configuration_values"      => configuration_values
+          "configuration_values"      => configuration_values,
+          "regex"                     => regex,
+          "value_for_regex"           => value_for_regex,
+          "result_value"              => result_value
         }
       end
 
@@ -216,14 +225,46 @@ module Mutx
         @task["aplication"] == "GUI"
       end
 
+      def has_regex?
+        return false if (@regex.empty? or @regex.nil?)
+        true
+      end
+
       def finish!
         @finished_at= now_in_seconds
-        @status = @summary = "finished"
+        @status = "finished"
+        set_result_value!
         save_report
         self.save!
         delete_asociated_files!
         Mutx::Support::Log.debug "[#{@id}] Executuion finished" if Mutx::Support::Log
         true
+      end
+
+      def set_result_value!
+        @summary = if is_cucumber?
+          get_result_from_summary!
+        else
+          eval_regex! if has_regex?
+        end
+      end
+
+      def eval_regex!
+        (@result_value = @value_for_regex) unless @console_output.scan("#{@regex}").last.flatten.empty?
+      end
+
+      def get_result_from_summary!
+        @result_value = if @summary.include? "failed"
+          "failed"
+        elsif @summary.include? "undefined"
+          "undefined"
+        elsif @summary.include? "pending"
+          "pending"
+        elsif @summary.include? "passed"
+          "passed"
+        else
+          "none"
+        end
       end
 
       def finished_by_timeout!
@@ -492,7 +533,7 @@ module Mutx
       def reset! reason=nil
         status_text = "stopped"
         status_text += " (#{reason})" if reason
-        @status = @summary = status_text
+        @status = @summary = @value_for_regex = status_text
         @finished_at= now_in_seconds
         save_report
         delete_asociated_files!
