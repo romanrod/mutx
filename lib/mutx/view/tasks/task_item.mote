@@ -35,7 +35,7 @@ color = Mutx::View.color(status)
           Information</a>
       % end
       % if status=="running"
-        <a href='#' title='See the last execution progress' class='label label-warning' onclick="refreshAndOpen('/results/log/{{running_results.last["_id"]}}');">
+        <a href='#' title='See the last execution progress' class='label label-warning' onclick="refreshAndOpen('/results/{{running_results.last["_id"]}}/log');">
           Last execution progress</a>
       % end
       </div>
