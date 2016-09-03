@@ -533,7 +533,7 @@ module Mutx
       def reset! reason=nil
         status_text = "stopped"
         status_text += " (#{reason})" if reason
-        @status = @summary = @value_for_regex = status_text
+        @status = @summary = @result_value = status_text
         @finished_at= now_in_seconds
         save_report
         delete_asociated_files!
