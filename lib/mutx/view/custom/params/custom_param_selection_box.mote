@@ -2,26 +2,21 @@
 # This template is used by task creation form where user can select custom params for a task
 custom_params_list = Mutx::API::CustomParams.list
 ?>
-<div class="panel panel-info">
-  <div class="panel-heading">
-    <h3 class="panel-title">Select the input parameter</h3>
-  </div>
-  <div class="panel-body">
-  <table>
-    % custom_params_list.each do |custom_param|
-      <tr>
-        <td>
-          <input type="checkbox" {{'checked="checked"' if params.include? custom_param["_id"]}} class="bigCheckbox" name="custom_param_{{custom_param['_id']}}" id="{{custom_param['name']}}" />&nbsp;
-        </td>
-        <td>
-          <label class='control-label' for='formGroupInputSmall'>{{custom_param['name']}}</label>&nbsp;
-        </td>
-        <td>
-          % custom_param_template = Mote.parse(File.read("#{Mutx::View.path}/custom/params/#{custom_param["type"]}.mote"), self, [:param, :no_label, :task_form])
-          {{custom_param_template.call(param:custom_param, no_label:true, task_form:true)}}
-        </td>
-      </tr>
-    % end
-  </table>
-  </div>
-</div>
+
+<table>
+  % custom_params_list.each do |custom_param|
+    <tr>
+      <td>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" {{'checked="checked"' if params.include? custom_param["_id"]}} class="bigCheckbox" name="custom_param_{{custom_param['_id']}}" id="{{custom_param['name']}}" />&nbsp;
+      </td>
+      <td>
+        <label class='control-label' for='formGroupInputSmall'>{{custom_param['name']}}</label>&nbsp;
+      </td>
+      <td>
+        % custom_param_template = Mote.parse(File.read("#{Mutx::View.path}/custom/params/#{custom_param["type"]}.mote"), self, [:param, :no_label, :task_form])
+        {{custom_param_template.call(param:custom_param, no_label:true, task_form:true)}}
+      </td>
+    </tr>
+  % end
+</table>
