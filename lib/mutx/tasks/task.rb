@@ -31,10 +31,11 @@ module Mutx
       :subject,
       :notifications,
       :value_for_regex,
-      :regex
+      :regex,
+      :notify_on
 
-      VALID_VALUES = ["failed","passed"]
-
+      REGEX_VALID_VALUES = ["failed","passed","none","warning"]
+      NOTIFY_VALID_VALUES = ["any","warning","passed","failed"]
 
       def self.valid_types
         ["task","test"]
@@ -67,6 +68,7 @@ module Mutx
           @application      = task_data["application"] || "command line"
           @regex            = task_data["regex"]
           @value_for_regex  = task_data["value_for_regex"]
+          @notify_on        = task_data["notify_on"]
         else
           Mutx::Support::Log.error "Creting task object. Argument is not a hash" if Mutx::Support::Log
           raise "Task data not defined correctly. Expecting info about task"
@@ -118,7 +120,8 @@ module Mutx
           "last_exec_time" => Time.now.utc,
           "application" => data["application"],
           "regex" => data["regex"],
-          "value_for_regex" => data["value_for_regex"]
+          "value_for_regex" => data["value_for_regex"],
+          "notify_on" => data["notify_on"]
         }
         self.new(task_data)
       end
@@ -142,7 +145,8 @@ module Mutx
           else
             errors << self.validate_name(data["name"])
           end
-          errors << self.validate_value_for_regex(data['value_for_regex'])
+          errors << self.validate_value_for_regex(data['value_for_regex'], data['regex'], data['cucumber'])
+          errors << self.validate_notifications(data['notify_on'], data['notifications'], data['mail'])
           errors << self.validate_max_execs(data["max_execs"])
           errors << self.validate_type(data["type"])
           errors << self.validate_risk_command(data["command"])
@@ -199,14 +203,20 @@ module Mutx
       # command must be evaluated for risks
       def self.validate_risk_command command
         return "Your commands seems to be unsecure" unless Mutx::Support::Risk.secure? command
-
       end
 
-      def self.validate_value_for_regex result_for_regex=nil
-        unless cucumber
-          return "Must define a result for regex" if result_for_regex.nil?
-          return "Invalid value for regex #{result_for_regex}" unless VALID_VALUES.include? result_for_regex
+      def self.validate_value_for_regex value_for_regex=nil, regex=nil, cucumber=nil
+        unless cucumber 
+          if regex
+            return "Must define a result for regex" if value_for_regex.nil?
+            return "Invalid value for regex #{value_for_regex}" unless REGEX_VALID_VALUES.include? value_for_regex
+          end
         end
+      end
+
+      def self.validate_notifications notify_on=nil, notifications=nil, recipients=nil
+        return "Must define at least one recipient to notify" if notifications and recipients.nil?
+        return "Invalid value for notify on #{notify_on}" if notifications and !NOTIFY_VALID_VALUES.include? notify_on
       end
 
       def task_data_for task_name
@@ -236,7 +246,8 @@ module Mutx
           "last_exec_time" => last_exec_time,
           "application" => application,
           "regex" => regex,
-          "value_for_regex" => value_for_regex
+          "value_for_regex" => value_for_regex,
+          "notify_on" => notify_on
         }
       end
 

@@ -18,6 +18,7 @@ if ["edit","view"].include? action
   cronneable = task["cronneable"]
   cron_time = task["cron_time"]
   notifications = task["notifications"]
+  notify_on = task["notify_on"]
   mail = task["mail"]
   subject = task["subject"]
   regex = task["regex"]
@@ -29,6 +30,17 @@ if ["edit","view"].include? action
   end
 
   disabled = 'disabled="disabled"' if action == "view"
+
+  checked_if_regex_none = "checked" if value_for_regex == "none" 
+  checked_if_regex_warning = "checked" if value_for_regex == "warning"
+  checked_if_regex_passed = "checked" if value_for_regex == "passed"
+  checked_if_regex_failed = "checked" if value_for_regex == "failed"
+
+  checked_if_notify_on_any = "checked" if notify_on == "any" 
+  checked_if_notify_on_warning = "checked" if notify_on == "warning"
+  checked_if_notify_on_passed = "checked" if notify_on == "passed"
+  checked_if_notify_on_failed = "checked" if notify_on == "failed"
+
 
 end
 
@@ -108,7 +120,7 @@ application = task["application"].upcase if task
 
 <!-- # Application -->
     <div class='form-group'>
-      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Application?</label>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Application</label>
         <select name="application" id="application" class='customParam' {{disabled}}>
           % if !application.nil?
             <option value="{{application.upcase}}" selected>{{application}}</option>
@@ -173,16 +185,16 @@ application = task["application"].upcase if task
       <label class='col-sm-3 control-label' for='formGroupInputSmall' title="Select the result execution for regular expression matching">Set result for matching as</label>
       <div class="btn-group" data-toggle="buttons">
         <label class="btn btn-primary btn-default active">
-          <input class="btn btn-default" type="radio" name="value_for_regex" value="none" id="value_for_regex" autocomplete="off" {{disabled}}  {{'checked' if value_for_regex=="none"}}>None
+          <input type="radio" name="value_for_regex" value="none" id="value_for_regex" autocomplete="off" {{disabled}}  {{checked_if_regex_none}}/>None
         </label>
         <label class="btn btn-primary btn-warning">
-          <input class="btn btn-warning" type="radio" name="value_for_regex" value="warning" id="value_for_regex" autocomplete="off" {{disabled}} {{'checked' if value_for_regex=="warning"}}> Warning
+          <input type="radio" name="value_for_regex" value="warning" id="value_for_regex" autocomplete="off" {{disabled}} {{checked_if_regex_warning}}/> Warning
         </label>
         <label class="btn btn-primary btn-success">
-          <input class="btn btn-success" type="radio" name="value_for_regex" value="passed" id="value_for_regex" autocomplete="off" {{disabled}} {{'checked' if value_for_regex=="passed"}}> Passed
+          <input type="radio" name="value_for_regex" value="passed" id="value_for_regex" autocomplete="off" {{disabled}} {{checked_if_regex_passed}}/> Passed
         </label>
         <label class="btn btn-primary btn-danger">
-          <input class="btn btn-danger" type="radio" name="value_for_regex" value="failed" id="value_for_regex" autocomplete="off" {{disabled}} {{'checked' if value_for_regex=="failed"}}> Failed
+          <input type="radio" name="value_for_regex" value="failed" id="value_for_regex" autocomplete="off" {{disabled}} {{checked_if_regex_failed}}/> Failed
         </label>
       </div>
       <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Result for regex matching','Choose the result execution for regular expression matching.', null);">?</a>
@@ -217,16 +229,16 @@ application = task["application"].upcase if task
     <label class='col-sm-3 control-label' for='formGroupInputSmall' title="Select the result execution for regular expression matching">Notify on</label>
       <div class="btn-group" data-toggle="buttons">
         <label class="btn btn-primary btn-default active">
-          <input class="btn btn-default" type="radio" name="notify_on" value="any" id="value_for_regex" autocomplete="off" {{disabled}}  {{'checked' if value_for_regex=="none"}}>Any
+          <input class="btn btn-default" type="radio" name="notify_on" value="any" id="notify_on_any" autocomplete="off" {{disabled}}  {{checked_if_notify_on_any}}>Any
         </label>
         <label class="btn btn-primary btn-warning">
-          <input class="btn btn-warning" type="radio" name="notify_on" value="warning" id="value_for_regex" autocomplete="off" {{disabled}} {{'checked' if value_for_regex=="warning"}}> Warning
+          <input class="btn btn-warning" type="radio" name="notify_on" value="warning" id="notify_on_warning" autocomplete="off" {{disabled}} {{checked_if_notify_on_warning}}> Warning
         </label>
         <label class="btn btn-primary btn-success">
-          <input class="btn btn-success" type="radio" name="notify_on" value="passed" id="value_for_regex" autocomplete="off" {{disabled}} {{'checked' if value_for_regex=="passed"}}> Passed
+          <input class="btn btn-success" type="radio" name="notify_on" value="passed" id="notify_on_passed" autocomplete="off" {{disabled}} {{checked_if_notify_on_passed}}> Passed
         </label>
         <label class="btn btn-primary btn-danger">
-          <input class="btn btn-danger" type="radio" name="notify_on" value="failed" id="value_for_regex" autocomplete="off" {{disabled}} {{'checked' if value_for_regex=="failed"}}> Failed
+          <input class="btn btn-danger" type="radio" name="notify_on" value="failed" id="notify_on_failed" autocomplete="off" {{disabled}} {{checked_if_notify_on_failed}}> Failed
         </label>
       </div>
       <br><br>

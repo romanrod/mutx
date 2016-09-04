@@ -107,7 +107,7 @@ module Mutx
           result.ensure_finished!
 
           puts result.summary
-          
+
           task = Mutx::Tasks::Task.get(result.task_id)
 
           task = Mutx::Database::MongoConnector.task_data_for result.task[:id]
@@ -122,8 +122,11 @@ module Mutx
           name = task[:name]
           id = task[:_id]
           cucumber = task[:cucumber]
+          notify_on = task[:notify_on]
           
-          Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber) if ((task[:notifications].eql? "on") && (!email.empty?))
+          if task["notifications"]
+            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
+          end
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
           
