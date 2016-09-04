@@ -203,8 +203,10 @@ module Mutx
       end
 
       def self.validate_value_for_regex result_for_regex=nil
-        return "Must define a result for regex" if result_for_regex.nil?
-        return "Invalid value for regex #{result_for_regex}" unless VALID_VALUES.include? result_for_regex
+        unless cucumber
+          return "Must define a result for regex" if result_for_regex.nil?
+          return "Invalid value for regex #{result_for_regex}" unless VALID_VALUES.include? result_for_regex
+        end
       end
 
       def task_data_for task_name

@@ -105,6 +105,9 @@ module Mutx
           end
 
           result.ensure_finished!
+
+          puts result.summary
+          
           task = Mutx::Tasks::Task.get(result.task_id)
 
           task = Mutx::Database::MongoConnector.task_data_for result.task[:id]

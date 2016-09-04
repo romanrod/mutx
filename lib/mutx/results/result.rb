@@ -68,7 +68,7 @@ module Mutx
           @application              = task_data["application"]
           @regex                    = task_data["regex"]
           @value_for_regex          = task_data["value_for_regex"]
-          @result_value             = "NONE" # by default
+          @result_value             = "none" # by default
           @console_output           = ""
           @last_check_time          = now_in_seconds
           @execution_data           = {}
@@ -226,8 +226,7 @@ module Mutx
       end
 
       def has_regex?
-        return false if (@regex.empty? or @regex.nil?)
-        true
+        @regex and true
       end
 
       def finish!
@@ -242,18 +241,21 @@ module Mutx
       end
 
       def set_result_value!
-        @summary = if is_cucumber?
+        if is_cucumber?
           get_result_from_summary!
         else
-          eval_regex! if has_regex?
+          eval_regex!
         end
       end
 
       def eval_regex!
-        (@result_value = @value_for_regex) unless @console_output.scan("#{@regex}").last.flatten.empty?
+        Mutx::Support::Log.debug "result_value => #{@result_value} = value_for_regex #{@value_for_regex}" if Mutx::Support::Log
+        found = @console_output.scan("#{@regex}").flatten.last
+        (@result_value = @value_for_regex) if found
       end
 
       def get_result_from_summary!
+        get_summary!
         @result_value = if @summary.include? "failed"
           "failed"
         elsif @summary.include? "undefined"
@@ -263,7 +265,7 @@ module Mutx
         elsif @summary.include? "passed"
           "passed"
         else
-          "none"
+          "summary => #{@summary}"
         end
       end
 
@@ -271,6 +273,7 @@ module Mutx
 
         @timeout = "#{Mutx::Support::Configuration.execution_time_to_live}"
         reset!("Timeout reached '#{@timeout}'")
+        @result_value = "aborted by timeout"
         save_report
         save_report_summary_and_status!
         Mutx::Support::Log.debug "[#{@id}] Finished by timeout (#{Mutx::Support::Configuration.execution_time_to_live} sec)" if Mutx::Support::Log
@@ -365,12 +368,12 @@ module Mutx
           @summary = Mutx::View::Parser.extract_summary(report) unless summary?
           self.save!
         else
-
+          # it's a task
         end
       end
 
       def summary?
-        !(["Not available yet", "running"].include? @summary)
+        !(["Not available yet", "running", "started"].include? @summary)
       end
 
       # Returns the html report file created by MuTX
@@ -533,7 +536,7 @@ module Mutx
       def reset! reason=nil
         status_text = "stopped"
         status_text += " (#{reason})" if reason
-        @status = @summary = @result_value = status_text
+        @status = @summary = status_text
         @finished_at= now_in_seconds
         save_report
         delete_asociated_files!
