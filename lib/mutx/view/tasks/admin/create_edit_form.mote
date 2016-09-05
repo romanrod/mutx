@@ -31,17 +31,28 @@ if ["edit","view"].include? action
 
   disabled = 'disabled="disabled"' if action == "view"
 
-  active_if_regex_none = "active" if value_for_regex == "none" 
-  active_if_regex_warning = "active" if value_for_regex == "warning"
-  active_if_regex_passed = "active" if value_for_regex == "passed"
-  active_if_regex_failed = "active" if value_for_regex == "failed"
+  case value_for_regex
+  when "warning"
+    active_if_regex_warning = "active"
+  when "passed"
+    active_if_regex_passed = "active"
+  when "failed"
+    active_if_regex_failed = "active"
+  else
+    active_if_regex_none = "active"
+  end
 
-  active_if_notify_on_any = "active" if notify_on == "any" 
-  active_if_notify_on_warning = "active" if notify_on == "warning"
-  active_if_notify_on_passed = "active" if notify_on == "passed"
-  active_if_notify_on_failed = "active" if notify_on == "failed"
-
-
+  case value_for_regex
+  when "warning"
+    active_if_notify_on_warning = "active"
+  when "passed"
+    active_if_notify_on_passed = "active"
+  when "failed"
+    active_if_notify_on_failed = "active"
+  else
+    active_if_notify_on_any = "active"
+  end
+  
 end
 
 

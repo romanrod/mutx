@@ -206,6 +206,7 @@ module Mutx
       end
 
       def self.validate_value_for_regex value_for_regex=nil, regex=nil, cucumber=nil
+        regex = nil if regex == ""
         unless cucumber 
           if regex
             return "Must define a result for regex" if value_for_regex.nil?
