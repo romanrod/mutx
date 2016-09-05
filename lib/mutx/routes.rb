@@ -162,9 +162,15 @@ Cuba.define do
 
     on get do
 
+      on "pull" do
+        #Check for updates on the branch and make a pull if its outdated
+        Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
+        res.redirect "/tasks"
+      end
+
       on "logout" do
         if env["SERVER_NAME"].eql? "localhost"
-          a = env["HTTP_REFERER"]
+          a = env["HTTP_REFERER"] || env["REQUEST_URI"]
           logout = a.match(/\D{4,5}:\/\//).to_s+"user:pass@"+env["SERVER_NAME"].to_s+":"+env["SERVER_PORT"].to_s
           res.redirect "#{logout}/tasks"
         else
@@ -375,11 +381,31 @@ Cuba.define do
 
 
       on "tasks/:task_name" do |task_name|
-        query_string = Mutx::Support::QueryString.new req
-        task_name.gsub!("%20"," ")
-        args = {query_string:query_string, task_name:task_name}
-        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-        res.write template.call(section:"Tasks", args:args)
+        task = Mutx::Tasks::Task.get_task_with task_name.gsub(/%20/, " ")
+        if task.blocked.eql? "on"
+          response = basic_auth(env) do |user, pass|
+           user == "mutx" && pass == "mutxAdmin"
+          end
+          if response
+            query_string = Mutx::Support::QueryString.new req
+            task_name.gsub!("%20"," ")
+            args = {query_string:query_string, task_name:task_name}
+            template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+            res.write template.call(section:"Tasks", args:args)
+          else
+           on default do
+             res.status = 401
+             res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+             res.write "Access Denied, Mutx don't let you run this execution without authorization"
+           end
+          end
+        else
+          query_string = Mutx::Support::QueryString.new req
+          task_name.gsub!("%20"," ")
+          args = {query_string:query_string, task_name:task_name}
+          template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+          res.write template.call(section:"Tasks", args:args)
+        end
       end
 
       on "tasks" do
@@ -416,12 +442,33 @@ Cuba.define do
       end
 
       on "tests/:task_name" do |task_name|
-        query_string = Mutx::Support::QueryString.new req
-        Mutx::Support::Log.debug "task_name => #{task_name}"
-        task_name.gsub!("%20"," ")
-        args = {query_string:query_string, task_name:task_name}
-        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-        res.write template.call(section:"Tests", args:args)
+        task = Mutx::Tasks::Task.get_task_with task_name.gsub(/%20/, " ")
+        if task.blocked.eql? "on"
+          response = basic_auth(env) do |user, pass|
+           user == "mutx" && pass == "mutxAdmin"
+          end
+          if response
+            query_string = Mutx::Support::QueryString.new req
+            Mutx::Support::Log.debug "task_name => #{task_name}"
+            task_name.gsub!("%20"," ")
+            args = {query_string:query_string, task_name:task_name}
+            template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+            res.write template.call(section:"Tests", args:args)
+          else
+           on default do
+             res.status = 401
+             res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+             res.write "Access Denied, Mutx don't let you run this execution without authorization"
+           end
+          end
+        else
+          query_string = Mutx::Support::QueryString.new req
+          Mutx::Support::Log.debug "task_name => #{task_name}"
+          task_name.gsub!("%20"," ")
+          args = {query_string:query_string, task_name:task_name}
+          template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+          res.write template.call(section:"Tests", args:args)
+        end
       end
 
       on "tests" do
@@ -663,12 +710,6 @@ Cuba.define do
 
       on "favicon" do
         res.write ""
-      end
-
-      on "pull" do
-        #When go to pull, check for updates on the branch and make a pull if its outdated
-        Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
-        res.redirect "/tasks"
       end
      
       on root do

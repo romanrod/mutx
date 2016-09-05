@@ -20,6 +20,7 @@ if ["edit","view"].include? action
   notifications = task["notifications"]
   notify_on = task["notify_on"]
   mail = task["mail"]
+  blocked = task["blocked"]
   subject = task["subject"]
   regex = task["regex"]
   value_for_regex = task["value_for_regex"]
@@ -115,6 +116,18 @@ application = task["application"].upcase if task
     <div class='form-group'>
       <label class='col-sm-3 control-label' for='formGroupInputSmall'>Command</label>
       <input class='customParam' {{"required title='This value is Required!'"}} type='text' name='command' id='command' placeholder='{{"Enter value here"}}'  value="{{command}}" {{disabled}} /> *
+    </div>
+
+<!-- Protected execution -->
+    <div class='form-group'>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Protected?</label>
+      % if !blocked.eql? "on"
+        <input type="checkbox" name="blocked" id="blocked" />
+      % else
+        <input type="checkbox" name="blocked" id="blocked" checked/>
+      % end
+       <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Protected', 'Click it if you want to protect this execution and only authorized users can run it');">
+  ?</a>
     </div>
 
 <!-- # type -->

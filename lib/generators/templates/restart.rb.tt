@@ -9,7 +9,7 @@ module Cron
 		  running_task = Mutx::Database::MongoConnector.running_now
 
 		  if running_task.eql? []
-        Mutx::Support::Console.execute "cd /home/ubuntu/garba-automation && mutx restart"
+        Mutx::Support::Console.execute "mutx stop && mutx restart"
       else
       	puts
       	puts "Tasks running right now, cant restart"
