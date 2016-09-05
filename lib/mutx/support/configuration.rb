@@ -98,24 +98,53 @@ module Mutx
         }
       end
 
+      def self.email_configured?
+        return false if self.smtp_address? or 
+          self.smtp_port? or 
+          self.smtp_domain? or 
+          self.smtp_user? or 
+          self.smtp_password.nil?
+        true
+      end
+
       def self.smtp_address
         @@input['notification']['smtp_address']          
+      end
+
+      def self.smtp_address?
+        ![nil,""].include? self.smtp_address
       end
 
       def self.smtp_port
         @@input['notification']['smtp_port']  
       end
 
+      def self.smtp_port?
+        ![nil,""].include? self.smtp_port
+      end
+
       def self.smtp_domain
         @@input['notification']['smtp_domain']  
+      end
+
+      def self.smtp_domain?
+        ![nil,""].include? self.smtp_domain
       end
 
       def self.smtp_user
         @@input['notification']['smtp_user']  
       end
 
+      def self.smtp_user?
+        ![nil,""].include? self.smtp_user
+      end
+
       def self.smtp_password
         @@input['notification']['smtp_password']  
+      end
+
+      def self.smtp_password?
+        ![nil,""].include? self.smtp_password
       end
 
       def self.smtp_autentication
@@ -165,10 +194,6 @@ module Mutx
 
       def self.refresh?
         !self.refresh_time.zero?
-      end
-
-      def self.use_gmail?
-        self.is_boolean? @@input['use_gmail'] ? @@input['use_gmail'] : false
       end
 
       def self.is_email_correct?
