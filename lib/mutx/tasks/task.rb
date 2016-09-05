@@ -68,7 +68,7 @@ module Mutx
           @application      = task_data["application"] || "command line"
           @regex            = task_data["regex"]
           @value_for_regex  = task_data["value_for_regex"]
-          @notify_on        = task_data["notify_on"]
+          @notify_on        = task_data["notify_on"] || "any"
         else
           Mutx::Support::Log.error "Creting task object. Argument is not a hash" if Mutx::Support::Log
           raise "Task data not defined correctly. Expecting info about task"
@@ -215,8 +215,10 @@ module Mutx
       end
 
       def self.validate_notifications notify_on=nil, notifications=nil, recipients=nil
-        return "Must define at least one recipient to notify" if notifications and recipients.nil?
-        return "Invalid value for notify on #{notify_on}" if notifications and !NOTIFY_VALID_VALUES.include? notify_on
+        if notifications
+          return "Must define at least one recipient to notify" if recipients.nil?
+          return "Invalid value for notify on #{notify_on}" if !NOTIFY_VALID_VALUES.include? notify_on
+        end
       end
 
       def task_data_for task_name
