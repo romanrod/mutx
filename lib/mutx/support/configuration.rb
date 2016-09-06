@@ -99,10 +99,10 @@ module Mutx
       end
 
       def self.email_configured?
-        return false if self.smtp_address? or 
-          self.smtp_port? or 
-          self.smtp_domain? or 
-          self.smtp_user? or 
+        return true if self.smtp_address? and 
+          self.smtp_port? and 
+          self.smtp_domain? and 
+          self.smtp_user? and 
           self.smtp_password.nil?
         true
       end
@@ -112,7 +112,7 @@ module Mutx
       end
 
       def self.smtp_address?
-        [nil,""].include? self.smtp_address
+        self.value?(self.smtp_address)
       end
 
       def self.smtp_port
@@ -120,7 +120,7 @@ module Mutx
       end
 
       def self.smtp_port?
-        [nil,""].include? self.smtp_port
+        self.value?(self.smtp_port)
       end
 
       def self.smtp_domain
@@ -128,7 +128,7 @@ module Mutx
       end
 
       def self.smtp_domain?
-        [nil,""].include? self.smtp_domain
+        self.value?(self.smtp_domain)
       end
 
       def self.smtp_user
@@ -136,7 +136,7 @@ module Mutx
       end
 
       def self.smtp_user?
-        [nil,""].include? self.smtp_user
+        self.value?(self.smtp_user)
       end
 
       def self.smtp_password
@@ -144,7 +144,11 @@ module Mutx
       end
 
       def self.smtp_password?
-        [nil,""].include? self.smtp_password
+        self.value?(self.smtp_password)
+      end
+
+      def self.value? value
+        ![nil,""].include? value
       end
 
       def self.smtp_autentication
