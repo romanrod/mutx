@@ -169,12 +169,16 @@ Cuba.define do
       end
 
       on "logout" do
+        $result = nil
+        $result = false
         if env["SERVER_NAME"].eql? "localhost"
+          $result = false
           a = env["HTTP_REFERER"] || env["REQUEST_URI"]
           logout = a.match(/\D{4,5}:\/\//).to_s+"user:pass@"+env["SERVER_NAME"].to_s+":"+env["SERVER_PORT"].to_s
-          res.redirect "#{logout}/tasks"
+          res.redirect "#{logout}/"
         else
-          res.redirect "http://user@mutx.garba.ninja/tasks"
+          $result = false
+          res.redirect "http://user@mutx.garba.ninja/"
         end
       end
 
@@ -220,8 +224,34 @@ Cuba.define do
       end
 
       on "results/:result_id/reset" do |result_id|
-        result = Mutx::API::Execution.reset(result_id)
-        res.redirect "/results?msg=#{result['message']}"
+        task_name = Mutx::Results::Result.get result_id
+        task = Mutx::Tasks::Task.get_task_with task_name.task["name"]
+        if task.blocked_stop.eql? "on"
+          $result = basic_auth(env) do |user, pass|
+           user == "mutx" && pass == "mutxAdmin"
+          end
+          if $result.eql? true
+            #begin
+              value = Mutx::API::Execution.reset(result_id)
+              res.redirect "/results?msg=#{value['message']}"
+            #rescue
+            #  retry if !value["message"].include? "Stopped"
+            #end
+          else
+           on default do
+             res.status = 401
+             res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+             res.write "Access Denied, Mutx don't let you stop this execution without authorization"
+           end
+          end
+        else
+          #begin
+            value = Mutx::API::Execution.reset(result_id)
+            res.redirect "/results?msg=#{value['message']}"
+          #rescue
+          #  retry if !value["message"].include? "Stopped"
+          #end
+        end
       end
 
       on "results/task/:task_name" do |task_name|
@@ -284,7 +314,7 @@ Cuba.define do
          $result = basic_auth(env) do |user, pass|
            user == "mutx" && pass == "mutxAdmin"
          end
-         if $result
+         if $result.eql? true
           template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
           res.write template.call(section:"Edit Tasks", args:{:query_string => Mutx::Support::QueryString.new(req)})
          else
@@ -322,11 +352,11 @@ Cuba.define do
         $result = basic_auth(env) do |user, pass|
          user == "mutx" && pass == "mutxAdmin"
         end
-        if $result
-        query_string = Mutx::Support::QueryString.new req
-        args = {query_string:query_string}
-        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-        res.write template.call(section:"Custom Params", args:args)
+        if $result.eql? true
+          query_string = Mutx::Support::QueryString.new req
+          args = {query_string:query_string}
+          template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+          res.write template.call(section:"Custom Params", args:args)
         else
          on default do
            res.status = 401
@@ -383,10 +413,10 @@ Cuba.define do
       on "tasks/:task_name" do |task_name|
         task = Mutx::Tasks::Task.get_task_with task_name.gsub(/%20/, " ")
         if task.blocked.eql? "on"
-          response = basic_auth(env) do |user, pass|
+          $result = basic_auth(env) do |user, pass|
            user == "mutx" && pass == "mutxAdmin"
           end
-          if response
+          if $result.eql? true
             query_string = Mutx::Support::QueryString.new req
             task_name.gsub!("%20"," ")
             args = {query_string:query_string, task_name:task_name}
@@ -444,10 +474,10 @@ Cuba.define do
       on "tests/:task_name" do |task_name|
         task = Mutx::Tasks::Task.get_task_with task_name.gsub(/%20/, " ")
         if task.blocked.eql? "on"
-          response = basic_auth(env) do |user, pass|
+          $result = basic_auth(env) do |user, pass|
            user == "mutx" && pass == "mutxAdmin"
           end
-          if response
+          if $result.eql? true
             query_string = Mutx::Support::QueryString.new req
             Mutx::Support::Log.debug "task_name => #{task_name}"
             task_name.gsub!("%20"," ")
@@ -488,21 +518,10 @@ Cuba.define do
 
 
       on "logs/:log_name" do |log_name|
-        $result = basic_auth(env) do |user, pass|
-         user == "mutx" && pass == "mutxAdmin"
-        end
-        if $result
-         query_string = Mutx::Support::QueryString.new req
-         args = {query_string:query_string, log_name:log_name}
-         template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
-         res.write template.call(section:"Log", args:args)
-        else
-         on default do
-           res.status = 401
-           res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
-           res.write "Access Denied, Mutx don't let you go to that place without authorization"
-         end
-        end
+        query_string = Mutx::Support::QueryString.new req
+        args = {query_string:query_string, log_name:log_name}
+        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])
+        res.write template.call(section:"Log", args:args)
       end
 
       on "logs" do

@@ -33,7 +33,8 @@ module Mutx
       :value_for_regex,
       :regex,
       :notify_on,
-      :blocked
+      :blocked,
+      :blocked_stop
 
       REGEX_VALID_VALUES = ["failed","passed","none"]
       NOTIFY_VALID_VALUES = ["any","passed","failed"]
@@ -66,6 +67,7 @@ module Mutx
           @subject          = task_data["subject"] || ""
           @notifications    = task_data["notifications"]
           @blocked          = task_data["blocked"]
+          @blocked_stop     = task_data["blocked_stop"]
           @last_exec_time   = task_data["last_exec_time"]
           @application      = task_data["application"] || "command line"
           @regex            = task_data["regex"]
@@ -122,6 +124,7 @@ module Mutx
           "subject" => data["subject"],
           "notifications" => data["notifications"],
           "blocked" => data["blocked"],
+          "blocked_stop" => data["blocked_stop"],
           "last_exec_time" => Time.now.utc,
           "application" => data["application"],
           "regex" => data["regex"],
@@ -251,6 +254,7 @@ module Mutx
           "subject" => subject,
           "notifications" => notifications,
           "blocked" => blocked,
+          "blocked_stop" => blocked_stop,
           "cron_time" => cron_time,
           "last_exec_time" => last_exec_time,
           "application" => application,

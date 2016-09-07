@@ -19,8 +19,12 @@ color = Mutx::View.color(status)
           % if task["cronneable"].eql? "on"
             &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i>
           % end
-          % if task["blocked"].eql? "on"
-            &nbsp;<i class="fa fa-lock" aria-hidden="true"></i>
+          % if ((task["blocked"].eql? "on") && (task["blocked_stop"].eql? "on"))
+            &nbsp;(&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>&nbsp;run / stop&nbsp;)</i>
+          % elsif (task["blocked"].eql? "on")
+            &nbsp;(&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>&nbsp;run&nbsp;)</i>
+          % elsif (task["blocked_stop"].eql? "on")
+            &nbsp;(&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>&nbsp;stop&nbsp;)</i>
           % end
         </h3>
     % if status=="running"

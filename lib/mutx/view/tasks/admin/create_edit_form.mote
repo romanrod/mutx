@@ -21,6 +21,7 @@ if ["edit","view"].include? action
   notify_on = task["notify_on"]
   mail = task["mail"]
   blocked = task["blocked"]
+  blocked_stop = task["blocked_stop"]
   subject = task["subject"]
   regex = task["regex"]
   value_for_regex = task["value_for_regex"]
@@ -33,21 +34,21 @@ if ["edit","view"].include? action
   disabled = 'disabled="disabled"' if action == "view"
 
   case value_for_regex
-  when "passed"
-    active_if_regex_passed = "active"
-  when "failed"
-    active_if_regex_failed = "active"
-  else
-    active_if_regex_none = "active"
+    when "passed"
+      active_if_regex_passed = "active"
+    when "failed"
+      active_if_regex_failed = "active"
+    else
+      active_if_regex_none = "active"
   end
 
   case value_for_regex
-  when "passed"
-    active_if_notify_on_passed = "active"
-  when "failed"
-    active_if_notify_on_failed = "active"
-  else
-    active_if_notify_on_any = "active"
+    when "passed"
+      active_if_notify_on_passed = "active"
+    when "failed"
+      active_if_notify_on_failed = "active"
+    else
+      active_if_notify_on_any = "active"
   end
   
 end
@@ -112,18 +113,6 @@ application = task["application"].upcase if task
     <div class='form-group'>
       <label class='col-sm-3 control-label' for='formGroupInputSmall'>Command</label>
       <input class='customParam' {{"required title='This value is Required!'"}} type='text' name='command' id='command' placeholder='{{"Enter value here"}}'  value="{{command}}" {{disabled}} /> *
-    </div>
-
-<!-- Protected execution -->
-    <div class='form-group'>
-      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Protected?</label>
-      % if !blocked.eql? "on"
-        <input type="checkbox" name="blocked" id="blocked" />
-      % else
-        <input type="checkbox" name="blocked" id="blocked" checked/>
-      % end
-       <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Protected', 'Click it if you want to protect this execution and only authorized users can run it');">
-  ?</a>
     </div>
 
 <!-- # type -->
@@ -191,6 +180,34 @@ application = task["application"].upcase if task
     </div>
 
   </nav>
+
+  <nav class="navbar navbar-default">
+    <h3>&nbsp;&nbsp;Security Configuration</h3>
+    <br>
+<!-- Protected execution -->
+    <div class='form-group'>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Protected run</label>
+      % if !blocked.eql? "on"
+        <input type="checkbox" name="blocked" id="blocked" />
+      % else
+        <input type="checkbox" name="blocked" id="blocked" checked/>
+      % end
+       <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Protected', 'Click it if you want to protect this execution and only authorized users can run it');">
+  ?</a>
+    </div>
+<!-- Protected Stop execution -->
+    <div class='form-group'>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Protected stop</label>
+      % if !blocked_stop.eql? "on"
+        <input type="checkbox" name="blocked_stop" id="blocked_stop" />
+      % else
+        <input type="checkbox" name="blocked_stop" id="blocked_stop" checked/>
+      % end
+       <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Protected', 'Click it if you want to protect the stop execution');">
+  ?</a>
+    </div>
+  </nav>
+
   <nav class="navbar navbar-default">  
     <h3>&nbsp;&nbsp;Result Configuration</h3>
     <br>
