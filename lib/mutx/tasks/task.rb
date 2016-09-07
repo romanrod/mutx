@@ -97,7 +97,9 @@ module Mutx
       end
 
       def self.get_task_with name
-        self.new(Mutx::Database::MongoConnector.task_data_for_name(name))
+        data = Mutx::Database::MongoConnector.task_data_for_name(name)
+        raise "Could not find data for task with name #{name}" if data.nil?
+        self.new(data)
       end
 
       def self.new_task(data)
