@@ -10,7 +10,7 @@ module Mutx
     class EmailSender
       include Sidekiq::Worker
       def perform(result_id, subject, email, name, id, type, cucumber, notify_on)
-        Mutx::BackgroundJobs::Mailer.new.sender(result_id, subject, email, name, id, type, cucumber, notify_on)
+        Mutx::Support::MailSender.new.sender(result_id, subject, email, name, id, type, cucumber, notify_on)
       end
     end
   end
