@@ -35,8 +35,8 @@ module Mutx
       :notify_on,
       :blocked
 
-      REGEX_VALID_VALUES = ["failed","passed","none","warning"]
-      NOTIFY_VALID_VALUES = ["any","warning","passed","failed"]
+      REGEX_VALID_VALUES = ["failed","passed","none"]
+      NOTIFY_VALID_VALUES = ["any","passed","failed"]
 
       def self.valid_types
         ["task","test"]

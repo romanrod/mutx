@@ -33,8 +33,6 @@ if ["edit","view"].include? action
   disabled = 'disabled="disabled"' if action == "view"
 
   case value_for_regex
-  when "warning"
-    active_if_regex_warning = "active"
   when "passed"
     active_if_regex_passed = "active"
   when "failed"
@@ -44,8 +42,6 @@ if ["edit","view"].include? action
   end
 
   case value_for_regex
-  when "warning"
-    active_if_notify_on_warning = "active"
   when "passed"
     active_if_notify_on_passed = "active"
   when "failed"
@@ -211,9 +207,6 @@ application = task["application"].upcase if task
         <label class="btn btn-primary btn-default {{active_if_regex_none}}">
           <input type="radio" name="value_for_regex" value="none" id="value_for_regex" autocomplete="off" {{disabled}}/>None
         </label>
-        <label class="btn btn-primary btn-warning {{active_if_regex_warning}}">
-          <input type="radio" name="value_for_regex" value="warning" id="value_for_regex" autocomplete="off" {{disabled}}/> Warning
-        </label>
         <label class="btn btn-primary btn-success {{active_if_regex_passed}}">
           <input type="radio" name="value_for_regex" value="passed" id="value_for_regex" autocomplete="off" {{disabled}}/> Passed
         </label>
@@ -254,9 +247,6 @@ application = task["application"].upcase if task
       <div class="btn-group" data-toggle="buttons">
         <label class="btn btn-primary btn-default {{active_if_notify_on_any}}">
           <input class="btn btn-default" type="radio" name="notify_on" value="any" id="notify_on_any" autocomplete="off" {{disabled}}/>Any
-        </label>
-        <label class="btn btn-primary btn-warning {{active_if_notify_on_warning}}">
-          <input class="btn btn-warning" type="radio" name="notify_on" value="warning" id="notify_on_warning" autocomplete="off" {{disabled}}/> Warning
         </label>
         <label class="btn btn-primary btn-success {{active_if_notify_on_passed}}">
           <input class="btn btn-success" type="radio" name="notify_on" value="passed" id="notify_on_passed" autocomplete="off" {{disabled}}/> Passed

@@ -66,7 +66,7 @@ module Mutx
           @task_name                = task_data["name"]
           @command                  = task_data["command"]
           @application              = task_data["application"]
-          @regex                    = task_data["regex"]
+          @regex                    = task_data["regex"] || nil
           @value_for_regex          = task_data["value_for_regex"]
           @result_value             = "none" # by default
           @console_output           = ""
@@ -250,8 +250,23 @@ module Mutx
 
       def eval_regex!
         Mutx::Support::Log.debug "result_value => #{@result_value} = value_for_regex #{@value_for_regex}" if Mutx::Support::Log
-        found = @console_output.scan("#{@regex}").flatten.last
-        (@result_value = @value_for_regex) if found
+        if @regex
+           @result_value = if @console_output.scan("#{@regex}").flatten.last
+            @value_for_regex 
+          else
+            oposite_value_for_regex
+          end
+        else # no regex
+          "not defined"
+        end
+      end
+
+      def oposite_value_for_regex
+        if @value_for_regex == "passed"
+          "failed"
+        else
+          "passed"
+        end
       end
 
       def get_result_from_summary!
