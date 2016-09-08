@@ -463,6 +463,11 @@ module Mutx
         $results.find({}, :sort => ['_id', -1])
       end
 
+      def self.find_results_for_task task_name
+        task_id = self.task_id_for task_name
+        self.results_for task_id
+      end
+
       def self.find_results_for_status status
         $results.find({$or => [{"summary" => /#{status}/}, {"status" => /#{status}/ }]},{"_id" => 1}).to_a
       end

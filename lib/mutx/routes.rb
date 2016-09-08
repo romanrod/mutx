@@ -29,31 +29,22 @@ Cuba.define do
 
       on "admin/config/reload" do
         on true do
-
           # Guarda el nuevo archivo de configuración si es válido
-
           Mutx::Support::Configuration.get
         end
       end
 
-
-
       on "admin/config/save" do
         on true do
           data = req.params.dup
-
           # Validar la data recibida
           # Insertar un nuevo registro y deshabilitar el resto
-
         end
       end
 
       on "admin/delete-custom-param" do
-
         on true do
-
           data = req.params.dup
-
           response = Mutx::API::CustomParams.set data # Creates or update
 
           path = "/admin/custom/params"
@@ -254,6 +245,7 @@ Cuba.define do
         end
       end
 
+      # Will be modified with api/tasks/:task/results
       on "results/task/:task_name" do |task_name|
         query_string = Mutx::Support::QueryString.new req
         task_name.gsub!("%20"," ")
@@ -591,6 +583,11 @@ Cuba.define do
 
       on "api/results/:id/reset" do |result_id|
         result = Mutx::API::Execution.reset(result_id)
+        res.write result.to_json
+      end
+
+      on "api/tasks/:id/results" do |task_id|
+        result = Mutx::API::Results.for_task_id(task_id)
         res.write result.to_json
       end
 

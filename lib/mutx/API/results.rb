@@ -26,6 +26,12 @@ module Mutx
         }
         response
       end
+
+      def self.for_task_id task_id
+        response = self.structure
+        response["results"] = Mutx::Results.all_results_for(task_id).map{|result| Mutx::API::Result.info(result["_id"])}
+        response
+      end
     end
   end
 end

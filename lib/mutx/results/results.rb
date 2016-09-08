@@ -28,6 +28,10 @@ module Mutx
       Mutx::Database::MongoConnector.find_results_for_status status
     end
 
+    def self.find_for_task task_name
+      Mutx::Database::MongoConnector.find_results_for_task task_name
+    end
+
     def self.all_results
       Mutx::Database::MongoConnector.all_results
     end
