@@ -17,6 +17,12 @@ module Mutx
         set_results_collection
         set_commits_collection
         set_documentation_collection
+        set_logger
+      end
+
+      def set_logger
+        Mongo::Logger.logger = ::Logger.new("mutx/logs/mongo.log")
+        Mongo::Logger.logger.level = ::Logger::INFO
       end
 
       def set_db_name
