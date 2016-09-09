@@ -1,22 +1,72 @@
 require 'mutx'
+require 'chronic'
 
 module Cron
 	class Tasks
 
 		def self.cron_jobs
+			@days = [:mo,:tu,:we,:th,:fr,:sa,:su]  
 		  cron_tasks_list = Mutx::Database::MongoConnector.cron_tasks
+      @none_day = true
+      @today = day_name #name of today
+
+      @now_time = Time.now.hour.to_s+":"+Time.now.min.to_s
 
 		  cron_tasks_list.each do |task|
-		  	if (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)))
+		  	@days.detect{|day| @none_day = "task_with_day" if task[:"#{day}"]}
+
+		  	# If no day execution is seted, works as always
+		  	if (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) &&
+		  	   (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) &&
+		  	   (@none_day.eql? true))
+
 		  		  query_string = {}
 		  		  query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
 		  		  task_name = task[:name]
 		        task_name.gsub!("%20"," ")
 		        puts Mutx::API::Tasks.cron_update task
 		        Mutx::API::Execution.start task_name, query_string
-		    end
+        # If there is a day seted, and that day is today, and no execution time is seted
+		    elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) &&
+		          (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) &&
+		          (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && 
+		          (task[:start_time].empty?) && (task[:stop_time].empty?))
+
+					query_string = {}
+					query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
+					task_name = task[:name]
+					task_name.gsub!("%20"," ")
+					puts Mutx::API::Tasks.cron_update task
+					Mutx::API::Execution.start task_name, query_string
+
+        # If there is a day seted, and that day is today, and execution range time is seted
+		    elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) &&
+		          (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) &&
+		          (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && 
+		          (@now_time.between? task[:start_time], task[:stop_time]))
+
+					query_string = {}
+					query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
+					task_name = task[:name]
+					task_name.gsub!("%20"," ")
+					puts Mutx::API::Tasks.cron_update task
+					Mutx::API::Execution.start task_name, query_string
+		    end#if
+
 		  end
 		  Mutx::Database::MongoConnector.force_close
+		end
+
+
+		def self.day_name()
+			num = Chronic.parse("today").wday
+			return "mo" if num.eql? 1
+			return "tu" if num.eql? 2
+			return "we" if num.eql? 3
+			return "th" if num.eql? 4
+      return "fr" if num.eql? 5
+      return "sa" if num.eql? 6
+      return "su" if num.eql? 7
 		end
 	end#class
 end#module

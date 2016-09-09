@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'mongo'
+require 'mongoid'
 
 module Mutx
   module Database
@@ -21,7 +21,7 @@ module Mutx
       end
 
       def set_logger
-        Mongo::Logger.logger = ::Logger.new("mutx/logs/mongo.log")
+        #Mongo::Logger.logger = ::Logger.new("mutx/logs/mongo.log")
         Mongo::Logger.logger.level = ::Logger::INFO
       end
 
@@ -34,7 +34,8 @@ module Mutx
       def set_client opts
         Mutx::Support::Log.debug "Setting db client" if Mutx::Support::Log
         if !$client
-          $client = Mongo::Client.new("mongodb://#{opts[:host]}:#{opts[:port]}/#{set_db_name}?connectTimeoutMS=30000")
+          #$client = Mongo::Client.new("mongodb://#{opts[:host]}:#{opts[:port]}/#{set_db_name}")
+          $client = Mongo::Client.new([ "#{opts[:host]}:#{opts[:port]}" ], :database => "#{set_db_name}")
         else
           $client
         end

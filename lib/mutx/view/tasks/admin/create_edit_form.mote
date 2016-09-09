@@ -24,6 +24,15 @@ if ["edit","view"].include? action
   blocked_stop = task["blocked_stop"]
   subject = task["subject"]
   regex = task["regex"]
+  mo = task["mo"]
+  tu = task["tu"]
+  we = task["we"]
+  th = task["th"]
+  fr = task["fr"]
+  sa = task["sa"]
+  su = task["su"]
+  start_time = task["start_time"]
+  stop_time = task["stop_time"]
   value_for_regex = task["value_for_regex"]
   value = if value.is_a? Hash
     value.to_json
@@ -66,7 +75,6 @@ types.unshift("Select...") unless types.include? "Select..."
 execution_type = type.capitalize if type
 platform = task["platform"].capitalize if task
 application = task["application"].upcase if task
-
 
 ?>
 
@@ -278,7 +286,7 @@ application = task["application"].upcase if task
   </nav>
   <nav class="navbar navbar-default">
 <!-- #Cronneable? -->
-    <h3>&nbsp;&nbsp;Cron</h3>
+    <h3>&nbsp;&nbsp;Cron configuration</h3>
     <br>
     <div class='form-group'>
       <label class='col-sm-3 control-label' for='formGroupInputSmall'>Enable cron</label>
@@ -291,12 +299,86 @@ application = task["application"].upcase if task
     </div>
     <!-- <div id="autoUpdate1" class="autoUpdate1"> -->
 
-<!-- # Time to cron in minutes -->
+<!-- # Cron time -->
     <div class='form-group'>
       <label class='col-sm-3 control-label' for='formGroupInputSmall'>Minutes to cron task</label>
       <input class='customParam' type='text' name='cron_time' id='cron_time' placeholder='{{"Enter minutes here"}}'  value="{{cron_time}}" {{disabled}} />
     </div>
+
+    <div class='form-group'>
+      <table>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Days of week</label>
+        <td>
+          <span>MO</span>
+          % if !mo.eql? "on"
+            <input type="checkbox" name="mo" id="mo">
+          % else
+            <input type="checkbox" name="mo" id="mo" checked>
+          % end
+        </td>
+        <td>
+          <span>TU</span>
+          % if !tu.eql? "on"
+            <input type="checkbox" name="tu" id="tu">
+          % else
+            <input type="checkbox" name="tu" id="tu" checked>
+          % end
+        </td>
+        <td>
+          <span>WE</span>
+          % if !we.eql? "on"
+            <input type="checkbox" name="we" id="we">
+          % else
+            <input type="checkbox" name="we" id="we" checked>
+          % end
+        </td>
+        <td>
+          <span>TH</span>
+          % if !th.eql? "on"
+            <input type="checkbox" name="th" id="th">
+          % else
+            <input type="checkbox" name="th" id="th" checked>
+          % end
+        </td>
+        <td>
+          <span>FR</span>
+          % if !fr.eql? "on"
+            <input type="checkbox" name="fr" id="fr">
+          % else
+            <input type="checkbox" name="fr" id="fr" checked>
+          % end
+        </td>
+        <td>
+          <span>SA</span>
+          % if !sa.eql? "on"
+            <input type="checkbox" name="sa" id="sa">
+          % else
+            <input type="checkbox" name="sa" id="sa" checked>
+          % end
+        </td>
+        <td>
+          <span>SU</span>
+          % if !su.eql? "on"
+            <input type="checkbox" name="su" id="su">
+          % else
+            <input type="checkbox" name="su" id="su" checked>
+          % end
+        </td>
+      </table>
+    </div> 
+
+    <div class='form-group'>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Start time</label>
+      <input class='customParam' type='text' name='start_time' id='star_time' placeholder='{{"Enter HH:MM"}}'  value="{{start_time}}" {{disabled}} />
+    </div>
+
+    <div class='form-group'>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Stop time</label>
+      <input class='customParam' type='text' name='stop_time' id='stop_time' placeholder='{{"Enter HH:MM"}}'  value="{{stop_time}}" {{disabled}} />
+    </div>
+
   </nav>
+
 <!-- custom params -->          
   <nav class="navbar navbar-default">     
     <h3>&nbsp;&nbsp;Select Input Parameters</h3>

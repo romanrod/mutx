@@ -34,7 +34,16 @@ module Mutx
       :regex,
       :notify_on,
       :blocked,
-      :blocked_stop
+      :blocked_stop,
+      :mo,
+      :tu,
+      :we,
+      :th,
+      :fr,
+      :sa,
+      :su,
+      :start_time,
+      :stop_time
 
       REGEX_VALID_VALUES = ["failed","passed","none"]
       NOTIFY_VALID_VALUES = ["any","passed","failed"]
@@ -72,6 +81,15 @@ module Mutx
           @application      = task_data["application"] || "command line"
           @regex            = task_data["regex"]
           @value_for_regex  = task_data["value_for_regex"]
+          @mo               = task_data["mo"]
+          @tu               = task_data["tu"]
+          @we               = task_data["we"]
+          @th               = task_data["th"]
+          @fr               = task_data["fr"]
+          @sa               = task_data["sa"]
+          @su               = task_data["su"]
+          @start_time       = task_data["start_time"]
+          @stop_time        = task_data["stop_time"]
           @notify_on        = task_data["notify_on"] || "any"
         else
           Mutx::Support::Log.error "Creting task object. Argument is not a hash" if Mutx::Support::Log
@@ -128,6 +146,15 @@ module Mutx
           "last_exec_time" => Time.now.utc,
           "application" => data["application"],
           "regex" => data["regex"],
+          "mo" => data["mo"],
+          "tu" => data["tu"],
+          "we" => data["we"],
+          "th" => data["th"],
+          "fr" => data["fr"],
+          "sa" => data["sa"],
+          "su" => data["su"],
+          "start_time" => data["start_time"],
+          "stop_time" => data["stop_time"],
           "value_for_regex" => data["value_for_regex"],
           "notify_on" => data["notify_on"]
         }
@@ -259,6 +286,15 @@ module Mutx
           "last_exec_time" => last_exec_time,
           "application" => application,
           "regex" => regex,
+          "mo" => mo,
+          "tu" => tu,
+          "we" => we,
+          "th" => th,
+          "fr" => fr,
+          "sa" => sa,
+          "su" => su,
+          "start_time" => start_time,
+          "stop_time" => stop_time,
           "value_for_regex" => value_for_regex,
           "notify_on" => notify_on
         }

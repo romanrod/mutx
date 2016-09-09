@@ -69,7 +69,7 @@ module Mutx
 
           # Update repo if changes are found
           if Mutx::Support::Configuration.use_git?
-            Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
+            #Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date? #TODO fix this!!!
           end
 
           Mutx::Support::TimeHelper.start # Sets timestamp before start process
