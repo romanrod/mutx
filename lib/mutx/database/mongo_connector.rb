@@ -283,10 +283,30 @@ module Mutx
         end.uniq
       end
 
+      #Cron_start
       def self.running_for_task task_name
         Mutx::Support::Log.debug "Getting db running for task name #{task_name}" if Mutx::Support::Log
         $results.find({"status" => /started|running/, "task.name" => task_name}).to_a
       end
+
+      def self.only_started_for_task task_name
+        Mutx::Support::Log.debug "Getting db running for task name #{task_name}" if Mutx::Support::Log
+        $results.find({"status" => "started", "task.name" => task_name}).to_a
+      end
+
+      def self.only_running_for_task task_name
+        Mutx::Support::Log.debug "Getting db running for task name #{task_name}" if Mutx::Support::Log
+        $results.find({"status" => "running", "task.name" => task_name}).to_a
+      end
+
+      def self.delete_started_result result_id
+        Mutx::Support::Log.debug "Deletting db started result with id #{result_id}" if Mutx::Support::Log
+        #Fix because MD5
+        #task_id = task_id.to_i if task_id.respond_to? :to_i
+        res = $results.delete_one({"_id" => result_id})
+        res.n==1
+      end
+      #Cron_end
 
       def self.active_tasks
         self.all_tasks

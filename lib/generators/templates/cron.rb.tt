@@ -1,5 +1,6 @@
 require 'mutx'
 require 'chronic'
+require 'byebug'
 
 module Cron
 	class Tasks
@@ -7,53 +8,34 @@ module Cron
 		def self.cron_jobs
 			@days = [:mo,:tu,:we,:th,:fr,:sa,:su]  
 		  cron_tasks_list = Mutx::Database::MongoConnector.cron_tasks
-      @none_day = true
       @today = day_name #name of today
 
       @now_time = Time.now.hour.to_s+":"+Time.now.min.to_s
 
 		  cron_tasks_list.each do |task|
-		  	@days.detect{|day| @none_day = "task_with_day" if task[:"#{day}"]}
+		  	@none_day = true
+        run = nil
+        started = nil
+        running = nil 
 
-		  	# If no day execution is seted, works as always
-		  	if (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) &&
-		  	   (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) &&
-		  	   (@none_day.eql? true))
+        run = Mutx::Database::MongoConnector.running_for_task task[:name]
+        started = Mutx::Database::MongoConnector.only_started_for_task task[:name]
+        running = Mutx::Database::MongoConnector.only_running_for_task task[:name]
 
-		  		  query_string = {}
-		  		  query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
-		  		  task_name = task[:name]
-		        task_name.gsub!("%20"," ")
-		        puts Mutx::API::Tasks.cron_update task
-		        Mutx::API::Execution.start task_name, query_string
-        # If there is a day seted, and that day is today, and no execution time is seted
-		    elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) &&
-		          (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) &&
-		          (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && 
-		          (task[:start_time].empty?) && (task[:stop_time].empty?))
+		  	if ((run.empty?) && (started.empty?) && (running.empty?))#verify if task is not running or started
+          validate_and_execute task
+        elsif !started.empty?
+			  	puts
+          puts "Deleting: #{task[:name]} because is started, but not running"
+          puts
+        	delete_started started
+			  else #task is running
+			  	puts
+          puts "Task: #{task[:name]} running"
+          puts
+			  end
 
-					query_string = {}
-					query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
-					task_name = task[:name]
-					task_name.gsub!("%20"," ")
-					puts Mutx::API::Tasks.cron_update task
-					Mutx::API::Execution.start task_name, query_string
-
-        # If there is a day seted, and that day is today, and execution range time is seted
-		    elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) &&
-		          (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) &&
-		          (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && 
-		          (@now_time.between? task[:start_time], task[:stop_time]))
-
-					query_string = {}
-					query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
-					task_name = task[:name]
-					task_name.gsub!("%20"," ")
-					puts Mutx::API::Tasks.cron_update task
-					Mutx::API::Execution.start task_name, query_string
-		    end#if
-
-		  end
+		  end#cron_task
 		  Mutx::Database::MongoConnector.force_close
 		end
 
@@ -68,6 +50,83 @@ module Cron
       return "sa" if num.eql? 6
       return "su" if num.eql? 7
 		end
+
+		def self.execute task
+			query_string = {}
+			query_string = {"execution_name"=>"CRONNED-#{task[:cron_time]}-min"}
+			task_name = task[:name]
+			task_name.gsub!("%20"," ")
+			puts
+			puts "EXECUTING: #{task_name} right now"
+			puts
+			puts Mutx::API::Tasks.cron_update task
+			Mutx::API::Execution.start task_name, query_string
+		end
+
+		def self.check_range_time task
+			init_hour = task[:start_time].match(/(\d*)/)[0]
+			stop_hour = task[:stop_time].match(/(\d*)/)[0]
+			@valid_hours_init = nil
+			@valid_hours_stop = nil
+			@valid = nil
+
+			@valid_hours_init = [init_hour.to_i]
+			(24-init_hour.to_i).times do
+			  if @valid_hours_init.last.eql? 23
+			    @valid_hours_init << 00
+			  else
+			    @valid_hours_init << @valid_hours_init.last + 1
+			  end
+			end
+
+			@valid_hours_stop = [stop_hour.to_i] 
+			(stop_hour.to_i-1).times do
+			  @valid_hours_stop << @valid_hours_stop.last - 1
+			end
+
+			@valid = @valid_hours_init + @valid_hours_stop.reverse
+			@valid.pop
+
+			if @valid.include? @now_time.match(/(\d*)/)[0].to_i
+				puts
+				puts @valid
+				puts @now_time
+				execute task
+			else
+				puts
+				puts @valid
+				puts "Actual time: #{@now_time}"
+        puts "ACTUAL TIME IS OUT OF RANGE FOR: #{task[:name]}"
+			end
+		end
+
+		def self.validate_and_execute task
+
+			@days.detect{|day| @none_day = "task_with_day" if task[:"#{day}"]}
+
+			# If no day execution is seted, works as always
+			if (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) && (@none_day.eql? true))
+			  execute task
+			# If there is a day seted, and that day is today, and no execution time is seted
+			elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) && (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && (task[:start_time].empty?) && (task[:stop_time].empty?))
+			  execute task
+			# If there is a day seted, and that day is today, and execution range time is seted
+			elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - task[:last_exec_time].utc) + 1) >= (task[:cron_time].to_i * 60)) && (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && (task[:start_time]) && (task[:stop_time]) )
+				if task[:start_time] > task[:stop_time] #initial time is greater than stop time
+					check_range_time task
+				elsif (@now_time.between? task[:start_time], task[:stop_time]) #stop time is greater than initial time
+			    execute task
+				end
+			end#if
+
+		end#validate
+
+		def self.delete_started started_task
+      started_task.each do |task|
+				Mutx::Database::MongoConnector.delete_started_result task["_id"]
+      end
+		end#delete_started
+
 	end#class
 end#module
 

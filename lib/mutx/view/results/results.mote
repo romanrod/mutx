@@ -63,6 +63,7 @@
             </div>
           </div>
       % else
+<!--
         <br>
         <br>
         <div id='well'>
@@ -70,10 +71,12 @@
         </div>
         <br>
         <br>
+-->
       % end
     % end
 % end
 % if tasks_list["tasks"].empty?
+<!--
     <br>
     <br>
     <div id='well'>
@@ -81,6 +84,7 @@
     </div>
     <br>
     <br>
+-->
 % end
 
 <style>

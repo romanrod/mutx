@@ -5,8 +5,8 @@ module Mutx
     def self.run! execution_request_data
 
       if Mutx::Support::Configuration.use_git?
-        Mutx::Support::Git.reset_hard and Mutx::Support::Git.pull
-        Mutx::Support::Log.debug "Git pulled" if Mutx::Support::Log
+        #Mutx::Support::Git.reset_hard and Mutx::Support::Git.pull
+        #Mutx::Support::Log.debug "Git pulled" if Mutx::Support::Log
       end
       
         result = Mutx::Results::Result.new(execution_request_data)
