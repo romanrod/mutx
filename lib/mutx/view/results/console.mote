@@ -72,8 +72,7 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
           <h6>&nbsp;</h6>
           <h6>
             <div>
-              <a href='#' class='label label-default' onclick='window.close();'>
-                Close this window</a>
+              <a onclick="window.history.go(-1);" style="cursor:pointer;" class='label label-default' >GO BACK</a>
               <a href='#' class='label label-info' onclick="window.open('/api/results/{{result.id}}', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600');" class='btn btn-default'>
                 Result Data</a>
               <a href='#' class='label label-warning' onclick="window.open('/api/results/{{result.id}}/data', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600');" class='btn btn-default'>
@@ -107,7 +106,7 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
         </div>
         <br>
         <div>
-          <a href='#' class='label label-default' onclick='window.close();'>Close this window</a>
+          <a onclick="window.history.go(-1);" style="cursor:pointer;" class='label label-default' >GO BACK</a>
         </div>
           <br>
           <br>
@@ -119,8 +118,7 @@ javascript = Mote.parse(File.read("#{Mutx::View.path}/javascript.mote"), self, [
           <h3>There is no result with id: <b>{{result_id}}</b></h3>
         </div>
         <br>
-        <a href='#' class='label label-default' onclick='window.close();'>
-                Close this window</a>
+        <a onclick="window.history.go(-1);" style="cursor:pointer;" class='label label-default' >GO BACK</a>
       </div>
     % end
   </body>

@@ -77,6 +77,7 @@ module Mutx
 
           #USE 'PTY' GEM INSTEAD POPEN TO READ OUTPUT IN REAL TIME
           @uname = Mutx::Support::Console.execute "uname"
+          @start_time = Time.now
           begin
             PTY.spawn("#{result.mutx_command}") do |stdout, stdin, pid|
               result.pid ="#{`ps -fea | grep #{Process.pid} | grep -v grep | awk '$2!=#{Process.pid} && $8!~/awk/ && $3==#{Process.pid}{print $2}'`}"
@@ -89,7 +90,7 @@ module Mutx
                     result.append_output @output.gsub(/(\[\d{1,2}\m)/, "")
                     @output = ""
                   #end
-                  if result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
+                  if (Time.now - @start_time) > 50 #result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
                     result.finished_by_timeout! and break
                   end }
                 result.append_output @output unless @output.empty?

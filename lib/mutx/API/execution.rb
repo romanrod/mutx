@@ -22,8 +22,12 @@ module Mutx
         end
 
         error = false
+        
+        running_started = []
+        running_started = Mutx::Database::MongoConnector.running_for_task task_name
+        is_there_task = Mutx::Tasks.is_there_task_with? task_name, type      
 
-        if Mutx::Tasks.is_there_task_with? task_name, type
+        if ((is_there_task) && (running_started.empty?))
           Mutx::Support::Log.debug "Starting working with task #{task_name}" if Mutx::Support::Log
 
           task = Mutx::Tasks::Task.get_task_with(task_name)

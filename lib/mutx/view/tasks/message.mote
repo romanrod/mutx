@@ -32,6 +32,6 @@
   <p>&nbsp;</p>
   <p>
     {{buttons}}
-    <a onclick="window.open('/results/{{result_id}}/log', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600');" class='btn btn-primary'>Go to Result</a>
+    <a href='/results/{{result_id}}/log', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600';" class='btn btn-primary'>Go to Result</a>
   </p>
 </div>

@@ -12,7 +12,7 @@
       % end
     </th>
     <th>
-      <a onclick="window.open('/results/{{result["_id"]}}/log', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600');" class="label label-default">
+      <a href='/results/{{result["_id"]}}/log', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600';" class="label label-default">
         Console Log
       </a>
     </th>
