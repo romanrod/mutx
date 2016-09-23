@@ -23,6 +23,7 @@ module Mutx
           Mutx::Support::ChangeInspector.is_there_a_change?
 
           result = Mutx::Results::Result.get(result_id)
+          task = Mutx::Tasks::Task.get(result.task_id)
 
           result.mutx_report_file_name= "mutx_report_#{result_id}.html"
 
@@ -49,7 +50,7 @@ module Mutx
           efective_command << "-f pretty -f html -o mutx/temp/#{result.mutx_report_file_name}" if result.is_cucumber?
           efective_command << result.custom_params_values
           efective_command << "_id=#{result.id}" # to use inside execution the possibility to add information to the result
-                    
+
           result.mutx_command= efective_command.join(" ")
 
           # To Be Deleted on prod
@@ -90,7 +91,7 @@ module Mutx
                     result.append_output @output.gsub(/(\[\d{1,2}\m)/, "")
                     @output = ""
                   #end
-                  if (Time.now - @start_time) > 50 #result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
+                  if  (!(task.cron_time.eql? "") && !(task.cron_time.eql? "0") && (Time.now - @start_time) >= ((task.cron_time.to_i * 60)-2)) #result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
                     result.finished_by_timeout! and break
                   end }
                 result.append_output @output unless @output.empty?
@@ -108,8 +109,6 @@ module Mutx
           result.ensure_finished!
 
           puts result.summary
-
-          task = Mutx::Tasks::Task.get(result.task_id)
 
           task = Mutx::Database::MongoConnector.task_data_for result.task[:id]
           subject = if ((task[:subject].empty?) || (task[:subject].nil?))
