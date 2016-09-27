@@ -19,7 +19,7 @@ module Cron
       cron_tasks_list.select{|line| cron_tasks << line if (((Time.now.utc - line[:last_exec_time].utc) + 1) >= (line[:cron_time].to_i * 60))}
       cron_tasks_list = []
       cron_tasks_list = cron_tasks
-      puts "#{cron_tasks_list.size} cronned task on time to run"
+      puts "#{cron_tasks_list.size} POSSIBLE cronned task on time to run"
       #END# Select only cronned tasks that last_exec_time is OK to run
 
 			#BEGIN# REMOVING POSSIBLE DUPLICATED TASKS
@@ -44,6 +44,8 @@ module Cron
       # TASK must be right on time to run and unique
 		  cron_tasks_list.each do |task|
         @@now_time = Time.now.hour.to_s+":"+Time.now.min.to_s
+        @@now_time = ("0" + @@now_time.match(/\d*/).to_s + ":" + @@now_time.match(/\:(\d*)/)[1].to_s) if @@now_time.match(/(\d*)/)[1].size.eql? 1
+        @@now_time = (@@now_time.match(/\d*/).to_s + ":0" + @@now_time.match(/\:(\d*)/)[1].to_s) if @@now_time.match(/\:(\d*)/)[1].size.eql? 1
 		  	@@last_exec_time = nil
 		  	@@last_exec_time = task[:last_exec_time]
 		  	# Update last_exec_time before to run (because this task is OK to run)
@@ -156,11 +158,13 @@ module Cron
 			elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - @@last_exec_time.utc) + 1) >= (task[:cron_time].to_i * 60)) && (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && (task[:start_time].empty?) && (task[:stop_time].empty?))
 			  execute task
 			# If there is a day seted, and that day is today, and execution range time is seted
-			elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - @@last_exec_time.utc) + 1) >= (task[:cron_time].to_i * 60)) && (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && (task[:start_time]) && (task[:stop_time]) )
+			elsif (((!task[:cron_time].eql? "") && (!task[:cron_time].eql? "0")) && (((Time.now.utc - @@last_exec_time.utc) + 1) >= (task[:cron_time].to_i * 60)) && (@none_day.eql? "task_with_day") && (task[:"#{@today}"].eql? "on") && (!task[:start_time].nil?) && (!task[:stop_time].nil?) )
 				if task[:start_time] > task[:stop_time] #initial time is greater than stop time
 					check_range_time task
 				elsif (@@now_time.between? task[:start_time], task[:stop_time]) #stop time is greater than initial time
 			    execute task
+			  else
+			  	puts "Out of date range for: #{task[:name]}"
 				end
 			end#if
 

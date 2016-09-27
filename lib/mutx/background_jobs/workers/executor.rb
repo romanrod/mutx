@@ -70,7 +70,7 @@ module Mutx
 
           # Update repo if changes are found
           if Mutx::Support::Configuration.use_git?
-            #Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date? #TODO fix this!!!
+            Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
           end
 
           Mutx::Support::TimeHelper.start # Sets timestamp before start process
@@ -93,7 +93,8 @@ module Mutx
                   #end
                   if  (!(task.cron_time.eql? "") && !(task.cron_time.eql? "0") && (Time.now - @start_time) >= ((task.cron_time.to_i * 60)-2)) #result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
                     result.finished_by_timeout! and break
-                  end }
+                  end
+                }
                 result.append_output @output unless @output.empty?
                 result.append_output "=========================\n"
               rescue Errno::EIO, Errno::ENOENT => e
