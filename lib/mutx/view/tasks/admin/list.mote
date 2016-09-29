@@ -100,7 +100,11 @@
         <td>{{task["name"]}}</td>
         <td><b><a href="#" title= "{{task["command"]}}" class="label label-default" aria-hidden="true">?</a></b></td>
         <td>{{task_type}}</td>
-        <td>{{task["cronneable"].nil? ? "-" : "ON" }}</td>
+        % if task["cronneable"].nil?
+          <td><span class="label label-danger">off</span></td>
+        % else
+          <td><span class="label label-success">on</span></td>
+        % end
         <td>{{task["custom_params"].empty? ? "No" : "Yes" }}</td>
         <td>{{info}}</td>
         <td>

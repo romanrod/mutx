@@ -17,6 +17,7 @@ module Mutx
         set_results_collection
         set_commits_collection
         set_documentation_collection
+        set_input_collection
         set_logger
       end
 
@@ -68,6 +69,12 @@ module Mutx
         Mutx::Support::Log.debug "Setting db custom param collection" if Mutx::Support::Log
         $custom_params  = $db.collection("custom_params")
         # $custom_params.ensure_index({"name" => 1})
+      end
+
+      def set_input_collection
+        Mutx::Support::Log.debug "Setting db Input collection" if Mutx::Support::Log
+        $inputs = $db.collection("inputs")
+        $inputs.indexes.create_one({"reference" => 1})
       end
 
       def set_commits_collection
@@ -326,6 +333,25 @@ module Mutx
           self.update_task task_data
         end
       end
+
+    ########################################
+    # INPUTS
+    #
+    #
+    #
+
+
+    def self.insert_input input_data
+      Mutx::Support::Log.debug "Inserting input [#{input_data}]" if Mutx::Support::Log
+      $inputs.insert_one(input_data)
+    end
+
+    def self.input_data_for_id(id)
+      res = $inputs.find({"_id" => id})
+      res = res.to_a.first if res.respond_to? :to_a
+      res
+    end
+
 
     ########################################
     # CUSTOM PARAMS

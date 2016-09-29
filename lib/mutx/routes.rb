@@ -146,12 +146,45 @@ Cuba.define do
           res.redirect path
         end
       end
+
+      on "api/input" do |id|
+        $result = basic_auth(env) do |user, pass|
+         user == "inputs" && pass == "InputsAdmin"
+        end
+        if $result.eql? true
+          Mutx::Support::Log.debug "REFERENCE IS => #{id}"
+          data = req.params.dup
+          data.store("reference", "#{id}")
+          Mutx::Support::Log.debug "DATA TO INPUT IS => #{data}"
+          response = Mutx::API::Input.validate_and_create data
+          Mutx::Support::Log.debug "RESPONSE => #{response}"
+          (res.status = 201
+          res.write "status 201") if response.to_s.include? "success=>true"
+          (res.status = 404
+          res.write "status 404") if response.to_s.include? "success=>false"
+          Mutx::Support::Log.debug "STATUS CODE => #{res.status}"
+        else
+         on default do
+           res.status = 401
+           res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+           res.write "status 401"
+           res.write "Access Denied, Mutx don't let you POST without authorization"
+         end
+        end
+      end
+
     end
 
 
 
 
     on get do
+
+      on "api/input/:id" do |id|
+        query_string = Mutx::Support::QueryString.new req
+        output = Mutx::API::Input.get_data(id, query_string.raw)        
+        res.write output.to_json
+      end
 
       on "pull" do
         #Check for updates on the branch and make a pull if its outdated
