@@ -12,6 +12,7 @@ require 'require_all'
 require 'byebug'
 require 'digest'
 require 'basica'
+require 'sidetiq'
 
 require_rel 'mutx'
 require_rel 'generators'

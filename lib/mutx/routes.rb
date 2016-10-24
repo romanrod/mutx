@@ -147,7 +147,7 @@ Cuba.define do
         end
       end
 
-      on "api/input" do |id|
+      on "api/input/:id" do |id|
         $result = basic_auth(env) do |user, pass|
          user == "inputs" && pass == "InputsAdmin"
         end
