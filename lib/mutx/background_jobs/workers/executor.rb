@@ -125,13 +125,18 @@ module Mutx
           cucumber = task[:cucumber]
           notify_on = task[:notify_on]
           
-          if task["notifications"]
+          if ( (task["notifications"]) && (!result.regex.empty?) && (result.console_output.to_s.include? "#{result.regex.to_s}") )
+            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
+          elsif ( (task["notifications"]) && (!result.regex.empty?) && (!result.console_output.to_s.include? "#{result.regex.to_s}") )
+            puts "****Result not to being notified, because regex #{result.regex.to_s} not included on output****"
+          elsif ( (task["notifications"]) && (result.regex.empty?) )
+            #task[:notifications] = "on" #Workaround until solve regex problem
             Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
           end
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
           
-          Mutx::Database::MongoConnector.force_close
+          #Mutx::Database::MongoConnector.force_close
         end
     end
   end
