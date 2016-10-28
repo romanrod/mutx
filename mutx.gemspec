@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email                  = ["roman.g.rodriguez@gmail.com"]
   spec.summary                = %q{Mutx lets you expose executions easily}
   spec.description            = %q{Exposes executions easily}
-  spec.homepage               = "https://github.com/romgrod/mutx"
+  spec.homepage               = "https://github.com/romanrod/mutx"
   spec.license                = "MIT"
   spec.required_ruby_version  = ">= 2.0.0"
 
