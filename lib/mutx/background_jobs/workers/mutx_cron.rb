@@ -47,7 +47,7 @@ module Mutx
           cron_tasks_list = []
           cron_tasks_list = cron_tasks
           puts "#{cron_tasks_list.size} cronned task ready to run (not running or started)"
-          #END#Check if task is running or starteda
+          #END#Check if task is running or started
 
           # TASK must be right on time to run and unique
           cron_tasks_list.each do |task|

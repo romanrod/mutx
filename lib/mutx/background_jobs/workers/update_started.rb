@@ -5,14 +5,14 @@ require 'sidetiq'
 
 module Mutx
   module Workers
-	class StartedTrasher
+	class UpdateStarted
       include Sidekiq::Worker
       include Sidetiq::Schedulable
       recurrence { minutely(2) }
       def perform
         started_result = nil
-        started_result = Mutx::Database::MongoConnector.remove_only_started
-		puts "- Started results was removed to avoid problems. -"
+        started_result = Mutx::Database::MongoConnector.update_only_started
+		puts "- Started results updated to 'NEVER_STARTED' -"
         Mutx::Database::MongoConnector.force_close
       end
 	end#class

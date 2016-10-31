@@ -91,7 +91,7 @@ module Mutx
                     result.append_output @output.gsub(/(\[\d{1,2}\m)/, "")
                     @output = ""
                   #end
-                  if  (!(task.cron_time.eql? "") && !(task.cron_time.eql? "0") && (Time.now - @start_time) >= ((task.cron_time.to_i * 60)-2)) #result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
+                  if result.seconds_without_changes > Mutx::Support::Configuration.execution_time_to_live
                     result.finished_by_timeout! and break
                   end
                 }

@@ -301,8 +301,12 @@ module Mutx
         $results.find({"status" => "started", "task.name" => task_name}).to_a
       end
 
-      def self.remove_only_started
-        $results.delete_many({"status" => "started"})
+      def self.update_only_started
+        $results.update_many({"status" => "started"}, {"$set" => {"status" => "never_started"}})
+      end
+
+      def self.update_last_exec_time
+        $results.update_many({"cronneable" => "on"}, {"$set" => {"last_exec_time" => Time.now.utc}})
       end
 
       def self.only_running_for_task task_name

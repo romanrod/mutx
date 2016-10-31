@@ -81,6 +81,9 @@ module Mutx
 
             mutx_arg = "-D" unless nodemon
 
+            Mutx::Database::MongoConnector.update_last_exec_time #Update of last_exec_time on all task
+                                                                 #before workers start
+
             Mutx::Support::Log.debug "Starting Sidekiq" if Mutx::Support::Log
             Mutx::BackgroundJobs::Sidekiq.start
             Mutx::Support::Log.debug "Sidekiq Started" if Mutx::Support::Log
