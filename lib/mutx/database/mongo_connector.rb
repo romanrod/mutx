@@ -301,6 +301,10 @@ module Mutx
         $results.find({"status" => "started", "task.name" => task_name}).to_a
       end
 
+      def self.remove_only_started
+        $results.delete_many({"status" => "started"})
+      end
+
       def self.only_running_for_task task_name
         Mutx::Support::Log.debug "Getting db running for task name #{task_name}" if Mutx::Support::Log
         $results.find({"status" => "running", "task.name" => task_name}).to_a
