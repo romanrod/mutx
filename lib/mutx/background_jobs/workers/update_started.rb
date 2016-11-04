@@ -11,8 +11,11 @@ module Mutx
       recurrence { minutely(2) }
       def perform
         started_result = nil
-        started_result = Mutx::Database::MongoConnector.update_only_started
-		puts "- Started results updated to 'NEVER_STARTED' -"
+        started_result = Mutx::Database::MongoConnector.started!
+        started_result.each do |line|
+          puts Mutx::API::Execution.reset(line["_id"])
+        end
+        puts "- ==== NO Started Results Founded ====" if started_result.eql? []
         Mutx::Database::MongoConnector.force_close
       end
 	end#class

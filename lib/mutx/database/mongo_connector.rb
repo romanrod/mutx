@@ -301,8 +301,12 @@ module Mutx
         $results.find({"status" => "started", "task.name" => task_name}).to_a
       end
 
-      def self.update_only_started
-        $results.update_many({"status" => "started"}, {"$set" => {"status" => "never_started"}})
+      #def self.update_only_started
+      #  $results.update_many({"status" => "started"}, {"$set" => {"status" => "never_started"}})
+      #end
+
+      def self.started!
+        $results.find({"status" => "started"}).to_a
       end
 
       def self.update_last_exec_time
