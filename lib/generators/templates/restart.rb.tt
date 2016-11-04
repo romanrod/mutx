@@ -2,22 +2,31 @@ require 'mutx'
 require 'byebug'
 
 module Cron
-	class Server
+  
+  class RunningTaskError < StandardError
+  end
 
-		def self.restart
-			running_task = []
-		  running_task = Mutx::Database::MongoConnector.running_now
+  class Server
+    def self.restart
+      begin
+        running_task = []
+        running_task = check
+        `mutx stop && mutx restart` if running_task.eql? []
+        raise RunningTaskError if !running_task.eql? []
+        rescue RunningTaskError
+          puts
+          puts "Tasks running right now, cant restart, trying in 10 seconds!"
+          puts
+          sleep 10
+          retry
+        end
+      Mutx::Database::MongoConnector.force_close
+    end
 
-		  if running_task.eql? []
-        Mutx::Support::Console.execute "mutx stop && mutx restart"
-      else
-      	puts
-      	puts "Tasks running right now, cant restart"
-      	puts
-      end
-		  Mutx::Database::MongoConnector.force_close
-		end
-	end#class
+    def self.check
+      Mutx::Database::MongoConnector.running_now
+    end
+  end#class
 end#module
 
 Cron::Server.restart

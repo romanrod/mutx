@@ -6,9 +6,9 @@ module Mutx
 
         workers_dir = workers_dir = __FILE__.split("/")[0..-2].join("/")+ "/workers"
 
-        Mutx::Support::Console.execute "sidekiq -r #{workers_dir}/executor.rb -d -L mutx/logs/sidekiq.log -P mutx/sidekiq_pid"
+        #Mutx::Support::Console.execute "sidekiq -r #{workers_dir}/executor.rb -d -L mutx/logs/sidekiq.log -P mutx/sidekiq_pid"
         Mutx::Support::Console.execute "sidekiq -r #{workers_dir}/mutx_cron.rb -d -L mutx/logs/sidekiq.log -P mutx/sidekiq_cron_pid"
-        Mutx::Support::Console.execute "sidekiq -r #{workers_dir}/update_started.rb -d -L mutx/logs/sidekiq.log -P mutx/sidekiq_update_started_pid"        
+        #Mutx::Support::Console.execute "sidekiq -r #{workers_dir}/update_started.rb -d -L mutx/logs/sidekiq.log -P mutx/sidekiq_update_started_pid"        
 
         print "\n* Sidekiq:"
         raise "Could not start Sidekiq correctly. Read mutx/logs/sidekiq.log file for more information" if not started?
