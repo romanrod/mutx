@@ -13,60 +13,71 @@ module Mutx
       recurrence { minutely(1) }
 
         def perform
+          running_task = []
+          running_task = Mutx::Database::MongoConnector.running_now
 
           puts "######### STARTING CRON ##########"
-          @days = [:mo,:tu,:we,:th,:fr,:sa,:su]
-          @today = day_name #name of today
 
-          #BEGIN# Select only cronned tasks that last_exec_time is OK to run
-          cron_tasks = []
-          cron_tasks_list = Mutx::Database::MongoConnector.cron_tasks
+          if running_task.eql? []
 
-          puts "#{cron_tasks_list.size} cronned task searched"
+            @days = [:mo,:tu,:we,:th,:fr,:sa,:su]
+            @today = day_name #name of today
 
-          cron_tasks_list.select{|line| cron_tasks << line if (((Time.now.utc - line[:last_exec_time].utc) + 1) >= (line[:cron_time].to_i * 60))}
-          cron_tasks_list = []
-          cron_tasks_list = cron_tasks
-          puts "#{cron_tasks_list.size} POSSIBLE cronned task on time to run"
-          #END# Select only cronned tasks that last_exec_time is OK to run
+            #BEGIN# Select only cronned tasks that last_exec_time is OK to run
+            cron_tasks = []
+            cron_tasks_list = Mutx::Database::MongoConnector.cron_tasks
 
-          #BEGIN# REMOVING POSSIBLE DUPLICATED TASKS
-          cron_tasks_list_aux = []
-          cron_tasks_list_aux = cron_tasks_list
-          cron_tasks_list = []
-          cron_tasks_list = cron_tasks_list_aux.uniq { |line| [line[:name]].join(":") }
+            puts "#{cron_tasks_list.size} cronned task searched"
 
-          puts
-          puts "REMOVING DUPLICATED TASKS WITH SAME NAME" if !cron_tasks_list_aux.size.eql? cron_tasks_list.size
-          puts "#{cron_tasks_list.size} cronned task after removing possible duplicated tasks"
-          #END# REMOVING POSSIBLE DUPLICATED TASKS
+            cron_tasks_list.select{|line| cron_tasks << line if (((Time.now.utc - line[:last_exec_time].utc) + 1) >= (line[:cron_time].to_i * 60))}
+            cron_tasks_list = []
+            cron_tasks_list = cron_tasks
+            puts "#{cron_tasks_list.size} POSSIBLE cronned task on time to run"
+            #END# Select only cronned tasks that last_exec_time is OK to run
 
-          #BEGIN#Check if task is running or started
-          cron_tasks = []
-          cron_tasks_list.select{|line| cron_tasks << line if ((Mutx::Database::MongoConnector.running_for_task line[:name]) && (Mutx::Database::MongoConnector.only_started_for_task line[:name]) && (Mutx::Database::MongoConnector.only_running_for_task line[:name])).eql? []}
-          cron_tasks_list = []
-          cron_tasks_list = cron_tasks
-          puts "#{cron_tasks_list.size} cronned task ready to run (not running or started)"
-          #END#Check if task is running or started
+            #BEGIN# REMOVING POSSIBLE DUPLICATED TASKS
+            cron_tasks_list_aux = []
+            cron_tasks_list_aux = cron_tasks_list
+            cron_tasks_list = []
+            cron_tasks_list = cron_tasks_list_aux.uniq { |line| [line[:name]].join(":") }
 
-          # TASK must be right on time to run and unique
-          cron_tasks_list.each do |task|
-            @@now_time = Time.now.hour.to_s+":"+Time.now.min.to_s
-            @@now_time = ("0" + @@now_time.match(/\d*/).to_s + ":" + @@now_time.match(/\:(\d*)/)[1].to_s) if @@now_time.match(/(\d*)/)[1].size.eql? 1
-            @@now_time = (@@now_time.match(/\d*/).to_s + ":0" + @@now_time.match(/\:(\d*)/)[1].to_s) if @@now_time.match(/\:(\d*)/)[1].size.eql? 1
-            @@last_exec_time = nil
-            @@last_exec_time = task[:last_exec_time]
-            # Update last_exec_time before to run (because this task is OK to run)
-            Mutx::API::Tasks.cron_update task if (((Time.now.utc - @@last_exec_time.utc) + 1) >= (task[:cron_time].to_i * 60))        
-            @none_day = true
+            puts
+            puts "REMOVING DUPLICATED TASKS WITH SAME NAME" if !cron_tasks_list_aux.size.eql? cron_tasks_list.size
+            puts "#{cron_tasks_list.size} cronned task after removing possible duplicated tasks"
+            #END# REMOVING POSSIBLE DUPLICATED TASKS
 
-              sleep 1
-              validate_and_execute task
+            #BEGIN#Check if task is running or started
+            cron_tasks = []
+            cron_tasks_list.select{|line| cron_tasks << line if ((Mutx::Database::MongoConnector.running_for_task line[:name]) && (Mutx::Database::MongoConnector.only_started_for_task line[:name]) && (Mutx::Database::MongoConnector.only_running_for_task line[:name])).eql? []}
+            cron_tasks_list = []
+            cron_tasks_list = cron_tasks
+            puts "#{cron_tasks_list.size} cronned task ready to run (not running or started)"
+            #END#Check if task is running or started
 
-          end#cron_task
+            # TASK must be right on time to run and unique
+            cron_tasks_list.each do |task|
+              @@now_time = Time.now.hour.to_s+":"+Time.now.min.to_s
+              @@now_time = ("0" + @@now_time.match(/\d*/).to_s + ":" + @@now_time.match(/\:(\d*)/)[1].to_s) if @@now_time.match(/(\d*)/)[1].size.eql? 1
+              @@now_time = (@@now_time.match(/\d*/).to_s + ":0" + @@now_time.match(/\:(\d*)/)[1].to_s) if @@now_time.match(/\:(\d*)/)[1].size.eql? 1
+              @@last_exec_time = nil
+              @@last_exec_time = task[:last_exec_time]
+              # Update last_exec_time before to run (because this task is OK to run)
+              Mutx::API::Tasks.cron_update task if (((Time.now.utc - @@last_exec_time.utc) + 1) >= (task[:cron_time].to_i * 60))        
+              @none_day = true
 
-          Mutx::Database::MongoConnector.force_close
-          puts "######### ENDING CRON ##########"
+                sleep 1
+                validate_and_execute task
+
+            end#cron_task
+
+            Mutx::Database::MongoConnector.force_close
+            puts "######### ENDING CRON ##########"
+          else ## si hay algo corriendo deja pasar toda la ejecucion hasta que finalice
+            puts
+            puts "HAY EJECUCIONES EN RUNNING O STARTED, SE ESPERA A QUE TERMINEN..."
+            puts
+            puts "######### ENDING CRON ##########"
+          end
 
         end #perform
 
