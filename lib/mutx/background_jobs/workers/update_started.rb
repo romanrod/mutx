@@ -16,7 +16,7 @@ module Mutx
           puts Mutx::API::Execution.reset(line["_id"])
         end
         puts "- ==== NO Started Results Founded ====" if started_result.eql? []
-        Mutx::Database::MongoConnector.force_close
+        ##Mutx::Database::MongoConnector.force_close
       end
 	end#class
   end

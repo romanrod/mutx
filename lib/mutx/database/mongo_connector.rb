@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'mongoid'
+require 'mongo'
 
 module Mutx
   module Database

@@ -142,7 +142,7 @@ module Mutx
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
           
-          #Mutx::Database::MongoConnector.force_close
+          ###Mutx::Database::MongoConnector.force_close
         end
     end
   end

@@ -70,7 +70,7 @@ module Mutx
 
             end#cron_task
 
-            Mutx::Database::MongoConnector.force_close
+            ##Mutx::Database::MongoConnector.force_close
             puts "######### ENDING CRON ##########"
           else ## si hay algo corriendo deja pasar toda la ejecucion hasta que finalice
             puts

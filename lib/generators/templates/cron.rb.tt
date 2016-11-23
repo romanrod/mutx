@@ -82,7 +82,7 @@ module Cron
         #  task = nil
 			  #end
 		  end#cron_task
-		  Mutx::Database::MongoConnector.force_close
+		  ##Mutx::Database::MongoConnector.force_close
 		  puts "######### ENDING CRON ##########"
 		end
 
