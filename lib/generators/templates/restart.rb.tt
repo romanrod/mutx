@@ -10,8 +10,14 @@ module Cron
     def self.restart
       begin
         running_task = []
-        running_task = check
-        `mutx stop && mutx restart` if running_task.eql? []
+        #running_task = check
+        `mutx stop`
+        `sudo service mongod restart`
+        `sudo service redis-server restart`       
+        `mutx stop && mutx start` #if running_task.eql? []
+        `mutx start`
+        `sudo sync && sudo sysctl -w vm.drop_caches=3`
+        puts
         raise RunningTaskError if !running_task.eql? []
         rescue RunningTaskError
           puts

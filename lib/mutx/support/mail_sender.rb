@@ -13,11 +13,14 @@ module Mutx
             delivery_method :smtp, {
             address:              Mutx::Support::Configuration.smtp_address,
             port:                 Mutx::Support::Configuration.smtp_port,
+            # pacheco's vm
             domain:               Mutx::Support::Configuration.smtp_domain,
             user_name:            Mutx::Support::Configuration.smtp_user,
             password:             Mutx::Support::Configuration.smtp_password,
             authentication:       Mutx::Support::Configuration.smtp_autentication,
+            #
             enable_starttls_auto: Mutx::Support::Configuration.smtp_enable_start_tls_auto
+
             }
           end
 

@@ -69,9 +69,13 @@ module Mutx
           @count = 0
 
           # Update repo if changes are found
-          if Mutx::Support::Configuration.use_git?
-            Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
-          end
+          ##if Mutx::Support::Configuration.use_git?
+          ##  Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
+          ##end # PULL COMMENTED
+
+          ## Pacheco's VM ##
+          #Mutx::Support::Console.execute "export https_proxy=http://proxy01.garba.com.ar:8080"
+          #Mutx::Support::Console.execute "export http_proxy=http://proxy01.garba.com.ar:8080"
 
           Mutx::Support::TimeHelper.start # Sets timestamp before start process
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
@@ -126,11 +130,13 @@ module Mutx
           notify_on = task[:notify_on]
           
           if ( (task["notifications"]) && (!result.regex.empty?) && (result.console_output.to_s.include? "#{result.regex.to_s}") )
+            Mutx::Database::MongoConnector.mark_notified (result_id)
             Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
           elsif ( (task["notifications"]) && (!result.regex.empty?) && (!result.console_output.to_s.include? "#{result.regex.to_s}") )
             puts "****Result not to being notified, because regex #{result.regex.to_s} not included on output****"
           elsif ( (task["notifications"]) && (result.regex.empty?) )
             #task[:notifications] = "on" #Workaround until solve regex problem
+            Mutx::Database::MongoConnector.mark_notified (result_id)
             Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
           end
 

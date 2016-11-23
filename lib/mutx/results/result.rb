@@ -35,8 +35,8 @@ module Mutx
         :gui_task,
         :regex,
         :value_for_regex,
-        :result_value
-
+        :result_value,
+        :notified
 
       def initialize data_for_result
         Mutx::Support::Log.debug "Result.new => data_for_result => #{data_for_result}" if Mutx::Support::Log
@@ -73,6 +73,7 @@ module Mutx
           @last_check_time          = now_in_seconds
           @execution_data           = {}
           @configuration_values     = Mutx::Database::MongoConnector.configuration
+          @notified                 = "no"
           create_output_dir
         end
       end
@@ -120,7 +121,8 @@ module Mutx
           "configuration_values"      => configuration_values,
           "regex"                     => regex,
           "value_for_regex"           => value_for_regex,
-          "result_value"              => result_value
+          "result_value"              => result_value,
+          "notified"                  => notified
         }
       end
 

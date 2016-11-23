@@ -327,6 +327,10 @@ module Mutx
       end
       #Cron_end
 
+      def self.mark_notified result_id
+        $results.update_one({"_id" => result_id}, {"$set" => {"notified" => "yes"}})
+      end
+
       def self.active_tasks
         self.all_tasks
       end

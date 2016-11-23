@@ -36,6 +36,7 @@
                     <th style="font-weight: bold;">Label</th>
                     <th style="font-weight: bold;">Time Elapsed</th>
                     <th style="font-weight: bold; text-align: center;">Unviewed</th>
+                    <th style="font-weight: bold; text-align: center;">Notified</th>
                     <th style="font-weight: bold;">Console</th>
                     <th style="font-weight: bold;">Status</th>
                   </tr>
