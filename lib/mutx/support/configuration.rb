@@ -50,6 +50,22 @@ module Mutx
         @@input['app_name'] || 'localhost'
       end
 
+      def self.specific_vm
+        @@input['specific_vm'] || false
+      end
+
+      def self.proxy_one
+        @@input['proxy_one'] || false
+      end
+
+      def self.proxy_two
+        @@input['proxy_two'] || false
+      end
+
+      def self.mail_from
+        @@input['mail_from'] || "Mutx <your@email.sender.org>"
+      end
+
       # Returns the configured port. If it isn't a number, port 8080 will be returned by defualt
       # @return [Fixnum] port number
       def self.port
@@ -253,7 +269,7 @@ module Mutx
 
       # After this period of time (in seconds) Mutx will kill process execution automatically
       def self.execution_time_to_live
-        self.is_a_number?(@@input["kill_inactive_executions_after"]) ? @@input["kill_inactive_executions_after"] : 900
+        self.is_a_number?(@@input["kill_inactive_executions_after"]) ? @@input["kill_inactive_executions_after"] : 180
       end
 
       def self.kill_after_time?

@@ -9,19 +9,26 @@ module Mutx
       def sender(result_id, subject, email, name, id, type, cucumber, notify_on)
 
         if Mutx::Support::Configuration.email_configured?
-          Mail.defaults do
-            delivery_method :smtp, {
-            address:              Mutx::Support::Configuration.smtp_address,
-            port:                 Mutx::Support::Configuration.smtp_port,
-            # pacheco's vm
-            domain:               Mutx::Support::Configuration.smtp_domain,
-            user_name:            Mutx::Support::Configuration.smtp_user,
-            password:             Mutx::Support::Configuration.smtp_password,
-            authentication:       Mutx::Support::Configuration.smtp_autentication,
-            #
-            enable_starttls_auto: Mutx::Support::Configuration.smtp_enable_start_tls_auto
-
-            }
+          if Mutx::Support::Configuration.specific_vm.eql? true #if true => "10.0.60.36" belgrano's vm
+            Mail.defaults do
+              delivery_method :smtp, {
+              address:              Mutx::Support::Configuration.smtp_address,
+              port:                 Mutx::Support::Configuration.smtp_port,
+              enable_starttls_auto: Mutx::Support::Configuration.smtp_enable_start_tls_auto
+              }
+            end
+          else
+            Mail.defaults do
+              delivery_method :smtp, {
+              address:              Mutx::Support::Configuration.smtp_address,
+              port:                 Mutx::Support::Configuration.smtp_port,
+              domain:               Mutx::Support::Configuration.smtp_domain,
+              user_name:            Mutx::Support::Configuration.smtp_user,
+              password:             Mutx::Support::Configuration.smtp_password,
+              authentication:       Mutx::Support::Configuration.smtp_autentication,
+              enable_starttls_auto: Mutx::Support::Configuration.smtp_enable_start_tls_auto
+              }
+            end
           end
 
           result = Mutx::Results::Result.get(result_id)
@@ -43,7 +50,7 @@ module Mutx
             #sets template
             mail = Mail.new
             mail.content_type "multipart/mixed;"
-            mail.from 'Mutx <your@email.sender.org>'
+            mail.from Mutx::Support::Configuration.mail_from
             mail.to "#{email}"
             mail.subject = "[MuTX] ==> #{subject}"
 

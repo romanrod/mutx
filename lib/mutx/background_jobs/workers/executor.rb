@@ -73,9 +73,11 @@ module Mutx
           ##  Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
           ##end # PULL COMMENTED
 
-          ## Pacheco's VM ##
-          #Mutx::Support::Console.execute "export https_proxy=http://proxy01.garba.com.ar:8080"
-          #Mutx::Support::Console.execute "export http_proxy=http://proxy01.garba.com.ar:8080"
+          ## Belgranos's VM ##
+          if Mutx::Support::Configuration.specific_vm.eql? true #"10.0.60.36"
+            Mutx::Support::Console.execute Mutx::Support::Configuration.proxy_one
+            Mutx::Support::Console.execute Mutx::Support::Configuration.proxy_two
+          end
 
           Mutx::Support::TimeHelper.start # Sets timestamp before start process
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
@@ -89,7 +91,7 @@ module Mutx
               result.save!
               begin
                 stdout.each { |line|
-                  Mutx::Support::Console.execute "sudo sync && sudo sysctl -w vm.drop_caches=3" if @uname.include? "Linux" #Free memo only Linux
+                  Mutx::Support::Console.execute "sudo sysctl -w vm.drop_caches=3" if @uname.include? "Linux" #Free memo only Linux
                   @output += line
                   #if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 5
                     result.append_output @output.gsub(/(\[\d{1,2}\m)/, "")
