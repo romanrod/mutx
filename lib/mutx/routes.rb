@@ -610,6 +610,11 @@ Cuba.define do
         res.write output.to_json
       end
 
+      on "api/results/:id/output" do |result_id|
+        output = Mutx::API::Result.output(result_id)
+        res.write output.to_json
+      end
+
       on "api/results/:id" do |result_id|
         res.write(Mutx::API::Result.info(result_id).to_json)
       end

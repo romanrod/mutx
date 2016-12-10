@@ -46,6 +46,15 @@ module Mutx
         {"type" => "result", "status" => result["status"]}
       end
 
+      def self.output result_id
+        result = Mutx::Results::Result.get(result_id)
+        if result
+          result.console_output
+        else
+          "No content to display"
+        end
+      end
+
     end
   end
 end
