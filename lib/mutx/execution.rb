@@ -4,11 +4,6 @@ module Mutx
 
     def self.run! execution_request_data
 
-      if Mutx::Support::Configuration.use_git?
-        #Mutx::Support::Git.reset_hard and Mutx::Support::Git.pull
-        #Mutx::Support::Log.debug "Git pulled" if Mutx::Support::Log
-      end
-      
         result = Mutx::Results::Result.new(execution_request_data)
         Mutx::Support::Log.debug "Result created with id => #{result.id}" if Mutx::Support::Log
 
