@@ -19,5 +19,9 @@ module Mutx
         Mutx::Support::Log.debug "#{result.task_type.capitalize}(#{result.id}) started" if Mutx::Support::Log
         result.id
     end
+
+    def self.attachment_path
+      "#{Dir.pwd}/mutx/out/" + ENV["_id"] + "/attachment"
+    end
   end
 end
