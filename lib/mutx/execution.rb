@@ -16,7 +16,8 @@ module Mutx
     end
 
     def self.attachment_path
-      "#{Dir.pwd}/mutx/out/" + ENV["_id"] + "/attachment"
+      id = ARGV.select{|arg| arg.start_with? "_id="}.first.split("=").last
+      "#{Dir.pwd}/mutx/out/#{id}/attachment"
     end
   end
 end
