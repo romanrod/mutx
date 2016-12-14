@@ -6,7 +6,7 @@ require 'ostruct'
 module Mutx
   module Support
     class MailSender
-      def sender(result_id, subject, email, name, id, type, cucumber, notify_on)
+      def sender(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder)
 
         if Mutx::Support::Configuration.email_configured?
           if Mutx::Support::Configuration.specific_vm.eql? true #if true => "10.0.60.36" belgrano's vm
@@ -64,6 +64,12 @@ module Mutx
               #mail.html_part = html_part #Adjunta al mail
               File.open("result.html", "w") { |file| file.write("#{html_part.body}") }
               mail.add_file "result.html"
+
+              files = Dir.glob("#{attach_folder}/*").select{ |e| File.file? e }
+              (files.each do |file|
+                mail.add_file file              
+              end) if !files.empty?
+              
               #fin seteo template
             else
               report = "mutx_report_#{result_id}.html"

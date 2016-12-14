@@ -7,6 +7,9 @@ module Mutx
         result = Mutx::Results::Result.new(execution_request_data)
         Mutx::Support::Log.debug "Result created with id => #{result.id}" if Mutx::Support::Log
 
+        Dir.mkdir "#{Dir.pwd}/mutx/out" unless Dir.exist? "#{Dir.pwd}/mutx/out"
+        Dir.mkdir "#{Dir.pwd}/mutx/out/#{result.id}/attachment"
+
         result.save!
 
         Mutx::Support::Log.debug "Execution type #{result.task_type}" if Mutx::Support::Log

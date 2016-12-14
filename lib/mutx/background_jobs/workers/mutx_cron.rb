@@ -14,7 +14,7 @@ module Mutx
 
         def perform
           running_task = []
-          running_task = Mutx::Database::MongoConnector.running_now
+          #running_task = Mutx::Database::MongoConnector.running_now
 
           puts "######### STARTING CRON ##########"
 

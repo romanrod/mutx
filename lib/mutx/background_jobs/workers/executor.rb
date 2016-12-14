@@ -30,6 +30,7 @@ module Mutx
           if result.is_ruby_platform?
             if Mutx::Platforms::Ruby.using_bundler?
               bundle_output = Mutx::Support::Console.execute "bundle install"
+              bundle_output.slice! "fatal: Not a git repository (or any of the parent directories): .git"
             end
             if bundle_output
               result.append_output bundle_output if bundle_output.include? "Installing"
@@ -52,6 +53,8 @@ module Mutx
           efective_command << "_id=#{result.id}" # to use inside execution the possibility to add information to the result
 
           result.mutx_command= efective_command.join(" ")
+
+          attach_folder = "#{Dir.pwd}/mutx/out/#{result.id}/attachment"
 
           # To Be Deleted on prod
           Mutx::Support::Log.debug "[result:#{result.id}] #{efective_command.join(' ')}" if Mutx::Support::Log
@@ -93,6 +96,7 @@ module Mutx
                 stdout.each { |line|
                   Mutx::Support::Console.execute "sudo sysctl -w vm.drop_caches=3" if @uname.include? "Linux" #Free memo only Linux
                   @output += line
+                  @output.slice! "fatal: Not a git repository (or any of the parent directories): .git"
                   #if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 5
                     result.append_output @output.gsub(/(\[\d{1,2}\m)/, "")
                     @output = ""
@@ -133,13 +137,13 @@ module Mutx
           
           if ( (task["notifications"]) && (!result.regex.empty?) && (result.console_output.to_s.include? "#{result.regex.to_s}") )
             Mutx::Database::MongoConnector.mark_notified (result_id)
-            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
+            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder) if ((task[:notifications].eql? "on") && (!email.empty?))
           elsif ( (task["notifications"]) && (!result.regex.empty?) && (!result.console_output.to_s.include? "#{result.regex.to_s}") )
             puts "****Result not to being notified, because regex #{result.regex.to_s} not included on output****"
           elsif ( (task["notifications"]) && (result.regex.empty?) )
             #task[:notifications] = "on" #Workaround until solve regex problem
             Mutx::Database::MongoConnector.mark_notified (result_id)
-            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on) if ((task[:notifications].eql? "on") && (!email.empty?))
+            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder) if ((task[:notifications].eql? "on") && (!email.empty?))
           end
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log
