@@ -6,11 +6,7 @@
 
   "app_port" : 8080,
 
-  "specific_vm" : false,
-
-  "proxy_one" : false,
-
-  "proxy_two" : false,
+  "proxys" : [],
 
   "mail_from" : "Mutx <your@email.sender.org>",
 
@@ -39,12 +35,12 @@
   "refresh_time" : 10,
 
   "notification" : {
-    "smtp_address" : null,
-    "smtp_port" : null,
-    "smtp_domain" : null,
-    "smtp_user" : null,
-    "smtp_password" : null,
-    "smtp_autentication" : null,
+    "smtp_address" : "null",
+    "smtp_port" : "null",
+    "smtp_domain" : "null",
+    "smtp_user" : "null",
+    "smtp_password" : "null",
+    "smtp_autentication" : "null",
     "use_gmail" : false,
     "username" : null,
     "password" : null,

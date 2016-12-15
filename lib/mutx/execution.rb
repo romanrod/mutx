@@ -22,5 +22,6 @@ module Mutx
       id = ARGV.select{|arg| arg.start_with? "_id="}.first.split("=").last
       "#{Dir.pwd}/mutx/out/#{id}/attachment"
     end
+
   end
 end

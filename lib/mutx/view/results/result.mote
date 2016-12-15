@@ -6,22 +6,27 @@
     <th>{{Mutx::View.formatted_for(result["elapsed_time"])}}</th>
     <th style="text-align: center;" >
       % if result["saw"]
-        No
+        <a href="#">
+          <span class="glyphicon glyphicon-eye-open"></span>
+        </a>
       % else
-        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+        <span class="glyphicon glyphicon-eye-close"></span>
       % end
     </th>
     <th style="text-align: center;" >
       % if result["notified"].eql? "yes"
-        <a " class="label label-success">
-          yes
-        </a>
+        <span class="glyphicon glyphicon-envelope"></span>
       % else
-        <a " class="label label-default">
-          no
-        </a>
+        <span class="glyphicon glyphicon-remove"></span>
       % end
     </th>
+    <th style="text-align: center;" >
+      % if result["file_attached"].eql? "yes"
+        <span class="glyphicon glyphicon-paperclip"></span>
+      % else
+        <span class="glyphicon glyphicon-remove"></span>
+      % end
+    </th>    
     <th>
       <a href='/results/{{result["_id"]}}/log', 'toolbar=no, scrollbars=yes, resizable=yes, top=300, left=300, width=800, height=600';" class="label label-default">
         Console Log

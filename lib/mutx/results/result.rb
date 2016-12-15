@@ -36,7 +36,8 @@ module Mutx
         :regex,
         :value_for_regex,
         :result_value,
-        :notified
+        :notified,
+        :file_attached
 
       def initialize data_for_result
         Mutx::Support::Log.debug "Result.new => data_for_result => #{data_for_result}" if Mutx::Support::Log
@@ -74,6 +75,7 @@ module Mutx
           @execution_data           = {}
           @configuration_values     = Mutx::Database::MongoConnector.configuration
           @notified                 = "no"
+          @file_attached            = "no"
           create_output_dir
         end
       end
@@ -122,7 +124,8 @@ module Mutx
           "regex"                     => regex,
           "value_for_regex"           => value_for_regex,
           "result_value"              => result_value,
-          "notified"                  => notified
+          "notified"                  => notified,
+          "file_attached"             => file_attached
         }
       end
 

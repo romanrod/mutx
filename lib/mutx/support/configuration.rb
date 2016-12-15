@@ -50,16 +50,8 @@ module Mutx
         @@input['app_name'] || 'localhost'
       end
 
-      def self.specific_vm
-        @@input['specific_vm'] || false
-      end
-
-      def self.proxy_one
-        @@input['proxy_one'] || false
-      end
-
-      def self.proxy_two
-        @@input['proxy_two'] || false
+      def self.proxys
+        @@input['proxys']
       end
 
       def self.mail_from

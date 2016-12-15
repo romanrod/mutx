@@ -9,7 +9,7 @@ module Mutx
       def sender(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder)
 
         if Mutx::Support::Configuration.email_configured?
-          if Mutx::Support::Configuration.specific_vm.eql? true #if true => "10.0.60.36" belgrano's vm
+          if Mutx::Support::Configuration.smtp_enable_start_tls_auto.eql? false
             Mail.defaults do
               delivery_method :smtp, {
               address:              Mutx::Support::Configuration.smtp_address,
@@ -17,7 +17,7 @@ module Mutx
               enable_starttls_auto: Mutx::Support::Configuration.smtp_enable_start_tls_auto
               }
             end
-          else
+          else #if smtp_enable_start_tls_auto == true
             Mail.defaults do
               delivery_method :smtp, {
               address:              Mutx::Support::Configuration.smtp_address,
@@ -66,7 +66,8 @@ module Mutx
               mail.add_file "result.html"
 
               files = Dir.glob("#{attach_folder}/*").select{ |e| File.file? e }
-              (files.each do |file|
+              ( Mutx::Database::MongoConnector.file_attached (result_id)
+                files.each do |file|
                 mail.add_file file              
               end) if !files.empty?
               
@@ -87,7 +88,9 @@ module Mutx
             html_part.body = ERB.new(template1).result(data.instance_eval { binding })
             mail.html_part = html_part
 
+            puts
             puts "SENDING RESULT VIA EMAIL"
+            puts
 
             tries = 3
             begin

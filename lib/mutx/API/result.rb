@@ -55,6 +55,27 @@ module Mutx
         end
       end
 
+      def self.last_notified
+        results = []
+        result = Mutx::Database::MongoConnector.last_notified
+        if result
+          result.each do |line|
+            #results << line["task"]["name"]
+            #time = Time.at line["started_at"]
+            #results << time
+            ll = "[***********]\n".concat line["task"]["name"].upcase.concat " => ".concat (Time.at(line["started_at"])).to_s
+            ll.slice! "-0300"
+            results << ll
+            ll = nil
+          end
+          results
+          res = results.join(",").gsub(/[,]/, "\n\n")
+          res
+        else
+          "No content to display"
+        end
+      end
+
     end
   end
 end

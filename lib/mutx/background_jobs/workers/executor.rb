@@ -76,10 +76,8 @@ module Mutx
           ##  Mutx::Support::Git.pull unless Mutx::Support::Git.up_to_date?
           ##end # PULL COMMENTED
 
-          ## Belgranos's VM ##
-          if Mutx::Support::Configuration.specific_vm.eql? true #"10.0.60.36"
-            Mutx::Support::Console.execute Mutx::Support::Configuration.proxy_one
-            Mutx::Support::Console.execute Mutx::Support::Configuration.proxy_two
+          if !Mutx::Support::Configuration.proxys.empty?
+            Mutx::Support::Configuration.proxys.detect{|proxy| Mutx::Support::Console.execute proxy}
           end
 
           Mutx::Support::TimeHelper.start # Sets timestamp before start process
