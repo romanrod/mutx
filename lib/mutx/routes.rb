@@ -615,8 +615,8 @@ Cuba.define do
         res.write output.to_json
       end
 
-      on "api/results/last_notified" do
-        output = Mutx::API::Result.last_notified
+      on "api/results/last_notified/:quantity" do |quantity|
+        output = Mutx::API::Result.last_notified quantity
         res.write output
       end
 

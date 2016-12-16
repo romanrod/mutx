@@ -17,11 +17,18 @@ color = Mutx::View.color(status)
         <h3 class='panel-title' onclick="goClean('/tasks/{{task["name"].gsub(' ','%20')}}');">
           {{task["name"]}}
           % if task["cronneable"].eql? "on"
-            &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i>
+            <a href="#" title= "Cronned task" class="label label-primary" aria-hidden="true">&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a>
           % end
           % if ((task["blocked"].eql? "on") || (task["blocked_stop"].eql? "on"))
-            &nbsp;<i class="fa fa-lock" aria-hidden="true"></i>
+            <a href="#" title= "Blocked task to run or stop" class="label label-primary" aria-hidden="true">&nbsp;<i class="fa fa-lock" aria-hidden="true"></i></a>
           % end
+          % if (task["notifications"].eql? "on")
+            <a href="#" title= "Task result must be notified" class="label label-primary" aria-hidden="true">&nbsp;<i <span class="glyphicon glyphicon-envelope"></span></i></a>
+          % end
+          % res = Mutx::Database::MongoConnector.results_for(task["_id"]).first
+          % if ( (!res.nil?) && (res["file_attached"].eql? "yes") )
+            <a href="#" title= "Attached file on last result" class="label label-primary" aria-hidden="true">&nbsp;<i <span class="glyphicon glyphicon-paperclip"></span></i></a>
+          %end
         </h3>
     % if status=="running"
         <i class="fa fa-cog fa-spin fa-1x fa-fw margin-bottom"></i>

@@ -332,9 +332,9 @@ module Mutx
         $results.update_one({"_id" => result_id}, {"$set" => {"notified" => "yes"}})
       end
 
-      def self.last_notified #get last 15 notified results
-        $results.find({"notified" => "yes"}).limit(15).sort({"started_at" => -1}).to_a
-        #$results.find({"notified" => "yes", "task" => 1}).limit(15).sort({"started_at" => -1}).to_a
+      def self.last_notified(quantity) #get last N notified results
+        quantity = 5 if ( (quantity.to_i.eql? 0) || (quantity.to_i <= 0) ) 
+        $results.find({"notified" => "yes"}).limit(quantity.to_i).sort({"started_at" => -1}).to_a
       end
 
       def self.file_attached result_id

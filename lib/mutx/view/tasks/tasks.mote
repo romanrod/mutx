@@ -8,6 +8,7 @@
     task_data = Mutx::API::Task.info_for_name(args[:task_name])
     content = template.call(task_data:task_data)
   else
+
     template = Mote.parse(File.read("#{Mutx::View.path}/tasks/task_item.mote"), self, [:task])
 
     tasks_list = Mutx::API::Tasks.list(type:type)
@@ -24,7 +25,16 @@
 % if args[:task_name]
   {{content}}
 % else
-  % tasks_list = tasks_list["tasks"]
+  % tasks_list_aux = []
+
+  % tasks_list["tasks"].each do |task|
+  %   res = nil
+  %   res = Mutx::Database::MongoConnector.running_results_for_task_id(task["_id"])
+  %   tasks_list_aux << task if res.empty?
+  %   tasks_list_aux.unshift(task) if !res.empty?
+  % end
+
+  % tasks_list = tasks_list_aux
   % tasks_list.each do |task_data|
     {{template.call(task:task_data)}}
   % end
