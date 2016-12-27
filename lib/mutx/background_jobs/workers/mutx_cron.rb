@@ -13,6 +13,7 @@ module Mutx
       recurrence { minutely(1) }
 
         def perform
+          Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
           running_task = []
           #running_task = Mutx::Database::MongoConnector.running_now
 
