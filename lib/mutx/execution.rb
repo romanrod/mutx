@@ -19,7 +19,9 @@ module Mutx
     end
 
     def self.attachment_path
-      id = ARGV.select{|arg| arg.start_with? "_id="}.first.split("=").last
+      str = ARGV.select{|arg| arg.start_with? "_id="}.first
+      raise "Could not find execution id" if str.nil?
+      id = str.split("=").last
       "#{Dir.pwd}/mutx/out/#{id}/attachment"
     end
 
