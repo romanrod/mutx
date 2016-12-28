@@ -34,7 +34,7 @@
   %   tasks_list_aux.unshift(task) if !res.empty?
   % end
 
-  % tasks_list = tasks_list_aux
+  % tasks_list = tasks_list_aux.sort_by!{ |m| m["name"].downcase }
   % tasks_list.each do |task_data|
     {{template.call(task:task_data)}}
   % end
