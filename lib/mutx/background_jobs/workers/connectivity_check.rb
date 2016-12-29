@@ -11,12 +11,13 @@ module Mutx
       include Sidetiq::Schedulable
         recurrence { minutely(2) }
         def perform
-          Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
         #def self.check
+          #Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
           path = "#{Dir.pwd}/mutx/temp/connectivity_check.txt"
           message_lost = "Internet connection lost!"
           begin
             if open("http://www.google.com/")
+              puts "HAY INTERNET..."
               contents = File.read("#{path}") if File.file?("#{path}")
               Mutx::Support::MailSender.new.sender(nil, "No internet connection for a while, now is ready again", "ohamra@gmail.com", "Prueba", nil, nil, nil, nil, nil) if ( (!contents.nil?) && (contents.include? "#{message_lost}") )
               File.delete("#{path}") if File.file?("#{path}")
