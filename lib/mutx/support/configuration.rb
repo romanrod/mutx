@@ -12,6 +12,7 @@ module Mutx
 
         if self.config_file_exists?
           @@input = Mutx::Support::Update.mutx_conf
+        elsif !Dir.pwd.to_s.include? "garba-automation"#not show put if you are in other dir
         else
           @@input = self.default_input
           puts "Error loading mutx configuration file. Using default values".colorize(:red)
