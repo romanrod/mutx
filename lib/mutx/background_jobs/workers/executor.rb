@@ -84,7 +84,6 @@ module Mutx
           Mutx::Support::Log.debug "[result:#{result.id}] Creating process" if Mutx::Support::Log
 
           #USE 'PTY' GEM INSTEAD POPEN TO READ OUTPUT IN REAL TIME
-          @uname = Mutx::Support::Console.execute "uname"
           @start_time = Time.now
           begin
             PTY.spawn("#{result.mutx_command}") do |stdout, stdin, pid|
@@ -92,7 +91,6 @@ module Mutx
               result.save!
               begin
                 stdout.each { |line|
-                  Mutx::Support::Console.execute "sudo sysctl -w vm.drop_caches=3" if @uname.include? "Linux" #Free memo only Linux
                   @output += line
                   @output.slice! "fatal: Not a git repository (or any of the parent directories): .git"
                   #if Mutx::Support::TimeHelper.elapsed_from_last_check_greater_than? 5

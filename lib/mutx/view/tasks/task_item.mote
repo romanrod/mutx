@@ -67,5 +67,6 @@ color = Mutx::View.color(status)
   display:inline-block;
   margin: 5px;
   width: auto;
+  padding: 10px;
 }
 </style>
