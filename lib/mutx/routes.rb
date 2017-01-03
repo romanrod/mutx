@@ -7,9 +7,9 @@ Cuba.plugin Basica
 include Mote::Helpers
 
 # Mutx::Support::Log.start
-Mutx::Support::Configuration.get
 
 Cuba.define do
+  Mutx::Support::Configuration.get
 
   Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
 
