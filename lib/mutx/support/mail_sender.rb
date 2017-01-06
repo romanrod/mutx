@@ -48,7 +48,7 @@ module Mutx
             mail.content_type "multipart/mixed;"
             mail.from Mutx::Support::Configuration.mail_from
             mail.to "#{email}"
-            mail.subject = "[MuTX] ==> #{subject}"
+            mail.subject = "[MuTX] #{subject}"
 
             data = OpenStruct.new(output: output, task_name: name, id: id, time: Time.now, status: status, info: info)
             
@@ -84,7 +84,7 @@ module Mutx
               mail.content_type "multipart/mixed;"
               mail.from Mutx::Support::Configuration.mail_from
               mail.to "#{email}"
-              mail.subject = "[MuTX] ==> #{subject}"
+              mail.subject = "[MuTX] #{subject}"
 
               data = OpenStruct.new(output: output, task_name: name, id: id, time: result.elapsed_time, status: status, info: info)
               
