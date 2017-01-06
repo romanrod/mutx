@@ -31,6 +31,7 @@ if ["edit","view"].include? action
   fr = task["fr"]
   sa = task["sa"]
   su = task["su"]
+  stop_bots = task["stop_bots"]
   start_time = task["start_time"]
   stop_time = task["stop_time"]
   value_for_regex = task["value_for_regex"]
@@ -212,6 +213,22 @@ application = task["application"].upcase if task
         <input type="checkbox" name="blocked_stop" id="blocked_stop" checked/>
       % end
        <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Protected', 'Click it if you want to protect the stop execution');">
+  ?</a>
+    </div>
+  </nav>
+
+  <nav class="navbar navbarr-inverse">
+    <h3>&nbsp;&nbsp;Notification on Recovery</h3>
+    <br>
+<!-- Stop notify when fail and notify again when is ok-->
+    <div class='form-group'>
+      <label class='col-sm-3 control-label' for='formGroupInputSmall'>Recovery mail</label>
+      % if ( (!stop_bots.eql? "on") && (!stop_bots.eql? "off") )
+        <input type="checkbox" name="stop_bots" id="blocked" />
+      % elsif ( (stop_bots.eql? "on") || (stop_bots.eql? "off") )
+        <input type="checkbox" name="stop_bots" id="blocked" checked/>
+      % end
+       <a href="#" title="Click here to know what this checkbox means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Recovery mail', 'Click it if you want to stop notifications when the task notify you and receive an email when starts to work without notifications again');">
   ?</a>
     </div>
   </nav>
@@ -414,6 +431,17 @@ application = task["application"].upcase if task
 }
 .form-group:hover + #autoUpdate1 {
     display: block;
+}
+% end
+% if action=="new"
+.navbarr-inverse {
+    background-color: #eaf3eb;
+    border-color: #080808;
+}
+% else
+.navbarr-inverse {
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
 }
 % end
 </style>

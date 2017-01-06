@@ -131,15 +131,22 @@ module Mutx
           cucumber = task[:cucumber]
           notify_on = task[:notify_on]
           
-          if ( (task["notifications"]) && (!result.regex.empty?) && (result.console_output.to_s.include? "#{result.regex.to_s}") )
+          if ( (task["notifications"].eql? "on") && (!task["stop_bots"].eql? "on") && (!task["stop_bots"].eql? "off") && (!result.regex.empty?) && (result.console_output.to_s.include? "#{result.regex.to_s}") )
             Mutx::Database::MongoConnector.mark_notified (result_id)
             Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder) if ((task[:notifications].eql? "on") && (!email.empty?))
-          elsif ( (task["notifications"]) && (!result.regex.empty?) && (!result.console_output.to_s.include? "#{result.regex.to_s}") )
-            puts "****Result not to being notified, because regex #{result.regex.to_s} not included on output****"
-          elsif ( (task["notifications"]) && (result.regex.empty?) )
-            #task[:notifications] = "on" #Workaround until solve regex problem
+          elsif ( (task["notifications"].eql? "on") && (!task["stop_bots"].eql? "on") && (!task["stop_bots"].eql? "off") && (result.regex.empty?) )
             Mutx::Database::MongoConnector.mark_notified (result_id)
             Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder) if ((task[:notifications].eql? "on") && (!email.empty?))
+          elsif ( (task["notifications"].eql? "on") && (task["stop_bots"].eql? "on") && (!result.regex.empty?) && (result.console_output.to_s.include? "#{result.regex.to_s}") )
+            Mutx::Database::MongoConnector.mark_notified (result_id)
+            Mutx::Workers::EmailSender.perform_async(result_id, subject, email, name, id, type, cucumber, notify_on, attach_folder) if ((task[:notifications].eql? "on") && (!email.empty?))
+            Mutx::Database::MongoConnector.update_stop_bots_off (id) #silence notifications
+            Mutx::Support::MailSender.new.sender(nil, "#{name} Comenzo a notificar, se le informara cuando vuelva a la normalidad", "#{email}", name, nil, nil, nil, nil, nil)
+          elsif ( (task["notifications"].eql? "on") && (task["stop_bots"].eql? "off") && (!result.regex.empty?) && (!result.console_output.to_s.include? "#{result.regex.to_s}") )
+            Mutx::Database::MongoConnector.update_stop_bots_on (id) #on notifications
+            Mutx::Support::MailSender.new.sender(nil, "#{name} Volvio a funcionar con normalidad", "#{email}", name, nil, nil, nil, nil, nil)          
+          elsif ( (task["notifications"].eql? "on") && (!result.regex.empty?) && (!result.console_output.to_s.include? "#{result.regex.to_s}") )
+            puts "****Result not to being notified, because regex #{result.regex.to_s} not included on output****"          
           end
 
           Mutx::Support::Log.debug "[result:#{result.id}]| command => #{result.mutx_command} | result as => #{result.status}" if Mutx::Support::Log

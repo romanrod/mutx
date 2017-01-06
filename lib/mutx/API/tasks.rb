@@ -28,6 +28,7 @@ module Mutx
         data["cucumber"] = data["cucumber"]
         data["information"] = nil if data["information"].nil?
         data["last_exec_time"] = Time.now.utc
+        data["stop_bots"] = data["stop_bots"] 
         data
       end
 

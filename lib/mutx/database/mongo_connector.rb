@@ -328,6 +328,14 @@ module Mutx
       end
       #Cron_end
 
+      def self.update_stop_bots_off task_id
+        $tasks.update_one({"_id" => task_id}, {"$set" => {"stop_bots" => "off"}})
+      end
+
+      def self.update_stop_bots_on task_id
+        $tasks.update_one({"_id" => task_id}, {"$set" => {"stop_bots" => "on"}})
+      end
+
       def self.mark_notified result_id
         $results.update_one({"_id" => result_id}, {"$set" => {"notified" => "yes"}})
       end
