@@ -1,0 +1,36 @@
+<?
+  repo_list = Mutx::Database::MongoConnector.all_repos
+?>
+
+<div class="panel panel-success">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h2>Listing Repos</h2><h5><a href="#" title="Click here to know what this means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Update Repo', 'To update a repo the path must be: /:token/:repo_name?value={ foo: bar, foo_1: bar_1 }  Without a valid token you cannot update');">
+  ?</a></h5></div>
+  <div class="panel-body">
+    <p><a class="btn btn-success" href="/admin/repositories">New Repo</a></p>
+  </div>
+    <div class="panel-success">
+      <div class="panel-body">
+      <!-- Table -->
+  <table class="order-table table">
+    <thead>
+      <tr>
+        <td><b>Repo Name</b></td>
+        <td><b>Token</b></td>
+        <td><b>Last Update</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      % repo_list.each do |repo|
+      <tr>
+        <td>{{repo[:repo_name]}}</td>
+        <td>{{repo[:repo_token]}}</td>
+        <td>{{Mutx::Support::TimeHelper.formatted_time_for(repo["last_update"])}}</td>
+      </tr>
+      % end
+    </tbody>
+  </table>
+      </div>
+    </div>
+  </div>
+</div>

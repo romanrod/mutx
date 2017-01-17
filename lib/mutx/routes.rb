@@ -86,6 +86,37 @@ Cuba.define do
 
       end
 
+      # TO CREATE A REPO
+      on "admin/create-repo" do
+
+        on true do
+
+          data = req.params.dup
+
+          Mutx::Support::Log.debug "data is => #{data}" #only has a repo_name
+
+          response = Mutx::API::Repo.validate_and_create data # Creates a new 'repo'
+
+          path = "create-repo"
+
+          # Si success es true
+          Mutx::Support::Log.debug "#{response}"
+
+          unless response[:success]
+
+            path += "/#{data['_id']}" if data["_id"]
+            path += "/#{data['action']}"
+          end
+          path += "?msg=#{response[:message]}"
+
+          path += "&name=#{data['name']}&action=#{data['action']}&type=#{data['type']}&value=#{data['value']}&options=#{data['options']}&required=data['required']&clean=false" unless response[:success]
+
+          res.redirect "/admin/list/repositories"
+
+        end
+
+      end
+
 
       on "admin/tasks/add-edit" do
 
@@ -173,9 +204,29 @@ Cuba.define do
         end
       end
 
+
     end
 
 
+
+    on put do
+      # UPDATE A REPO!
+      on "api/repos/:token/:name" do |token, name|
+        Mutx::Support::Log.debug "REPO NAME IS => #{name}"
+        data = req.params.dup
+        data.store("token", "#{token}")
+        data.store("name", "#{name}")
+        Mutx::Support::Log.debug "DATA TO INPUT IS => #{data}"
+        response = Mutx::API::Repo.update! data
+        Mutx::Support::Log.debug "RESPONSE => #{response}"
+        (res.status = 200
+         res.write "status 200") if response.to_s.include? "success=>true"
+        (res.status = 404
+        res.write "status 404") if response.to_s.include? "success=>false"
+        Mutx::Support::Log.debug "STATUS CODE => #{res.status}"
+      end
+
+    end
 
 
     on get do
@@ -184,6 +235,16 @@ Cuba.define do
         query_string = Mutx::Support::QueryString.new req
         output = Mutx::API::Input.get_data(id, query_string.raw)        
         res.write output.to_json
+      end
+
+      on "api/repos/:name" do |name|
+        query_string = Mutx::Support::QueryString.new req
+        output = Mutx::API::Repo.get_data(name, query_string.raw)     
+        (res.status = 200
+         res.write output.to_json) if !output.to_s.include? "success=>false"
+        (res.status = 404
+        res.write "Not Found => status 404") if output.to_s.include? "success=>false"
+        Mutx::Support::Log.debug "STATUS CODE => #{res.status}"
       end
 
       on "pull" do
@@ -556,9 +617,28 @@ Cuba.define do
         res.write template.call(section:"Logs", args:args)
       end
 
+## ========================================================================
+# REPOS
+#
+#
 
+      on "admin/repositories" do
+        #template = Mote.parse(File.read("#{Mutx::View.path}/repo.mote"),self, [:section, :args])
+        #res.write template.call(section:"Repos")
+        query_string = Mutx::Support::QueryString.new req
+        args = {query_string:query_string, action:"new"}
+        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])      
+        res.write template.call(section:"New Repo", args:args)
+      end
 
-
+      on "admin/list/repositories" do
+        #template = Mote.parse(File.read("#{Mutx::View.path}/repo.mote"),self, [:section, :args])
+        #res.write template.call(section:"Repos")
+        query_string = Mutx::Support::QueryString.new req
+        args = {query_string:query_string, action:"new"}
+        template = Mote.parse(File.read("#{Mutx::View.path}/body.mote"),self, [:section, :args])      
+        res.write template.call(section:"List Repos", args:args)
+      end
 
 # ========================================================================
 # SCREENSHOTS

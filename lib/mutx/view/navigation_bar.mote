@@ -46,6 +46,7 @@
           <ul class='dropdown-menu' role='menu'>
             <li><a href='/admin/tasks/list'>Tasks</a></li>
             <li><a href='/admin/custom/params'>Custom Parameters</a></li>
+            <li><a href='/admin/list/repositories'>Repositories</a>
             <li role="presentation" class="divider"></li>
             <li><a href='/logs/mutx'>Mutx Log</a>
             <li><a href='/logs/sidekiq'>Sidekiq Log</a>

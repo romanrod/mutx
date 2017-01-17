@@ -19,6 +19,7 @@ module Mutx
         set_commits_collection
         set_documentation_collection
         set_input_collection
+        set_repos_collection
         set_logger
       end
 
@@ -76,6 +77,11 @@ module Mutx
         Mutx::Support::Log.debug "Setting db Input collection" if Mutx::Support::Log
         $inputs = $db.collection("inputs")
         $inputs.indexes.create_one({"reference" => 1})
+      end
+
+      def set_repos_collection
+        Mutx::Support::Log.debug "Setting db Repos collection" if Mutx::Support::Log
+        $repos = $db.collection("repos")
       end
 
       def set_commits_collection
@@ -382,6 +388,39 @@ module Mutx
 
     def self.input_data_for_id(id)
       res = $inputs.find({"_id" => id})
+      res = res.to_a.first if res.respond_to? :to_a
+      res
+    end
+
+    ########################################
+    # REPOS
+    #
+    #
+    #
+    def self.all_repos
+      res = $repos.find({})
+      res.to_a if res.respond_to? :to_a
+      res
+    end
+
+    def self.insert_repo repo_data
+      res = $repos.find({"repo_name" => repo_data["repo_name"]})
+      (Mutx::Support::Log.debug "Inserting repo [#{repo_data}]" if Mutx::Support::Log
+      $repos.insert_one(repo_data)) if res.to_a.empty?
+    end
+
+    def self.update_repo_data repo_data
+      aux = repo_data["value"].to_json
+      aux_1 = JSON.parse(aux) #=> HASH
+      repo_data["value"] = JSON.parse aux_1#value en json!
+      #only update if repo exists and token is valid
+      res = $repos.find({"repo_name" => repo_data["repo_name"]})
+      (Mutx::Support::Log.debug "Updating repo #{repo_data["repo_name"]}" if Mutx::Support::Log
+      $repos.update_one({"repo_name" => repo_data["repo_name"]}, {"$set" => {"value" => repo_data["value"], "last_update" => repo_data["last_update"]} }) ) if ( (!res.to_a.empty?) && (res.to_a[0]["repo_token"].eql? repo_data["repo_token"]) )
+    end
+
+    def self.repo_data_for_name(name)
+      res = $repos.find({"repo_name" => name})
       res = res.to_a.first if res.respond_to? :to_a
       res
     end

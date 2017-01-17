@@ -28,7 +28,9 @@ module Mutx
         "Repo" => "",
         "Logs" => "logs",
         "Log" => "logs/log",
-        "Help" => ""
+        "Help" => "",
+        "New Repo" => "repos",
+        "List Repos" => "list_repos",
       }
 
       def self.path_for section
