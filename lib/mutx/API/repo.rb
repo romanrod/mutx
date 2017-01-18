@@ -11,7 +11,7 @@ module Mutx
           id = definition["_id"] || Mutx::Database::MongoConnector.generate_id
           @id          = id 
           @repo_name   = definition["name"]
-          @repo_token  = definition["token"] || Mutx::Database::MongoConnector.generate_id
+          @repo_token  = definition["token"] || Mutx::Database::MongoConnector.generate_token
           @value       = definition["value"]
           @last_update = Time.now.utc
         end

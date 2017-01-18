@@ -168,6 +168,11 @@ module Mutx
         Digest::MD5.hexdigest(value.to_s) #Added MD5 to generate a mongo id
       end
 
+      def self.generate_token
+        value = Time.now.to_f.to_s.gsub( ".","")[0..12].to_i + 10
+        Digest::MD5.hexdigest(value.to_s)
+      end
+
       # Returns a list of collections
       def self.collections
         ["tasks","results","custom_params","commit","configuration"]
