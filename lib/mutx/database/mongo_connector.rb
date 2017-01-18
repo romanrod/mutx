@@ -410,9 +410,13 @@ module Mutx
     end
 
     def self.update_repo_data repo_data
+=begin
       aux = repo_data["value"].to_json
       aux_1 = JSON.parse(aux) #=> HASH
       repo_data["value"] = JSON.parse aux_1#value en json!
+=end
+      aux = JSON.parse repo_data["value"].gsub('=>', ':')
+      repo_data["value"] = aux
       #only update if repo exists and token is valid
       res = $repos.find({"repo_name" => repo_data["repo_name"]})
       (Mutx::Support::Log.debug "Updating repo #{repo_data["repo_name"]}" if Mutx::Support::Log

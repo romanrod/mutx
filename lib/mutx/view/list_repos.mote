@@ -4,7 +4,7 @@
 
 <div class="panel panel-success">
   <!-- Default panel contents -->
-  <div class="panel-heading"><h2>Listing Repos</h2><h5><a href="#" title="Click here to know what this means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Update Repo', 'To update a repo the path must be: /:token/:repo_name?value={ foo: bar, foo_1: bar_1 }  Without a valid token you cannot update');">
+  <div class="panel-heading"><h2>Listing Repos</h2><h5><a href="#" title="Click here to know what this means" class="label label-info" aria-hidden="true" data-toggle="modal" data-target="#myModal" onclick="javascript:info('Update Repo', 'To update a repo the path must be: /:token/:repo_name . Send value in body as application/json { foo: bar, foo_1: bar_1 } . Without a valid token you cannot update');">
   ?</a></h5></div>
   <div class="panel-body">
     <p><a class="btn btn-success" href="/admin/repositories">New Repo</a></p>

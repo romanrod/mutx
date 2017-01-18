@@ -212,10 +212,12 @@ Cuba.define do
     on put do
       # UPDATE A REPO!
       on "api/repos/:token/:name" do |token, name|
+        value = JSON.parse(req.body.read) #passed values in body as json
         Mutx::Support::Log.debug "REPO NAME IS => #{name}"
         data = req.params.dup
         data.store("token", "#{token}")
         data.store("name", "#{name}")
+        data.store("value", "#{value}")
         Mutx::Support::Log.debug "DATA TO INPUT IS => #{data}"
         response = Mutx::API::Repo.update! data
         Mutx::Support::Log.debug "RESPONSE => #{response}"
