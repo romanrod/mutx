@@ -243,6 +243,7 @@ Cuba.define do
         query_string = Mutx::Support::QueryString.new req
         output = Mutx::API::Repo.get_data(name, query_string.raw)     
         (res.status = 200
+         output.delete("repo_token")
          res.write output.to_json) if !output.to_s.include? "success=>false"
         (res.status = 404
         res.write "Not Found => status 404") if output.to_s.include? "success=>false"
