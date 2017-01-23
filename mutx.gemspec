@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'basica'
   spec.add_dependency 'sidetiq'
   spec.add_dependency 'chronic'
-  spec.add_dependency 'zip'
+  #spec.add_dependency 'zip'
 
 
   spec.add_development_dependency "bundler", "~> 1.5"
