@@ -1,7 +1,9 @@
 # encoding: utf-8
 require "cuba"
 #include Basica
+require_relative './database/middleware' 
 
+Cuba.use Mutx::Database::Middleware
 Cuba.plugin Basica
 
 include Mote::Helpers
@@ -10,8 +12,6 @@ include Mote::Helpers
 Mutx::Support::Configuration.get
 
 Cuba.define do
-
-  Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
 
   $tasks_counter = 0
 

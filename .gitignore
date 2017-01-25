@@ -1,5 +1,2 @@
 pkg
-Gemfile.lock
-mutx/
-mutx/*
 .DS_Store

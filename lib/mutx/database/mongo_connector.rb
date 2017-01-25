@@ -1,6 +1,5 @@
 # encoding: utf-8
-#require 'mongoid'
-require 'mongo'
+require_relative './mongo_connection'
 
 module Mutx
   module Database
@@ -9,9 +8,15 @@ module Mutx
       #include Mongo
 
       def initialize(opts={host: "localhost", port: 27017, username: nil, pass: nil})
-        set_client(opts)
-        set_db
-        authenticate(opts)
+        project_name = Dir.pwd.split("/").last
+        mongo_connection = MongoConnection.instance
+        mongo_connection.client(host: opts[:host],
+                                port: opts[:port],
+                                database: "#{project_name}_mutx",
+                                username: opts[:username],
+                                password: opts[:pass])
+
+        $db = mongo_connection.db
         set_task_collection
         set_custom_param_collection
         set_config_collection
@@ -46,6 +51,10 @@ module Mutx
 
       def self.force_close
         $client = $client.close if $client
+      end
+
+      def self.close
+        MongoConnection.instance.close
       end
 
       def set_db
