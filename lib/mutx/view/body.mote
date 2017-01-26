@@ -2,6 +2,11 @@
   # encoding: utf-8  
   query_string = args[:query_string]
 
+  msg = if query_string.msg
+          message_file_path = File.read("#{Mutx::View.path}/message.mote")
+          Mote.parse(message_file_path, self, [:query_string]).call(query_string: query_string)
+        end
+
   clean = query_string.clean || false
 
   message = section =~ /message/i ? " onload=\"javascript:startTimer();\"" : nil
@@ -54,14 +59,14 @@
 
       {{navigation_bar}}
 
-
+      {{msg}}
 
       <div class='container'>
       <br>
       {{git_information}}
       </div>
       <div class='container'>
-
+        
         <p>{{content}}</p>
 
         {{footer}}
