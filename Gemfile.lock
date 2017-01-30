@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutx (0.1.64)
+    mutx (0.1.65)
       basica
       bson_ext
       byebug
@@ -95,7 +95,7 @@ GEM
     raindrops (0.17.0)
     rake (12.0.0)
     redcarpet (3.4.0)
-    redis (3.3.3)
+    redis (3.3.2)
     require_all (1.4.0)
     rufus-scheduler (3.3.2)
       tzinfo
