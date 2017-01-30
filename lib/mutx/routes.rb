@@ -1,4 +1,4 @@
-f# encoding: utf-8
+# encoding: utf-8
 require "cuba"
 #include Basica
 require_relative './database/middleware' 
