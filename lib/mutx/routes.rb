@@ -1,4 +1,4 @@
-# encoding: utf-8
+f# encoding: utf-8
 require "cuba"
 #include Basica
 require_relative './database/middleware' 
@@ -898,7 +898,7 @@ Cuba.define do
 
     end
 
-  ##Mutx::Database::MongoConnector.close
+  Mutx::Database::MongoConnector.force_close
 
   rescue => e
     Mutx::Support::Log.error "Cuba: #{e} #{e.backtrace}" if Mutx::Support::Log

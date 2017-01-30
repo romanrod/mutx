@@ -50,7 +50,7 @@ module Mutx
       end
 
       def self.force_close
-        $client = $client.close if $client
+        $client.close if $client
       end
 
       def self.close
