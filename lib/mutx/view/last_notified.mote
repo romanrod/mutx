@@ -1,0 +1,13 @@
+<?
+
+output = Mutx::API::Result.last_notified
+
+?>
+
+<div class="well">
+  <div style='width: 100%; display: table;'>
+    <div style='display: table-row'>
+      <div style='width: 600px; display: table-cell;'>{{output}}</div>
+    </div>
+  </div>
+</div>

@@ -44,7 +44,8 @@ module Mutx
       :su,
       :start_time,
       :stop_time,
-      :stop_bots
+      :stop_bots,
+      :task_status
 
       REGEX_VALID_VALUES = ["failed","passed","none"]
       NOTIFY_VALID_VALUES = ["any","passed","failed"]
@@ -93,6 +94,7 @@ module Mutx
           @stop_time        = task_data["stop_time"]
           @notify_on        = task_data["notify_on"] || "any"
           @stop_bots        = task_data["stop_bots"]
+          @task_status      = task_data["task_status"] || "off"
         else
           Mutx::Support::Log.error "Creting task object. Argument is not a hash" if Mutx::Support::Log
           raise "Task data not defined correctly. Expecting info about task"
@@ -159,7 +161,8 @@ module Mutx
           "stop_time" => data["stop_time"],
           "value_for_regex" => data["value_for_regex"],
           "notify_on" => data["notify_on"],
-          "stop_bots" => data["stop_bots"]
+          "stop_bots" => data["stop_bots"],
+          "task_status" => data["task_status"]
         }
         self.new(task_data)
       end
@@ -300,7 +303,8 @@ module Mutx
           "stop_time" => stop_time,
           "value_for_regex" => value_for_regex,
           "notify_on" => notify_on,
-          "stop_bots" => stop_bots
+          "stop_bots" => stop_bots,
+          "task_status" => task_status          
         }
       end
 

@@ -13,6 +13,7 @@ module Mutx
       recurrence { minutely(1) }
 
         def perform
+        #def self.checker
           Mutx::Database::MongoConnector.new Mutx::Support::Configuration.db_connection_data
           running_task = []
           #running_task = Mutx::Database::MongoConnector.running_now
@@ -20,7 +21,7 @@ module Mutx
           puts "######### STARTING CRON ##########"
 
           if running_task.eql? []
-
+            
             @days = [:mo,:tu,:we,:th,:fr,:sa,:su]
             @today = day_name #name of today
 
@@ -30,7 +31,7 @@ module Mutx
 
             puts "#{cron_tasks_list.size} cronned task searched"
 
-            cron_tasks_list.select{|line| cron_tasks << line if (((Time.now.utc - line[:last_exec_time].utc) + 1) >= (line[:cron_time].to_i * 60))}
+            cron_tasks_list.select{|line| cron_tasks << line if ( (((Time.now.utc - line[:last_exec_time].utc) + 1) >= (line[:cron_time].to_i * 60)) && (line[:task_status].eql? "on") )}
             cron_tasks_list = []
             cron_tasks_list = cron_tasks
             puts "#{cron_tasks_list.size} POSSIBLE cronned task on time to run"
@@ -71,13 +72,14 @@ module Mutx
 
             end#cron_task
 
-            ##Mutx::Database::MongoConnector.force_close
+            Mutx::Database::MongoConnector.close
             puts "######### ENDING CRON ##########"
           else ## si hay algo corriendo deja pasar toda la ejecucion hasta que finalice
             puts
             puts "HAY EJECUCIONES EN RUNNING O STARTED, SE ESPERA A QUE TERMINEN..."
             puts
             puts "######### ENDING CRON ##########"
+            Mutx::Database::MongoConnector.close
           end
 
         end #perform

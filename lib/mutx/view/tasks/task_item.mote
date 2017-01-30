@@ -35,6 +35,11 @@ color = Mutx::View.color(status)
         </h3>
     </div>
       <div class="panel-body">
+      % if (task["task_status"].eql? "off")
+          <a href="task/status/{{task["name"].gsub(' ','%20')}}" title= "Click to allow task to be cronned" class="label label-danger" aria-hidden="true">&nbsp;<i <span class="glyphicon glyphicon-off"></span> OFF </i></a>
+      % elsif (task["task_status"].eql? "on")
+          <a href="task/status/{{task["name"].gsub(' ','%20')}}" title= "Click to stop task and cannot be cronned" class="label label-success" aria-hidden="true">&nbsp;<i <span class="glyphicon glyphicon-play-circle"></span> ON </i></a>
+      % end
         <a href='/{{task["type"]}}s/{{task["name"].gsub(' ','%20')}}' class='label label-success'>
           Open</a>
         <a href='/results/task/{{task["name"].gsub(' ','%20')}}' class='label label-info'>

@@ -490,6 +490,44 @@ Cuba.define do
         res.redirect path
       end
 
+      on "task/status/:task_name" do |task_name|
+        task = Mutx::Tasks::Task.get_task_with task_name.gsub(/%20/, " ")
+        if task.blocked.eql? "on"
+          $result = basic_auth(env) do |user, pass|
+           user == "mutx" && pass == "mutxAdmin"
+          end
+          if $result.eql? true
+            query_string = Mutx::Support::QueryString.new req
+            task_name = task_name.gsub!("%20"," ") if task_name.include? "%20"
+            task = Mutx::Database::MongoConnector.task_data_for_name(task_name)
+            if task["task_status"].eql? "off"
+              status = "on"
+            else
+              status = "off"
+            end
+            Mutx::Database::MongoConnector.update_status(task["_id"], status)
+            res.redirect "/tasks"
+          else
+           on default do
+             res.status = 401
+             res.headers["WWW-Authenticate"] = 'Basic realm="MyApp"'
+             res.write "Access Denied, Mutx don't let you STOP/START this execution without authorization"
+           end
+          end
+        else
+          query_string = Mutx::Support::QueryString.new req
+          task_name = task_name.gsub!("%20"," ") if task_name.include? "%20"
+          task = Mutx::Database::MongoConnector.task_data_for_name(task_name)
+          if task["task_status"].eql? "off"
+            status = "on"
+          else
+            status = "off"
+          end
+          Mutx::Database::MongoConnector.update_status(task["_id"], status)
+          res.redirect "/tasks"
+        end
+      end
+
 
       on "message/task/:result_id" do |result_id|
         query_string = Mutx::Support::QueryString.new req
@@ -860,7 +898,7 @@ Cuba.define do
 
     end
 
-  ##Mutx::Database::MongoConnector.force_close
+  ##Mutx::Database::MongoConnector.close
 
   rescue => e
     Mutx::Support::Log.error "Cuba: #{e} #{e.backtrace}" if Mutx::Support::Log

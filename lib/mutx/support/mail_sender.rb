@@ -143,6 +143,7 @@ module Mutx
         else
           puts "Misconfiguration on email settings"
         end
+        Mutx::Database::MongoConnector.close
       end
     end
   end

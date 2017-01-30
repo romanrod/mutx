@@ -369,6 +369,10 @@ module Mutx
         $results.update_one({"_id" => result_id}, {"$set" => {"file_attached" => "yes"}})
       end
 
+      def self.update_status task_id, status
+        $tasks.update_one({"_id" => task_id}, {"$set" => {"task_status" => status}})
+      end
+
       def self.active_tasks
         self.all_tasks
       end

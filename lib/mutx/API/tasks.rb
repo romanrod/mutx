@@ -29,6 +29,11 @@ module Mutx
         data["information"] = nil if data["information"].nil?
         data["last_exec_time"] = Time.now.utc
         data["stop_bots"] = data["stop_bots"] 
+        if data["task_status"] == "off" 
+          data["task_status"] = "off"
+        else
+          data["task_status"] = "on"
+        end
         data
       end
 
